@@ -1,0 +1,93 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+
+import '../../../../core/base/state/base_state.dart';
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/constants/enums/preferences_keys_enum.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/init/cache/locale_manager.dart';
+import '../../../../core/init/lang/language_manager.dart';
+import '../../../../core/init/lang/locale_keys.g.dart';
+import '../viewmodel/test_viewmodel.dart';
+
+class TestView extends StatefulWidget {
+  TestView({Key? key}) : super(key: key);
+
+  @override
+  _TestViewState createState() => _TestViewState();
+}
+
+class _TestViewState extends BaseState<TestView> {
+  TestViewModel _viewModel = TestViewModel();
+
+  TestViewModel get viewModel => _viewModel;
+
+  set viewModel(TestViewModel viewModel) {
+    _viewModel = viewModel;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseView<TestViewModel>(
+      viewModel: TestViewModel(),
+      onModelReady: (TestViewModel model) {
+        model.setContext(context);
+      },
+      onPageBuilder: (BuildContext context, TestViewModel value) =>
+          scaffoldBody,
+    );
+  }
+
+  Widget get scaffoldBody => Scaffold(
+        appBar: appBar(),
+        floatingActionButton: floatingActionButtonNumberIncrement,
+        body: textNumber,
+      );
+
+  AppBar appBar() {
+    return AppBar(
+      leading: Text(
+        LocaleManager.instance.getStringValue(PreferencesKeys.TOKEN)!,
+      ),
+      title: textWelcomeWidget(),
+      actions: [
+        iconButtonChangeTheme(),
+      ],
+    );
+  }
+
+  IconButton iconButtonChangeTheme() {
+    return IconButton(
+      icon: Icon(Icons.change_history),
+      onPressed: () {
+        context.setLocale(LanguageManager.instance.enLocale);
+      },
+    );
+  }
+
+  Widget get textNumber {
+    return Column(
+      children: <Widget>[
+        Observer(
+          builder: (context) => Text(
+            viewModel.number.toString(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text textWelcomeWidget() => Text(LocaleKeys.welcome.locale!);
+
+  FloatingActionButton get floatingActionButtonNumberIncrement =>
+      FloatingActionButton(
+        onPressed: () => viewModel.incrementNumber(),
+      );
+}
+
+extension _FormArea on _TestViewState {
+  TextFormField get mailField => TextFormField(
+        validator: (val) => val.isValidEmail,
+      );
+}
