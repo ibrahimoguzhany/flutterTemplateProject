@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
 import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
 import 'package:fluttermvvmtemplate/view/authenticate/login/viewmodel/login_view_model.dart';
@@ -25,7 +24,7 @@ class LoginView extends StatelessWidget {
             Container(
               padding: context.paddingLow,
               height: context.height * 0.4,
-              color: context.colors.background,
+              color: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
               child: buildText(context),
             ),
             Padding(
@@ -39,7 +38,8 @@ class LoginView extends StatelessWidget {
   Text buildText(BuildContext context) {
     return Text(
       "data",
-      style: context.textTheme.subtitle1,
+      style: context.textTheme.headline1!
+          .copyWith(color: context.theme.primaryColor),
     );
   }
 }

@@ -19,30 +19,23 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends BaseState<TestView> {
-  TestViewModel _viewModel = TestViewModel();
-
-  TestViewModel get viewModel => _viewModel;
-
-  set viewModel(TestViewModel viewModel) {
-    _viewModel = viewModel;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseView<TestViewModel>(
       viewModel: TestViewModel(),
-      onModelReady: (TestViewModel model) {
+      onModelReady: (model) {
         model.setContext(context);
+        model.init();
       },
       onPageBuilder: (BuildContext context, TestViewModel value) =>
-          scaffoldBody,
+          scaffoldBody(value),
     );
   }
 
-  Widget get scaffoldBody => Scaffold(
+  Widget scaffoldBody(TestViewModel value) => Scaffold(
         appBar: appBar(),
-        floatingActionButton: floatingActionButtonNumberIncrement,
-        body: textNumber,
+        floatingActionButton: floatingActionButtonNumberIncrement(value),
+        body: textNumber(value),
       );
 
   AppBar appBar() {
@@ -53,6 +46,11 @@ class _TestViewState extends BaseState<TestView> {
       title: textWelcomeWidget(),
       actions: [
         iconButtonChangeTheme(),
+        IconButton(
+            onPressed: () {
+              LocaleManager.instance.setString(PreferencesKeys.TOKEN, "4321");
+            },
+            icon: Icon(Icons.settings))
       ],
     );
   }
@@ -66,7 +64,7 @@ class _TestViewState extends BaseState<TestView> {
     );
   }
 
-  Widget get textNumber {
+  Widget textNumber(TestViewModel viewModel) {
     return Column(
       children: <Widget>[
         Observer(
@@ -80,7 +78,8 @@ class _TestViewState extends BaseState<TestView> {
 
   Text textWelcomeWidget() => Text(LocaleKeys.welcome.locale!);
 
-  FloatingActionButton get floatingActionButtonNumberIncrement =>
+  FloatingActionButton floatingActionButtonNumberIncrement(
+          TestViewModel viewModel) =>
       FloatingActionButton(
         onPressed: () => viewModel.incrementNumber(),
       );

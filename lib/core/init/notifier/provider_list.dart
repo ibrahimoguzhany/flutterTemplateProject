@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import '../navigation/navigation_service.dart';
 import 'theme_notifier.dart';
 import 'package:provider/provider.dart';

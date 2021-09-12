@@ -24,6 +24,7 @@ dependencies:
 
 dependency_overrides:
   analyzer: ^2.1.0
+  meta: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +34,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/lang/
+
+  fonts:
+    - asset: assets/fonts/Poppins-Regular.ttf
+    - asset: assets/fonts/Poppins-Bold.ttf
+    - asset: assets/fonts/Poppins-Light.ttf

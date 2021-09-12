@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
+import 'package:fluttermvvmtemplate/core/constants/enums/http_request_enum.dart';
 import 'package:fluttermvvmtemplate/core/init/network/network_manager.dart';
 import 'package:fluttermvvmtemplate/view/authenticate/test/model/test_model.dart';
 import 'package:mobx/mobx.dart';
@@ -40,9 +41,11 @@ abstract class _TestViewModelBase with Store, BaseViewModel {
   @action
   Future<void> getSampleRequest() async {
     isLoading = true;
-    final list =
-        await NetworkManager.instance!.dioGet<TestModel>("x", TestModel());
-    if (list is List) {
+    // final list =
+    //     await NetworkManager.instance!.coreDio.fetchData(path, type: type);
+    final list = await NetworkManager.instance!.coreDio
+        .fetchData<List<TestModel>,TestModel>("x", type: HttpTypes.GET, parseModel: TestModel());
+    if (list is List<TestModel>) {
       // print true
     }
 
