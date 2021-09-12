@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
-import 'package:fluttermvvmtemplate/core/constants/enums/http_request_enum.dart';
-import 'package:fluttermvvmtemplate/core/init/network/network_manager.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/test/model/test_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/base/model/base_viewmodel.dart';
 import '../../../../core/constants/enums/app_theme_enums.dart';
+import '../../../../core/constants/enums/http_request_enum.dart';
+import '../../../../core/init/network/IResponseModel.dart';
 import '../../../../core/init/notifier/theme_notifier.dart';
+import '../model/test_model.dart';
 
 part 'test_viewmodel.g.dart';
 
@@ -43,10 +43,13 @@ abstract class _TestViewModelBase with Store, BaseViewModel {
     isLoading = true;
     // final list =
     //     await NetworkManager.instance!.coreDio.fetchData(path, type: type);
-    final list = await NetworkManager.instance!.coreDio
-        .fetchData<List<TestModel>,TestModel>("x", type: HttpTypes.GET, parseModel: TestModel());
-    if (list is List<TestModel>) {
+    final response = await coreDio
+        .fetchData<ResponseModel<List<TestModel>>, TestModel>("x",
+            type: HttpTypes.GET, parseModel: TestModel());
+    if (response is List<TestModel>) {
       // print true
+    } else {
+      // response.error;
     }
 
     isLoading = false;

@@ -1,21 +1,28 @@
 import 'dart:io';
 
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_error.dart';
 
+import '../../base/model/base_error.dart';
 import '../../base/model/base_model.dart';
 import '../../constants/enums/http_request_enum.dart';
 import '../../extensions/network_extension.dart';
 import 'ICoreDio.dart';
+import 'IResponseModel.dart';
+
+part './network_core/core_operations.dart';
 
 class CoreDio with DioMixin implements Dio, ICoreDio {
   final BaseOptions options;
 
   CoreDio(this.options) {
     this.options = options;
+    this.interceptors.add(InterceptorsWrapper());
+
+    this.httpClientAdapter = DefaultHttpClientAdapter();
   }
 
-  Future<R> fetchData<R, T extends BaseModel>(String path,
+  Future<IResponseModel<R>> fetchData<R, T extends BaseModel>(String path,
       {required HttpTypes type,
       required T parseModel,
       dynamic data,
@@ -27,19 +34,11 @@ class CoreDio with DioMixin implements Dio, ICoreDio {
     switch (response.statusCode) {
       case HttpStatus.ok:
       case HttpStatus.accepted:
-        return _responseParser<R>(parseModel, _responseParser);
+        final model = _responseParser<R>(parseModel, _responseParser);
+        return ResponseModel<R>(data: model);
 
       default:
-        return BaseError(response.statusMessage!) as dynamic;
+        return ResponseModel(error: BaseError("message"));
     }
-  }
-
-  R _responseParser<R>(BaseModel model, dynamic data) {
-    if (data is List) {
-      return data.map((e) => model.fromJson(e)).toList() as R;
-    } else if (data is Map) {
-      return model.fromJson(data as Map<String, Object>) as R;
-    }
-    return data as R;
   }
 }
