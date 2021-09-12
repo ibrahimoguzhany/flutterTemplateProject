@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/core/components/column/form_column.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/base/view/base_view.dart';
+import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/extensions/context_extension.dart';
-import '../../../_widgets/listview/on_board_indicator.dart';
+import '../model/on_board_model.dart';
 import '../viewmodel/on_board_view_model.dart';
 
-class OnBoardView extends StatefulWidget {
+class OnBoardView extends StatelessWidget {
   const OnBoardView({Key? key}) : super(key: key);
-
-  @override
-  OnBoardViewState createState() => OnBoardViewState();
-}
-
-class OnBoardViewState extends State<OnBoardView> {
-  late OnBoardViewModel viewModel;
-
   @override
   Widget build(BuildContext context) {
     return BaseView<OnBoardViewModel>(
@@ -24,47 +16,105 @@ class OnBoardViewState extends State<OnBoardView> {
       onModelReady: (OnBoardViewModel model) {
         model.setContext(context);
         model.init();
-        viewModel = model;
       },
-      onPageBuilder: (BuildContext context, OnBoardViewModel value) => Scaffold(
-        body: buildColumnBody(),
+      onPageBuilder: (BuildContext context, OnBoardViewModel viewModel) =>
+          Scaffold(
+        body: Padding(
+          padding: context.paddingNormalHorizontal,
+          child: Column(
+            children: [
+              Spacer(
+                flex: 2,
+              ),
+              Expanded(
+                flex: 5,
+                child: buildPageView(viewModel),
+              ),
+              Expanded(flex: 2, child: buildRowFooter(viewModel, context)),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Column buildColumnBody() {
-    return Column(
+  PageView buildPageView(OnBoardViewModel viewModel) {
+    return PageView.builder(
+        itemCount: viewModel.onBoardItems.length,
+        itemBuilder: (context, index) =>
+            buildColumnBody(context, viewModel.onBoardItems[index]));
+  }
+
+  Row buildRowFooter(OnBoardViewModel viewModel, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          flex: 9,
-          child: buildPageView(),
+          flex: 2,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: context.paddingLowAll,
+                  child: CircleAvatar(
+                    radius: viewModel.currentIndex == index ? 8 : 5,
+                  ),
+                );
+              }),
         ),
-        Expanded(child: buildObserverIndicator())
+        Spacer(),
+        FloatingActionButton(
+          onPressed: () {},
+          child: Icon(
+            Icons.arrow_right_alt,
+            color: context.colors.primaryVariant,
+          ),
+        )
       ],
     );
   }
 
-  PageView buildPageView() {
-    return PageView.builder(
-      onPageChanged: (val) {
-        viewModel.onPageChanged(val);
-      },
-      itemCount: viewModel.onBoardModel.length,
-      itemBuilder: (context, index) => Container(
-        color: context.randomColor,
-        child: FormColumn(
-          children: [Placeholder(), Text(viewModel.onBoardModel[index].text)],
-        ),
-      ),
+  Column buildColumnBody(BuildContext context, OnBoardModel model) {
+    return Column(
+      children: [
+        Expanded(flex: 5, child: buildSvgPicture(model.imagePath)),
+        buildColumnDescription(context, model),
+      ],
     );
   }
 
-  Observer buildObserverIndicator() {
-    return Observer(builder: (_) {
-      return OnBoardIndicator(
-        itemCount: viewModel.onBoardModel.length,
-        currentIndex: viewModel.currentPageIndex,
-      );
-    });
+  Column buildColumnDescription(BuildContext context, OnBoardModel model) {
+    return Column(
+      children: [
+        buildLocaleTextTitle(model, context),
+        Padding(
+          padding: context.paddingMediumVHorizontal,
+          child: buildLocaleTextDescription(model, context),
+        ),
+      ],
+    );
   }
+
+  AutoLocaleText buildLocaleTextTitle(
+      OnBoardModel model, BuildContext context) {
+    return AutoLocaleText(
+      value: model.title,
+      style: Theme.of(context).textTheme.headline3!.copyWith(
+          fontWeight: FontWeight.bold, color: context.colors.onSecondary),
+    );
+  }
+
+  AutoLocaleText buildLocaleTextDescription(
+      OnBoardModel model, BuildContext context) {
+    return AutoLocaleText(
+      value: model.description,
+      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+            fontWeight: FontWeight.w100,
+          ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  SvgPicture buildSvgPicture(String path) => SvgPicture.asset(path);
 }

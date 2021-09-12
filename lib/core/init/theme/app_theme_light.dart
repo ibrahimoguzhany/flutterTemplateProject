@@ -10,7 +10,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
   AppThemeLight._init();
 
   ThemeData get theme => ThemeData(
-        colorScheme: _appColorScheme(),
+        colorScheme: _appColorScheme,
         textTheme: buildTextTheme(),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         // floatingActionButtonTheme:
@@ -31,17 +31,17 @@ class AppThemeLight extends AppTheme with ILightTheme {
     );
   }
 
-  ColorScheme _appColorScheme() {
+  ColorScheme get _appColorScheme {
     return ColorScheme(
       primary: colorSchemeLight.black,
-      primaryVariant: Colors.white,
+      primaryVariant: Colors.white, //xx
       secondary: Colors.green,
       secondaryVariant: Colors.green[200]!,
       surface: Colors.red[900]!,
-      background: Colors.greenAccent,
+      background: Colors.greenAccent, //xx
       error: Colors.redAccent,
       onPrimary: Colors.amber,
-      onSecondary: Colors.amberAccent,
+      onSecondary: Colors.black,
       onSurface: Colors.black26,
       onBackground: Colors.black12,
       onError: Colors.black,

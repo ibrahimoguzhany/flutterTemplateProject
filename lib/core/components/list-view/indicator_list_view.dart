@@ -24,7 +24,7 @@ class IndicatorListView extends StatelessWidget {
 
   Padding buildPadding(BuildContext context, int index) {
     return Padding(
-      padding: context.paddingLow,
+      padding: context.paddingLowAll,
       child: buildCircleAvatar(index, context),
     );
   }
