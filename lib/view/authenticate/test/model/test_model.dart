@@ -1,4 +1,4 @@
-import 'package:fluttermvvmtemplate/core/base/model/base_model.dart';
+import '../../../../core/base/model/base_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'test_model.g.dart';
@@ -12,12 +12,12 @@ class TestModel extends BaseModel {
 
   TestModel({this.userId, this.id, this.title, this.completed});
 
-  Map<String, Object> toJson() {
+  Map<String, dynamic> toJson() {
     return _$TestModelToJson(this);
   }
 
   @override
-  fromJson(Map<String, Object> json) {
+  fromJson(Map<String, dynamic> json) {
     return _$TestModelFromJson(json);
   }
 }

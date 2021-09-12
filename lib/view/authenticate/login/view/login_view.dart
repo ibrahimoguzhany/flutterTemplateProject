@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
-import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/login/viewmodel/login_view_model.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../_widgets/button/facebook_button.dart';
+import '../viewmodel/login_view_model.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
+  late LoginViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +18,8 @@ class LoginView extends StatelessWidget {
       viewModel: LoginViewModel(),
       onModelReady: (model) {
         model.setContext(context);
+        model.init();
+        viewModel = model;
       },
       onPageBuilder: (BuildContext context, LoginViewModel value) =>
           buildScaffold(context),
@@ -19,18 +27,21 @@ class LoginView extends StatelessWidget {
   }
 
   Scaffold buildScaffold(BuildContext context) => Scaffold(
-        body: ListView(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: context.paddingLow,
-              height: context.height * 0.4,
-              color: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
-              child: buildText(context),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.lowValue),
-              child: Placeholder(),
-            ),
+            FacebookButton(onComplete: (data, {errorMessage}) {
+              if (data != null) {
+              } else {
+                scaffoldKey.currentState!
+                    .showSnackBar(SnackBar(content: Text(errorMessage!)));
+              }
+            })
           ],
         ),
       );

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'view/authenticate/onboard/view/on_board_view.dart';
 import 'core/constants/app/app_contansts.dart';
 import 'core/init/cache/locale_manager.dart';
 import 'core/init/lang/language_manager.dart';
@@ -7,7 +8,6 @@ import 'core/init/navigation/navigation_route.dart';
 import 'core/init/navigation/navigation_service.dart';
 import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
-import 'view/authenticate/test/view/test_view.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TestView(),
+      home: OnBoardView(),
       theme: Provider.of<ThemeNotifier>(context).currentTheme,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,

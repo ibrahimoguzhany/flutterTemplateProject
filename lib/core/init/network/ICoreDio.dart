@@ -1,6 +1,6 @@
-import 'package:fluttermvvmtemplate/core/base/model/base_model.dart';
-import 'package:fluttermvvmtemplate/core/constants/enums/http_request_enum.dart';
-import 'package:fluttermvvmtemplate/core/init/network/IResponseModel.dart';
+import '../../base/model/base_model.dart';
+import '../../constants/enums/http_request_enum.dart';
+import 'IResponseModel.dart';
 
 abstract class ICoreDio {
   Future<IResponseModel<R>>

@@ -1,6 +1,6 @@
 
 import 'package:dio/dio.dart';
-import 'package:fluttermvvmtemplate/core/init/network/core_dio.dart';
+import 'core_dio.dart';
 import '../../constants/enums/preferences_keys_enum.dart';
 import '../cache/locale_manager.dart';
 import 'ICoreDio.dart';

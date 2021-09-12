@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:fluttermvvmtemplate/core/init/network/ICoreDio.dart';
-import 'package:fluttermvvmtemplate/core/init/network/network_manager.dart';
+
+import '../../init/network/ICoreDio.dart';
+import '../../init/network/network_manager.dart';
 
 abstract class BaseViewModel {
   late BuildContext context;

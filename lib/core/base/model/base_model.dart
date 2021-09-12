@@ -1,5 +1,5 @@
 abstract class BaseModel<T> {
-  T fromJson(Map<String, Object> json);
+  T fromJson(Map<String, dynamic> json);
 
-  Map<String, Object> toJson();
+  Map<String, dynamic> toJson();
 }

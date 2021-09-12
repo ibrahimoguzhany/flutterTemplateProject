@@ -13,9 +13,9 @@ TestModel _$TestModelFromJson(Map<String, dynamic> json) => TestModel(
       completed: json['completed'] as bool?,
     );
 
-Map<String, Object> _$TestModelToJson(TestModel instance) => <String, Object>{
-      'userId': instance.userId!,
-      'id': instance.id!,
-      'title': instance.title!,
-      'completed': instance.completed!,
+Map<String, dynamic> _$TestModelToJson(TestModel instance) => <String, dynamic>{
+      'userId': instance.userId,
+      'id': instance.id,
+      'title': instance.title,
+      'completed': instance.completed,
     };
