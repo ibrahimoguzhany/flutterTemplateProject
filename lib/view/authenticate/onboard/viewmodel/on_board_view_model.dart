@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/core/constants/enums/preferences_keys_enum.dart';
+import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
@@ -27,6 +29,14 @@ abstract class _OnBoardViewModelBase with Store, BaseViewModel {
         SVGImagePaths.instance!.real_time_sync_SVG));
   }
 
+  @observable
+  bool isLoading = false;
+
+  @action
+  void changeLoading() {
+    isLoading = !isLoading;
+  }
+
   List<OnBoardModel> onBoardItems = [];
   @observable
   int currentIndex = 0;
@@ -34,5 +44,12 @@ abstract class _OnBoardViewModelBase with Store, BaseViewModel {
   @action
   void changeCurrentIndex(int value) {
     currentIndex = value;
+  }
+
+  Future<void> completeToOnBoard() async {
+    changeLoading();
+    await localeManager.setBoolValue(PreferencesKeys.IS_FIRST_APP, true);
+    changeLoading();
+    navigation.navigateToPageClear(NavigationConstants.TEST_VIEW);
   }
 }

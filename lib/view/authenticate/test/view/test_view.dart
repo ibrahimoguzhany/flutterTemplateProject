@@ -48,7 +48,8 @@ class _TestViewState extends BaseState<TestView> {
         iconButtonChangeTheme(),
         IconButton(
             onPressed: () {
-              LocaleManager.instance.setString(PreferencesKeys.TOKEN, "4321");
+              LocaleManager.instance
+                  .setStringValue(PreferencesKeys.TOKEN, "4321");
             },
             icon: Icon(Icons.settings))
       ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttermvvmtemplate/view/_widgets/avatar/on_board_circle.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -41,6 +43,9 @@ class OnBoardView extends StatelessWidget {
   PageView buildPageView(OnBoardViewModel viewModel) {
     return PageView.builder(
         itemCount: viewModel.onBoardItems.length,
+        onPageChanged: (val) {
+          viewModel.changeCurrentIndex(val);
+        },
         itemBuilder: (context, index) =>
             buildColumnBody(context, viewModel.onBoardItems[index]));
   }
@@ -49,29 +54,52 @@ class OnBoardView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        buildListViewCircles(viewModel),
         Expanded(
-          flex: 2,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: context.paddingLowAll,
-                  child: CircleAvatar(
-                    radius: viewModel.currentIndex == index ? 8 : 5,
-                  ),
-                );
-              }),
+          child: Center(child: Observer(builder: (_) {
+            return Visibility(
+              child: CircularProgressIndicator(),
+              visible: viewModel.isLoading,
+            );
+          })),
         ),
-        Spacer(),
-        FloatingActionButton(
-          onPressed: () {},
-          child: Icon(
-            Icons.arrow_right_alt,
-            color: context.colors.primaryVariant,
-          ),
-        )
+        buildSkipButton(context, viewModel)
       ],
+    );
+  }
+
+  ListView buildListViewCircles(OnBoardViewModel viewModel) {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: context.paddingLowAll,
+            child: Observer(builder: (_) {
+              return SizedBox(
+                width: context.width * 0.07,
+                child: OnBoardCircle(
+                  isSelected: viewModel.currentIndex == index,
+                  currentIndex: viewModel.currentIndex,
+                ),
+              );
+            }),
+          );
+        });
+  }
+
+  FloatingActionButton buildSkipButton(
+      BuildContext context, OnBoardViewModel viewModel) {
+    return FloatingActionButton(
+      backgroundColor: context.colors.secondaryVariant,
+      onPressed: () {
+        viewModel.completeToOnBoard();
+      },
+      child: Icon(
+        Icons.arrow_right_alt,
+        color: context.colors.primaryVariant,
+      ),
     );
   }
 

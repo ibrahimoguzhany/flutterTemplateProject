@@ -36,15 +36,15 @@ class AppThemeLight extends AppTheme with ILightTheme {
       primary: colorSchemeLight.black,
       primaryVariant: Colors.white, //xx
       secondary: Colors.green,
-      secondaryVariant: Colors.green[200]!,
+      secondaryVariant: colorSchemeLight.boldGreen, //xx
       surface: Colors.red[900]!,
       background: Colors.greenAccent, //xx
       error: Colors.redAccent,
-      onPrimary: Colors.amber,
-      onSecondary: Colors.black,
+      onPrimary: Colors.greenAccent,
+      onSecondary: Colors.black, //xx
       onSurface: Colors.black26,
       onBackground: Colors.black12,
-      onError: Colors.black,
+      onError: Colors.orange,
       brightness: Brightness.light,
     );
   }
