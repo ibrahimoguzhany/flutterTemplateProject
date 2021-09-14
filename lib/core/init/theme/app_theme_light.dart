@@ -12,6 +12,16 @@ class AppThemeLight extends AppTheme with ILightTheme {
   ThemeData get theme => ThemeData(
         colorScheme: _appColorScheme,
         textTheme: buildTextTheme(),
+        inputDecorationTheme: InputDecorationTheme(
+            focusColor: Colors.black12,
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black54)),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.black54),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black54))),
+        scaffoldBackgroundColor: Color(0xfff1f3f8),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         // floatingActionButtonTheme:
         // ThemeData.light().floatingActionButtonTheme.copyWith(),
@@ -35,16 +45,16 @@ class AppThemeLight extends AppTheme with ILightTheme {
     return ColorScheme(
       primary: colorSchemeLight.black,
       primaryVariant: Colors.white, //xx
-      secondary: Colors.green,
+      secondary: colorSchemeLight.socarGreen,
       secondaryVariant: colorSchemeLight.boldGreen, //xx
       surface: Colors.red[900]!,
       background: Colors.greenAccent, //xx
-      error: Colors.redAccent,
+      error: colorSchemeLight.socarRed,
       onPrimary: Colors.greenAccent,
       onSecondary: Colors.black, //xx
-      onSurface: Colors.black26,
+      onSurface: colorSchemeLight.socarBlue, // xx
       onBackground: Colors.black12,
-      onError: Colors.orange,
+      onError: colorSchemeLight.onError, //xx
       brightness: Brightness.light,
     );
   }

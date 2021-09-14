@@ -12,4 +12,5 @@ class SVGImagePaths {
   final contractSVG = "undraw_Contract_re_ves9".toSVG;
   final design_process_SVG = "undraw_Design_process_re_0dhf".toSVG;
   final real_time_sync_SVG = "undraw_Real_time_sync_re_nky7".toSVG;
+  final socar_logo_SVG = "socarlogo".toSVG;
 }

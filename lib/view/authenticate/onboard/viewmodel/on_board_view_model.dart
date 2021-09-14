@@ -4,7 +4,6 @@ import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constan
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/init/lang/locale_keys.g.dart';
 import '../../../_product/_constants/image_path_svg.dart';
 import '../model/on_board_model.dart';

@@ -16,6 +16,10 @@ class ColorSchemeLight {
   final Color lightGray = Color(0xfff7f7f7);
   final Color darkGray = Color(0xff676870);
   final Color black = Color(0xff020306);
+  final Color socarBlue = Color(0xfff029EDF);
+  final Color socarRed = Color(0xfffE40428);
+  final Color socarGreen = Color(0xfff76B82B);
+  final Color onError = Color(0xffffc93c);
 
   final Color boldGreen = Color(0xff27928d);
 }

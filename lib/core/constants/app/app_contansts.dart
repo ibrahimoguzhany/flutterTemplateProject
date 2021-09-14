@@ -3,6 +3,7 @@ class ApplicationConstants {
   static const IPAD_NAME = "IPAD";
   static const COMPANY_NAME = "ARF";
 
-  static const EMAIL_REGEX = r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$";
+  static const EMAIL_REGEX =
+      r"^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
   static const FONT_FAMILY = "POPPINS";
 }

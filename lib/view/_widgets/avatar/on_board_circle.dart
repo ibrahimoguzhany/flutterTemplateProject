@@ -16,7 +16,7 @@ class OnBoardCircle extends StatelessWidget {
       child: CircleAvatar(
         backgroundColor:
             context.colors.onError.withOpacity(isSelected ? 1 : 0.2),
-        radius: isSelected ? context.width * 0.03 : context.width * 0.015,
+        radius: isSelected ? context.width * 0.024 : context.width * 0.012,
         child: AnimatedOpacity(
           duration: context.durationLow,
           opacity: isSelected ? 1 : 0,

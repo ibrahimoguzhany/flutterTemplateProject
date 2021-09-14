@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'core_dio.dart';
 import '../../constants/enums/preferences_keys_enum.dart';
@@ -46,5 +45,4 @@ class NetworkManager {
     //   },
     // ));
   }
-
 }

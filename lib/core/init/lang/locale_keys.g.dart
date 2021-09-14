@@ -1,18 +1,24 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const welcome = 'welcome';
-  static const onBoard_page1_title = 'Make It Good';
-  static const onBoard_page1_desc =
-      'You are not alone. You have unique abilities to go another world';
+  static const onBoard_page1_title = 'onBoard.page1.title';
+  static const onBoard_page1_desc = 'onBoard.page1.desc';
   static const onBoard_page1 = 'onBoard.page1';
-  static const onBoard_page2_title = 'Make It Good';
-  static const onBoard_page2_desc =
-      'You are not alone. You have unique abilities to go another world';
+  static const onBoard_page2_title = 'onBoard.page2.title';
+  static const onBoard_page2_desc = 'onBoard.page2.desc';
   static const onBoard_page2 = 'onBoard.page2';
-  static const onBoard_page3_title = 'Make It Good';
-  static const onBoard_page3_desc =
-      'You are not alone. You have unique abilities to go another world';
+  static const onBoard_page3_title = 'onBoard.page3.title';
+  static const onBoard_page3_desc = 'onBoard.page3.desc';
   static const onBoard_page3 = 'onBoard.page3';
   static const onBoard = 'onBoard';
+  static const login_tab1 = 'login.tab1';
+  static const login_tab2 = 'login.tab2';
+  static const login_email = 'login.email';
+  static const login_password = 'login.password';
+  static const login_forgotText = 'login.forgotText';
+  static const login_login = 'login.login';
+  static const login_noAccount = 'login.noAccount';
+  static const login = 'login';
+
 }

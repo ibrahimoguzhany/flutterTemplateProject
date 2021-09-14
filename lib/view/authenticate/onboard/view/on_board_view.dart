@@ -77,12 +77,9 @@ class OnBoardView extends StatelessWidget {
           return Padding(
             padding: context.paddingLowAll,
             child: Observer(builder: (_) {
-              return SizedBox(
-                width: context.width * 0.07,
-                child: OnBoardCircle(
-                  isSelected: viewModel.currentIndex == index,
-                  currentIndex: viewModel.currentIndex,
-                ),
+              return OnBoardCircle(
+                isSelected: viewModel.currentIndex == index,
+                currentIndex: viewModel.currentIndex,
               );
             }),
           );
