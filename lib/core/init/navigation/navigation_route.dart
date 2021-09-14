@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../view/authenticate/test/view/test_view.dart';
+import '../../../view/home/home1/view/home_view.dart';
 import '../../components/card/not_found_navigation_widget.dart';
 import '../../constants/navigation/navigation_constants.dart';
 
@@ -15,6 +16,8 @@ class NavigationRoute {
     switch (args.name) {
       case NavigationConstants.TEST_VIEW:
         return normalNavigate(TestView());
+      case NavigationConstants.HOME_VIEW:
+        return normalNavigate(HomeView());
 
       default:
         return MaterialPageRoute(
