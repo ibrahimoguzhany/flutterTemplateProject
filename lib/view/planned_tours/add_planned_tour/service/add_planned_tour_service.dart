@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 
 class PlannedTourService {
   static PlannedTourService? _instance;
@@ -14,7 +14,7 @@ class PlannedTourService {
   CollectionReference toursCollection =
       FirebaseFirestore.instance.collection('tours');
 
-  Future<void> addTour(TourModel tour) {
+  Future<void> addTour(PlannedTourModel tour) {
     // Call the user's CollectionReference to add a new user
     return toursCollection
         .add({

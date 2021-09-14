@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/viewmodel/add_planned_tour_view_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 
 class AddPlannedTourView extends StatefulWidget {
   const AddPlannedTourView({Key? key}) : super(key: key);
@@ -99,7 +99,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             SizedBox(height: 10),
             FloatingActionButton.extended(
                 onPressed: () async {
-                  viewModel.addTour(TourModel(
+                  viewModel.addTour(PlannedTourModel(
                       field: field!,
                       fieldOrganizationScore: fieldOrganizationScore!,
                       location: location!,

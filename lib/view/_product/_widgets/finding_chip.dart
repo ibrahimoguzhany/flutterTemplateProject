@@ -1,11 +1,15 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/planned_tour_detail_view_model.dart';
 
 class FindingChip extends StatefulWidget {
   final String title;
+  final PlannedTourDetailViewModel viewModel;
+  final int index;
 
-  FindingChip(this.title, {Key? key}) : super(key: key);
+  FindingChip(this.title, this.viewModel, this.index, {Key? key})
+      : super(key: key);
 
   @override
   _FindingChipState createState() => _FindingChipState();
@@ -27,8 +31,19 @@ class _FindingChipState extends State<FindingChip> {
               //set border radius, color and width
               ),
           onPressed: () {
+            widget.viewModel.selectedFinding =
+                widget.viewModel.findingList[widget.index];
+
             setState(() {
-              active = !active;
+              if (!active) {
+                active = widget.index ==
+                    widget.viewModel.currentFindingList
+                        .indexOf(widget.viewModel.selectedFinding);
+                widget.viewModel.changeVisibilityTrue();
+              } else {
+                active = false;
+                widget.viewModel.changeVisibilityFalse();
+              }
             });
           }, //set function
           child: Text(widget.title) //set title

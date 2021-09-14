@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<TourModel> toursFromJson(String str) =>
-    List<TourModel>.from(json.decode(str).map((x) => TourModel.fromJson(x)));
-String tourToJson(List<TourModel> data) =>
+List<PlannedTourModel> toursFromJson(String str) =>
+    List<PlannedTourModel>.from(json.decode(str).map((x) => PlannedTourModel.fromJson(x)));
+String tourToJson(List<PlannedTourModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class TourModel {
+class PlannedTourModel {
   String location = "";
   String field = "";
   String tourTeamMembers = "";
@@ -15,7 +15,7 @@ class TourModel {
   String tourDate = "";
   String fieldOrganizationScore = "";
   String observedPositiveFindings = "";
-  TourModel(
+  PlannedTourModel(
       {required this.location,
       required this.field,
       required this.tourTeamMembers,
@@ -24,7 +24,7 @@ class TourModel {
       required this.fieldOrganizationScore,
       required this.observedPositiveFindings});
 
-  TourModel.fromJson(Map<String, dynamic> json) {
+  PlannedTourModel.fromJson(Map<String, dynamic> json) {
     location = json['location'];
     field = json['field'];
     tourTeamMembers = json['tourTeamMembers'];
@@ -46,7 +46,7 @@ class TourModel {
     return data;
   }
 
-  TourModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+  PlannedTourModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     field = documentSnapshot.get("field");
     fieldOrganizationScore = documentSnapshot.get("fieldOrganizationScore");
     location = documentSnapshot.get("location");

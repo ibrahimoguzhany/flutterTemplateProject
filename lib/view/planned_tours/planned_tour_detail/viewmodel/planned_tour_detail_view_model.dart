@@ -16,9 +16,29 @@ abstract class _PlannedTourDetailViewModelBase with Store, BaseViewModel {
     findingList = await getFindings();
   }
 
+  @observable
   List<FindingModel> findingList = <FindingModel>[];
 
   List<FindingModel> get currentFindingList => findingList;
+
+  @observable
+  FindingModel selectedFinding = FindingModel();
+
+  @observable
+  bool isVisible = false;
+
+  // @action
+  // void setSelectedFinding(int index) {}
+
+  @action
+  void changeVisibilityTrue() {
+    isVisible = true;
+  }
+
+  @action
+  void changeVisibilityFalse() {
+    isVisible = false;
+  }
 
   @action
   Future<List<FindingModel>> getFindings() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/service/add_planned_tour_service.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 import 'package:mobx/mobx.dart';
 part 'add_planned_tour_view_model.g.dart';
 
@@ -17,7 +17,7 @@ abstract class _AddPlannedTourViewModelBase with Store, BaseViewModel {
   var service = PlannedTourService.instance!;
 
   @action
-  addTour(TourModel tour) async {
+  addTour(PlannedTourModel tour) async {
     await service.addTour(tour);
 
     // Get.back();

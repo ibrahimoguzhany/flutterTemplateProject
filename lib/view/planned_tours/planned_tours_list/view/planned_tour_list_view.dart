@@ -4,7 +4,7 @@ import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
 import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
 import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
 import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tours_list/viewmodel/planned_tour_list_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -29,18 +29,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
       onPageBuilder:
           (BuildContext context, PlannedTourListViewModel viewModel) =>
               Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                Provider.of<AuthenticationProvider>(context, listen: false)
-                    .signOut();
-              },
-            )
-          ],
-          title: Text("Planlı Turlar"),
-        ),
+        appBar: buildAppBar(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             NavigationService.instance
@@ -66,6 +55,21 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
     );
   }
 
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: () {
+            Provider.of<AuthenticationProvider>(context, listen: false)
+                .signOut();
+          },
+        )
+      ],
+      title: Text("Planlı Turlar"),
+    );
+  }
+
   ListView buildListView(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
     return ListView.separated(
@@ -88,7 +92,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
         onTap: () {
           NavigationService.instance.navigateToPage(
               NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
-              data: TourModel.fromJson(data));
+              data: PlannedTourModel.fromJson(data));
         },
         leading: Text(
           data['location'],
