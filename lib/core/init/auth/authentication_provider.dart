@@ -29,6 +29,7 @@ class AuthenticationProvider {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+
       return "Oturum Açıldı!";
     } on FirebaseAuthException catch (e) {
       return e.message!;

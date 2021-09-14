@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
 import 'package:fluttermvvmtemplate/view/profile/view/profile_view.dart';
-import 'package:fluttermvvmtemplate/view/tours/planned_tours/view/planned_tours_view.dart';
-import 'package:fluttermvvmtemplate/view/tours/unplanned_tours/view/unplanned_tours.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/unplanned_tour_list/view/unplanned_tour_list_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -12,8 +12,8 @@ class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    PlannedToursView(),
-    UnPlannedToursView(),
+    PlannedTourListView(),
+    UnPlannedTourListView(),
     ProfileView(),
   ];
 
@@ -33,7 +33,7 @@ class _HomeViewState extends State<HomeView> {
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Planlı Turlar',
-      ),
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.mail),
           label: 'Plansız Turlar',

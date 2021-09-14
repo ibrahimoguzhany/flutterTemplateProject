@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
-import 'package:fluttermvvmtemplate/view/home/home1/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/home/home1/service/finding_service.dart';
+import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
+import 'package:fluttermvvmtemplate/view/home/home_esd/service/finding_service.dart';
 import 'package:mobx/mobx.dart';
 
-part 'planned_tours_view_model.g.dart';
+part 'planned_tour_detail_view_model.g.dart';
 
-class PlannedToursViewModel = _PlannedToursViewModelBase
-    with _$PlannedToursViewModel;
+class PlannedTourDetailViewModel = _PlannedTourDetailViewModelBase
+    with _$PlannedTourDetailViewModel;
 
-abstract class _PlannedToursViewModelBase with Store, BaseViewModel {
+abstract class _PlannedTourDetailViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   Future<void> init() async {
     findingList = await getFindings();

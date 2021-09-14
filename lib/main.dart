@@ -12,7 +12,7 @@ import 'core/init/navigation/navigation_service.dart';
 import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
 import 'view/authenticate/login/view/login_view.dart';
-import 'view/home/home1/view/home_view.dart';
+import 'view/home/home_esd/view/home_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

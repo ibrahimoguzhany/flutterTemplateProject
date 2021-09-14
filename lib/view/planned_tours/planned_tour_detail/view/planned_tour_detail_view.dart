@@ -1,38 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
 import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
-import 'package:fluttermvvmtemplate/view/tours/planned_tours/viewmodel/planned_tours_view_model.dart';
+import 'package:fluttermvvmtemplate/view/_product/_widgets/finding_chip.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/planned_tour_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/base/view/base_view.dart';
-import '../../../_product/_widgets/finding_chip.dart';
+class PlannedTourDetailView extends StatelessWidget {
+  PlannedTourDetailView({Key? key}) : super(key: key);
 
-class PlannedToursView extends StatefulWidget {
-  PlannedToursView({Key? key}) : super(key: key);
-
-  @override
-  State<PlannedToursView> createState() => _PlannedToursViewState();
-}
-
-class _PlannedToursViewState extends State<PlannedToursView> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  // final TourModel tour;
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<PlannedToursViewModel>(
-      viewModel: PlannedToursViewModel(),
-      onModelReady: (PlannedToursViewModel model) {
+    final tour = ModalRoute.of(context)!.settings.arguments as TourModel;
+
+    return BaseView<PlannedTourDetailViewModel>(
+      viewModel: PlannedTourDetailViewModel(),
+      onModelReady: (PlannedTourDetailViewModel model) {
         model.setContext(context);
         model.init();
       },
-      onPageBuilder: (BuildContext context, PlannedToursViewModel viewModel) =>
-          Scaffold(
+      onPageBuilder:
+          (BuildContext context, PlannedTourDetailViewModel viewModel) =>
+              Scaffold(
         appBar: AppBar(
-          title: Text("Planlı Turlar"),
+          title: Text("Planlı Turlar Detay"),
           actions: [
             IconButton(
               onPressed: () {
