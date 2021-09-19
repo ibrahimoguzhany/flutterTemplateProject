@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
+
+import '../../model/planned_tour_model.dart';
 
 class PlannedTourService {
   static PlannedTourService? _instance;
@@ -9,7 +10,7 @@ class PlannedTourService {
   }
 
   PlannedTourService._init();
-
+  
   final firestoreInstance = FirebaseFirestore.instance;
   CollectionReference toursCollection =
       FirebaseFirestore.instance.collection('tours');

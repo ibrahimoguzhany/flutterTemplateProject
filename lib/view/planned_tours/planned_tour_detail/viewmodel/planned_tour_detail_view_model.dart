@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/service/finding_service.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../../core/base/model/base_viewmodel.dart';
+import '../../../home/home_esd/model/finding_model.dart';
+import '../../../home/home_esd/service/finding_service.dart';
 
 part 'planned_tour_detail_view_model.g.dart';
 

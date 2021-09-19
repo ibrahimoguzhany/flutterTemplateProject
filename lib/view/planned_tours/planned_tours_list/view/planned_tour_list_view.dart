@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tours_list/viewmodel/planned_tour_list_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/auth/authentication_provider.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../model/planned_tour_model.dart';
+import '../viewmodel/planned_tour_list_view_model.dart';
 
 class PlannedTourListView extends StatefulWidget {
   @override
@@ -32,8 +33,6 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
         appBar: buildAppBar(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            NavigationService.instance
-                .navigateToPage(NavigationConstants.ADD_PLANNED_TOUR_VIEW);
             // Get.toNamed("add_tour_page");
           },
           child: Icon(Icons.add),

@@ -1,15 +1,18 @@
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
-import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
-import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
-import 'package:fluttermvvmtemplate/view/_product/_widgets/finding_chip.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/planned_tour_detail_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/components/text/auto_locale.text.dart';
+import '../../../../core/init/auth/authentication_provider.dart';
+import '../../../_product/_widgets/finding_chip.dart';
+import '../../../home/home_esd/model/finding_model.dart';
+import '../../model/planned_tour_model.dart';
+import '../viewmodel/planned_tour_detail_view_model.dart';
 
 class PlannedTourDetailView extends StatelessWidget {
   PlannedTourDetailView({Key? key}) : super(key: key);
@@ -30,7 +33,10 @@ class PlannedTourDetailView extends StatelessWidget {
           (BuildContext context, PlannedTourDetailViewModel viewModel) =>
               Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            NavigationService.instance
+                .navigateToPage(NavigationConstants.ADD_PLANNED_TOUR_FINDING);
+          },
           child: Icon(Icons.add),
         ),
         appBar: AppBar(
@@ -154,7 +160,9 @@ class PlannedTourDetailView extends StatelessWidget {
                   finding.fieldManagerStatements as String),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlemler"),
-              buildBiggerDataTextWidget(finding.observations as String),
+              buildBiggerDataTextWidget(finding.observations != null
+                  ? finding.observations as String
+                  : ""),
               SizedBox(height: 10),
               buildLittleTextWidget("Bulgu Türü"),
               buildBiggerDataTextWidget(finding.findingType as String),
