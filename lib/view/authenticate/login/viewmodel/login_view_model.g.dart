@@ -39,16 +39,61 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
     });
   }
 
-  final _$fetchLoginServiceAsyncAction =
-      AsyncAction('_LoginViewModelBase.fetchLoginService');
+  final _$isVisibleAtom = Atom(name: '_LoginViewModelBase.isVisible');
 
   @override
-  Future<void> fetchLoginService() {
-    return _$fetchLoginServiceAsyncAction.run(() => super.fetchLoginService());
+  bool get isVisible {
+    _$isVisibleAtom.reportRead();
+    return super.isVisible;
+  }
+
+  @override
+  set isVisible(bool value) {
+    _$isVisibleAtom.reportWrite(value, super.isVisible, () {
+      super.isVisible = value;
+    });
+  }
+
+  final _$currentTabIndexAtom =
+      Atom(name: '_LoginViewModelBase.currentTabIndex');
+
+  @override
+  int get currentTabIndex {
+    _$currentTabIndexAtom.reportRead();
+    return super.currentTabIndex;
+  }
+
+  @override
+  set currentTabIndex(int value) {
+    _$currentTabIndexAtom.reportWrite(value, super.currentTabIndex, () {
+      super.currentTabIndex = value;
+    });
   }
 
   final _$_LoginViewModelBaseActionController =
       ActionController(name: '_LoginViewModelBase');
+
+  @override
+  void changeVisibility() {
+    final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
+        name: '_LoginViewModelBase.changeVisibility');
+    try {
+      return super.changeVisibility();
+    } finally {
+      _$_LoginViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeCurrentTabIndex(int val) {
+    final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
+        name: '_LoginViewModelBase.changeCurrentTabIndex');
+    try {
+      return super.changeCurrentTabIndex(val);
+    } finally {
+      _$_LoginViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void isLockStateChange() {
@@ -76,7 +121,9 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-isLockOpen: ${isLockOpen}
+isLockOpen: ${isLockOpen},
+isVisible: ${isVisible},
+currentTabIndex: ${currentTabIndex}
     ''';
   }
 }

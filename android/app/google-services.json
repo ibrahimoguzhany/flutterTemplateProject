@@ -1,0 +1,47 @@
+{
+    "project_info": {
+        "project_number": "656814541531",
+        "project_id": "forthfl-74350",
+        "storage_bucket": "forthfl-74350.appspot.com"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:656814541531:android:c37c29e52fd285ff40dafe",
+                "android_client_info": {
+                    "package_name": "com.example.esd_mobile_demo"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "656814541531-7re8rsvnjc3jo4taj6b5lj1t2lqm212r.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.esd_mobile_demo",
+                        "certificate_hash": "6e69e0b39f644bc54480518e768d41c0b4dc7c71"
+                    }
+                },
+                {
+                    "client_id": "656814541531-mpalqb44fbf1kfaiuo5m5e15hjegrr69.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyAolSUatpo--_XIpSIHiqym1Xbxt_Es64s"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "656814541531-mpalqb44fbf1kfaiuo5m5e15hjegrr69.apps.googleusercontent.com",
+                            "client_type": 3
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}

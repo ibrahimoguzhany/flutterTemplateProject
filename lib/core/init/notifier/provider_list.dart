@@ -1,14 +1,16 @@
-import '../navigation/navigation_service.dart';
-import 'theme_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../auth/authentication_provider.dart';
+import '../navigation/navigation_service.dart';
+import 'theme_notifier.dart';
+
 class ApplicationProvider {
   static ApplicationProvider? _instance;
-
-  static ApplicationProvider? get instance {
-    if (_instance == null) _instance = ApplicationProvider._init();
-    return _instance;
+  static ApplicationProvider get instance {
+    _instance ??= ApplicationProvider._init();
+    return _instance!;
   }
 
   ApplicationProvider._init();
@@ -21,6 +23,13 @@ class ApplicationProvider {
     ),
     Provider.value(
       value: NavigationService.instance,
+    ),
+    Provider<AuthenticationProvider>(
+      create: (_) => AuthenticationProvider(FirebaseAuth.instance),
+    ),
+    StreamProvider(
+      create: (context) => context.read<AuthenticationProvider>().authState,
+      initialData: null,
     )
   ];
 
