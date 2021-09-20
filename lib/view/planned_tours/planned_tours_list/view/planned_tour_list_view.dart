@@ -33,6 +33,8 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
         appBar: buildAppBar(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            NavigationService.instance
+                .navigateToPage(NavigationConstants.ADD_PLANNED_TOUR_VIEW);
             // Get.toNamed("add_tour_page");
           },
           child: Icon(Icons.add),

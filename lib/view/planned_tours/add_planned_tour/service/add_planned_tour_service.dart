@@ -10,13 +10,13 @@ class PlannedTourService {
   }
 
   PlannedTourService._init();
-  
+
   final firestoreInstance = FirebaseFirestore.instance;
   CollectionReference toursCollection =
       FirebaseFirestore.instance.collection('tours');
 
   Future<void> addTour(PlannedTourModel tour) {
-    // Call the user's CollectionReference to add a new user
+
     return toursCollection
         .add({
           'field': tour.field,
