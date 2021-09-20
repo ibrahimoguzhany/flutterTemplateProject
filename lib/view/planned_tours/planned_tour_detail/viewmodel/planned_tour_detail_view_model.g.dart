@@ -9,6 +9,30 @@ part of 'planned_tour_detail_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
+  Computed<int>? _$findingListLengthComputed;
+
+  @override
+  int get findingListLength => (_$findingListLengthComputed ??= Computed<int>(
+          () => super.findingListLength,
+          name: '_PlannedTourDetailViewModelBase.findingListLength'))
+      .value;
+
+  final _$findingSnapshotsAtom =
+      Atom(name: '_PlannedTourDetailViewModelBase.findingSnapshots');
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> get findingSnapshots {
+    _$findingSnapshotsAtom.reportRead();
+    return super.findingSnapshots;
+  }
+
+  @override
+  set findingSnapshots(Stream<QuerySnapshot<Map<String, dynamic>>> value) {
+    _$findingSnapshotsAtom.reportWrite(value, super.findingSnapshots, () {
+      super.findingSnapshots = value;
+    });
+  }
+
   final _$findingListAtom =
       Atom(name: '_PlannedTourDetailViewModelBase.findingList');
 
@@ -98,9 +122,11 @@ mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
   @override
   String toString() {
     return '''
+findingSnapshots: ${findingSnapshots},
 findingList: ${findingList},
 selectedFinding: ${selectedFinding},
-isVisible: ${isVisible}
+isVisible: ${isVisible},
+findingListLength: ${findingListLength}
     ''';
   }
 }
