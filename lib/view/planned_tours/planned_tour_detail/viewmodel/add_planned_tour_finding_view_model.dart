@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/service/planned_tour_detail_service.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../../core/base/model/base_viewmodel.dart';
+import '../../../home/home_esd/model/finding_model.dart';
+import '../service/planned_tour_detail_service.dart';
+
 part 'add_planned_tour_finding_view_model.g.dart';
 
 class AddPlannedTourFindingViewModel = _AddPlannedTourFindingViewModelBase
@@ -19,7 +21,14 @@ abstract class _AddPlannedTourFindingViewModelBase with Store, BaseViewModel {
   Future<void> addFinding(FindingModel model) async {
     await service.addFinding(model);
 
-    scaffoldState.currentState!
-        .showSnackBar(SnackBar(content: Text("Tur başarıyla eklendi.")));
+    // scaffoldState.currentState!
+    //     .showSnackBar(SnackBar(content: Text("Tur başarıyla eklendi.")));
   }
+
+  // @action
+  // Future<void> navigateBack(PlannedTourModel tour) async {
+  //   await NavigationService.instance.navigateToPage(
+  //       NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
+  //       data: tour);
+  // }
 }

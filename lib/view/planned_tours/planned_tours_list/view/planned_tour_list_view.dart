@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
-import '../../model/planned_tour_model.dart';
 import '../viewmodel/planned_tour_list_view_model.dart';
 
 class PlannedTourListView extends StatefulWidget {
@@ -86,6 +87,8 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
   }
 
   Padding buildListTile(Map<String, dynamic> data, int index) {
+    var _data = data['observedPositiveFindings'].toString();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -103,9 +106,9 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           data['field'],
           style: TextStyle(fontSize: 18),
         ),
-        subtitle: Text(
-          data['tourTeamMembers'],
-          style: TextStyle(fontSize: 18),
+        subtitle: AutoLocaleText(
+          value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
+          style: TextStyle(fontSize: 15),
         ),
         trailing: Text(
           data['tourDate'],

@@ -1,5 +1,11 @@
-import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
+import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
+import 'package:fluttermvvmtemplate/view/_product/_widgets/finding_chip.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,19 +15,29 @@ import 'package:provider/provider.dart';
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
-import '../../../_product/_widgets/finding_chip.dart';
 import '../../../home/home_esd/model/finding_model.dart';
-import '../../model/planned_tour_model.dart';
 import '../viewmodel/planned_tour_detail_view_model.dart';
 
-class PlannedTourDetailView extends StatelessWidget {
+class PlannedTourDetailView extends StatefulWidget {
   PlannedTourDetailView({Key? key}) : super(key: key);
 
-  // final TourModel tour;
+  @override
+  _PlannedTourDetailViewState createState() => _PlannedTourDetailViewState();
+}
+
+class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
+  final findingStream = StreamController<FindingModel>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    findingStream.close();
+  }
 
   @override
   Widget build(BuildContext context) {
     final tour = ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
+    // print(tour);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -34,8 +50,12 @@ class PlannedTourDetailView extends StatelessWidget {
               Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            NavigationService.instance
-                .navigateToPage(NavigationConstants.ADD_PLANNED_TOUR_FINDING);
+            NavigationService.instance.navigateToPage(
+                NavigationConstants.ADD_PLANNED_TOUR_FINDING,
+                data: tour);
+            // NavigationService.instance.navigateToPage(
+            //     NavigationConstants.ADD_PLANNED_TOUR_FINDING,
+            //     data: tour);
           },
           child: Icon(Icons.add),
         ),
@@ -56,13 +76,26 @@ class PlannedTourDetailView extends StatelessWidget {
             // TODO: Findingler Turlara aittir. Findingleri Tur'un içinden çekmelisin. collection'un collection'una get atabilirsin.
             Expanded(
               child: Observer(builder: (_) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: viewModel.currentFindingList.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      FindingChip("Bulgu $index", viewModel, index),
+                return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: viewModel.findingSnapshots,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError)
+                      return Text('Error = ${snapshot.error}');
+
+                    if (snapshot.hasData) {
+                      final docs = snapshot.data!.docs;
+                      return buildHorizontalChips(docs, viewModel);
+                    }
+
+                    return Center(child: CircularProgressIndicator());
+                  },
                 );
+                // return ListView.builder(
+                //     shrinkWrap: true,
+                //     scrollDirection: Axis.horizontal,
+                //     itemCount: viewModel.findingListLength,
+                //     itemBuilder: (BuildContext context, int index) =>
+                //         FindingChip("Bulgu $index", viewModel, index));
               }),
             ),
             Observer(builder: (_) {
@@ -97,6 +130,17 @@ class PlannedTourDetailView extends StatelessWidget {
     );
   }
 
+  ListView buildHorizontalChips(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+      PlannedTourDetailViewModel viewModel) {
+    return ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: docs.length,
+        itemBuilder: (BuildContext context, int index) =>
+            FindingChip("Bulgu $index", viewModel, index));
+  }
+
   Padding buildExpandedTourDetails(PlannedTourModel tour) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -120,7 +164,7 @@ class PlannedTourDetailView extends StatelessWidget {
               buildBiggerDataTextWidget(tour.tourAccompanies),
               SizedBox(height: 10),
               buildLittleTextWidget("Tur Tarihi"),
-              buildBiggerDataTextWidget(tour.tourTeamMembers),
+              buildBiggerDataTextWidget(tour.tourDate),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Organinasyon Skoru"),
               buildBiggerDataTextWidget(tour.fieldOrganizationScore),
@@ -234,11 +278,20 @@ class PlannedTourDetailView extends StatelessWidget {
     );
   }
 
-  Padding buildBiggerDataTextWidget(String data) {
+  buildBiggerDataTextWidget(dynamic data) {
+    // var result = "";
+    var finalResult = "";
+    if (data is List) {
+      data.forEach((dynamic element) {
+        finalResult += element['name'] + ", ";
+        // result.trimRight(',');
+      });
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AutoLocaleText(
-        value: data,
+        value: data is List ? finalResult : data,
         style: TextStyle(
           fontSize: 18,
         ),

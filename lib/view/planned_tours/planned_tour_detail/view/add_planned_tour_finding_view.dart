@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -18,6 +19,9 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
 
   @override
   Widget build(BuildContext context) {
+    // PlannedTourModel tour =
+    //     ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
+    // print(tour);
     return BaseView<AddPlannedTourFindingViewModel>(
       viewModel: AddPlannedTourFindingViewModel(),
       onModelReady: (AddPlannedTourFindingViewModel model) {
@@ -107,7 +111,8 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             SizedBox(height: 10),
             FloatingActionButton.extended(
                 onPressed: () async {
-                  viewModel.addFinding(finding!);
+                  await viewModel.addFinding(finding!);
+                  Navigator.pop(context);
                 },
                 label: Text("Kaydet"))
           ],

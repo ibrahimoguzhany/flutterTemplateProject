@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -18,18 +20,20 @@ abstract class _PlannedTourDetailViewModelBase with Store, BaseViewModel {
   }
 
   @observable
+  var findingSnapshots =
+      FirebaseFirestore.instance.collection('findings').snapshots();
+
+  @observable
   List<FindingModel> findingList = <FindingModel>[];
 
-  List<FindingModel> get currentFindingList => findingList;
+  @computed
+  int get findingListLength => findingList.length;
 
   @observable
   FindingModel selectedFinding = FindingModel();
 
   @observable
   bool isVisible = false;
-
-  // @action
-  // void setSelectedFinding(int index) {}
 
   @action
   void changeVisibilityTrue() {

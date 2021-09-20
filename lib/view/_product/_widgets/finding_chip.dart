@@ -37,7 +37,7 @@ class _FindingChipState extends State<FindingChip> {
             setState(() {
               if (!active) {
                 active = widget.index ==
-                    widget.viewModel.currentFindingList
+                    widget.viewModel.findingList
                         .indexOf(widget.viewModel.selectedFinding);
                 widget.viewModel.changeVisibilityTrue();
               } else {

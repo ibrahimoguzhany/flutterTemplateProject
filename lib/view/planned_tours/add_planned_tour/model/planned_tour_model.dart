@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<PlannedTourModel> toursFromJson(String str) =>
-    List<PlannedTourModel>.from(json.decode(str).map((x) => PlannedTourModel.fromJson(x)));
+List<PlannedTourModel> toursFromJson(String str) => List<PlannedTourModel>.from(
+    json.decode(str).map((x) => PlannedTourModel.fromJson(x)));
 String tourToJson(List<PlannedTourModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class PlannedTourModel {
   String location = "";
   String field = "";
-  String tourTeamMembers = "";
-  String tourAccompanies = "";
+  List<dynamic> tourTeamMembers = [];
+  List<dynamic> tourAccompanies = [];
   String tourDate = "";
   String fieldOrganizationScore = "";
   String observedPositiveFindings = "";

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../model/planned_tour_model.dart';
+import '../model/planned_tour_model.dart';
 
 class PlannedTourService {
   static PlannedTourService? _instance;
@@ -16,7 +16,6 @@ class PlannedTourService {
       FirebaseFirestore.instance.collection('tours');
 
   Future<void> addTour(PlannedTourModel tour) {
-
     return toursCollection
         .add({
           'field': tour.field,
