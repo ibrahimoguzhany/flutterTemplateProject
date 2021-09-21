@@ -28,7 +28,7 @@ class NavigationRoute {
       case NavigationConstants.ADD_PLANNED_TOUR_VIEW:
         return normalNavigate(AddPlannedTourView());
       case NavigationConstants.ADD_PLANNED_TOUR_FINDING:
-        return normalNavigate(AddPlannedTourFindingView());
+        return navigateWithData(AddPlannedTourFindingView(), args.arguments);
       case NavigationConstants.PLANNED_TOUR_LIST_VIEW:
         return normalNavigate(PlannedTourListView());
 

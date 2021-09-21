@@ -17,18 +17,10 @@ abstract class _AddPlannedTourFindingViewModelBase with Store, BaseViewModel {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   var service = PlannedTourDetailService.instance!;
+
   @action
-  Future<void> addFinding(FindingModel model) async {
-    await service.addFinding(model);
-
-    // scaffoldState.currentState!
-    //     .showSnackBar(SnackBar(content: Text("Tur başarıyla eklendi.")));
+  Future<void> addFinding(
+      FindingModel model, BuildContext context, String key) async {
+    await service.addFinding(model, context, key);
   }
-
-  // @action
-  // Future<void> navigateBack(PlannedTourModel tour) async {
-  //   await NavigationService.instance.navigateToPage(
-  //       NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
-  //       data: tour);
-  // }
 }

@@ -1,14 +1,14 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
-import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/view/base_view.dart';
+import '../../../../core/components/text/auto_locale.text.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import '../model/planned_tour_model.dart';
 import '../model/tour_accompanies_dd_model.dart';
 import '../model/tour_team_members_model.dart';
@@ -39,7 +39,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
     'İstanbul Rafineri'
   ];
   String? dropdownValue;
-  late TextEditingController _controller3;
+  late TextEditingController _datePickerController;
 
   static List<TourAccompaniesDDModel> _tourAccompaniesList = [
     TourAccompaniesDDModel(1, "Oğuzhan Yılmaz"),
@@ -69,15 +69,18 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
   @override
   void initState() {
     super.initState();
-    _controller3 = TextEditingController(text: DateTime.now().toString());
+    _datePickerController =
+        TextEditingController(text: DateTime.now().toString());
+
     tour = PlannedTourModel(
-        location: "location",
-        field: "field",
+        location: "",
+        field: "",
         tourTeamMembers: [],
         tourAccompanies: [],
         tourDate: "",
-        fieldOrganizationScore: "fieldOrganizationScore",
-        observedPositiveFindings: "observedPositiveFindings");
+        fieldOrganizationScore: "",
+        observedPositiveFindings: "",
+        key: "");
   }
 
   @override
@@ -123,7 +126,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             FloatingActionButton.extended(
               label: Text("Kaydet"),
               onPressed: () async {
-                await viewModel.addTour(tour);
+                await viewModel.addTour(tour, context);
                 Get.snackbar(
                   "Başarılı",
                   "Tur başarıyla eklendi.",
@@ -144,7 +147,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
     return DateTimePicker(
       type: DateTimePickerType.date,
       dateMask: 'dd/MM/yyyy',
-      controller: _controller3,
+      controller: _datePickerController,
       //initialValue: _initialValue,
       firstDate: DateTime(2000),
       calendarTitle: "Tur Tarihi",
@@ -153,11 +156,11 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
       dateLabelText: 'Tur Tarihi',
       onChanged: (val) => setState(() {
         tour.tourDate = val;
-        print(tourDate);
+        print(tour.tourDate);
       }),
       onSaved: (val) => setState(() {
         tour.tourDate = val ?? '';
-        print(tourDate);
+        print(tour.tourDate);
       }),
     );
   }
@@ -176,13 +179,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
           borderSide: const BorderSide(color: Colors.black26, width: 2.0),
           borderRadius: BorderRadius.circular(5),
         ),
-        // border: OutlineInputBorder(
-        //   borderSide: const BorderSide(color: Colors.black26, width: 2.0),
-        //   borderRadius: BorderRadius.circular(5),
-        // ),
       ),
-      // maxLines: 8,
-      // decoration: const InputDecoration(border: OutlineInputBorder()),
       onChanged: (val) {
         tour.observedPositiveFindings = val;
       },
@@ -192,25 +189,17 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
   Center buildFieldOrganizationScoreField() {
     return Center(
       child: CustomNumberPicker(
-        initialValue: 5,
+        initialValue: 0,
         maxValue: 100,
         minValue: 0,
         step: 1,
         onValue: (value) {
-          fieldOrganizationScore = value.toString();
+          tour.fieldOrganizationScore = value.toString();
         },
       ),
     );
   }
 
-  TextField buildTourDateField() {
-    return TextField(
-      decoration: const InputDecoration(border: UnderlineInputBorder()),
-      onChanged: (val) {
-        tour.tourDate = val;
-      },
-    );
-  }
 
   MultiSelectDialogField<TourTeamMembersDDModel>
       buildTourTeamMembersMultiDropdownField() {

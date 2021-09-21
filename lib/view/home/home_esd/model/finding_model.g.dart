@@ -14,14 +14,12 @@ FindingModel _$FindingModelFromJson(Map<String, dynamic> json) => FindingModel(
       actionsMustBeTaken: json['actionsMustBeTaken'] as String?,
       fieldManagerStatements: json['fieldManagerStatements'] as String?,
       file: json['file'] as String?,
-      findingId: json['findingId'] as String?,
       key: json['key'] as String?,
     );
 
 Map<String, dynamic> _$FindingModelToJson(FindingModel instance) =>
     <String, dynamic>{
       'findingType': instance.findingType,
-      'findingId': instance.findingId,
       'category': instance.category,
       'observations': instance.observations,
       'actionsTakenInField': instance.actionsTakenInField,

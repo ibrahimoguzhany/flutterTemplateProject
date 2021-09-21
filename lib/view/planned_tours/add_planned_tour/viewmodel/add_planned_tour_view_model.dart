@@ -17,8 +17,8 @@ abstract class _AddPlannedTourViewModelBase with Store, BaseViewModel {
   var service = PlannedTourService.instance!;
 
   @action
-  addTour(PlannedTourModel tour) async {
-    await service.addTour(tour);
+  addTour(PlannedTourModel tour,BuildContext context) async {
+    await service.addTour(tour,context);
     // scaffoldState.currentState!
     //     .showSnackBar(SnackBar(content: Text("Tur başarıyla eklendi.")));
   }

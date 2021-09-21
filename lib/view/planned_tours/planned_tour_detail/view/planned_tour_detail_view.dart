@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
 import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
 import 'package:fluttermvvmtemplate/view/_product/_widgets/finding_chip.dart';
@@ -19,25 +20,29 @@ import '../../../home/home_esd/model/finding_model.dart';
 import '../viewmodel/planned_tour_detail_view_model.dart';
 
 class PlannedTourDetailView extends StatefulWidget {
-  PlannedTourDetailView({Key? key}) : super(key: key);
+  final PlannedTourModel? tour;
+  PlannedTourDetailView({Key? key, this.tour}) : super(key: key);
 
   @override
   _PlannedTourDetailViewState createState() => _PlannedTourDetailViewState();
 }
 
 class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
-  final findingStream = StreamController<FindingModel>();
-
-  @override
-  void dispose() {
-    super.dispose();
-    findingStream.close();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final tour = ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
-    // print(tour);
+    // final tour = ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
+
+    var findingSnapshots = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<AuthenticationProvider>(context)
+            .firebaseAuth
+            .currentUser!
+            .uid)
+        .collection('tours')
+        .doc(widget.tour!.key)
+        .collection("findings")
+        .snapshots();
+    print(widget.tour);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -52,7 +57,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
           onPressed: () {
             NavigationService.instance.navigateToPage(
                 NavigationConstants.ADD_PLANNED_TOUR_FINDING,
-                data: tour);
+                data: widget.tour);
             // NavigationService.instance.navigateToPage(
             //     NavigationConstants.ADD_PLANNED_TOUR_FINDING,
             //     data: tour);
@@ -73,29 +78,24 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         body: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            // TODO: Findingler Turlara aittir. Findingleri Tur'un içinden çekmelisin. collection'un collection'una get atabilirsin.
             Expanded(
               child: Observer(builder: (_) {
                 return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: viewModel.findingSnapshots,
+                  stream: findingSnapshots,
                   builder: (context, snapshot) {
                     if (snapshot.hasError)
                       return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
                       final docs = snapshot.data!.docs;
-                      return buildHorizontalChips(docs, viewModel);
+
+                      return buildHorizontalChips(
+                          docs, viewModel, widget.tour!.key);
                     }
 
                     return Center(child: CircularProgressIndicator());
                   },
                 );
-                // return ListView.builder(
-                //     shrinkWrap: true,
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: viewModel.findingListLength,
-                //     itemBuilder: (BuildContext context, int index) =>
-                //         FindingChip("Bulgu $index", viewModel, index));
               }),
             ),
             Observer(builder: (_) {
@@ -111,7 +111,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                 visible: !viewModel.isVisible,
                 child: Expanded(
                   flex: 12,
-                  child: buildExpandedTourDetails(tour),
+                  child: buildExpandedTourDetails(widget.tour!),
                 ),
               );
             }),
@@ -132,13 +132,18 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
 
   ListView buildHorizontalChips(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-      PlannedTourDetailViewModel viewModel) {
+      PlannedTourDetailViewModel viewModel,
+      String tourKey) {
     return ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: docs.length,
-        itemBuilder: (BuildContext context, int index) =>
-            FindingChip("Bulgu $index", viewModel, index));
+        itemBuilder: (BuildContext context, int index) => FindingChip(
+              "Bulgu $index",
+              viewModel,
+              index,
+              tourKey: tourKey,
+            ));
   }
 
   Padding buildExpandedTourDetails(PlannedTourModel tour) {

@@ -13,8 +13,8 @@ mixin _$AddPlannedTourViewModel on _AddPlannedTourViewModelBase, Store {
       AsyncAction('_AddPlannedTourViewModelBase.addTour');
 
   @override
-  Future addTour(PlannedTourModel tour) {
-    return _$addTourAsyncAction.run(() => super.addTour(tour));
+  Future addTour(PlannedTourModel tour, BuildContext context) {
+    return _$addTourAsyncAction.run(() => super.addTour(tour, context));
   }
 
   @override

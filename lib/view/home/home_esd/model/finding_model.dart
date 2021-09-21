@@ -7,7 +7,6 @@ part 'finding_model.g.dart';
 @JsonSerializable()
 class FindingModel extends INetworkModel<FindingModel> {
   String? findingType;
-  String? findingId;
   String? category;
   String? observations;
   String? actionsTakenInField;
@@ -24,7 +23,6 @@ class FindingModel extends INetworkModel<FindingModel> {
       this.actionsMustBeTaken,
       this.fieldManagerStatements,
       this.file,
-      this.findingId,
       this.key});
 
   FindingModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {

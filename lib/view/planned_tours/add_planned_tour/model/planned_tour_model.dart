@@ -15,6 +15,7 @@ class PlannedTourModel {
   String tourDate = "";
   String fieldOrganizationScore = "";
   String observedPositiveFindings = "";
+  String key = "";
   PlannedTourModel(
       {required this.location,
       required this.field,
@@ -22,7 +23,8 @@ class PlannedTourModel {
       required this.tourAccompanies,
       required this.tourDate,
       required this.fieldOrganizationScore,
-      required this.observedPositiveFindings});
+      required this.observedPositiveFindings,
+      required this.key});
 
   PlannedTourModel.fromJson(Map<String, dynamic> json) {
     location = json['location'];
@@ -32,6 +34,7 @@ class PlannedTourModel {
     tourDate = json['tourDate'];
     fieldOrganizationScore = json['fieldOrganizationScore'];
     observedPositiveFindings = json['observedPositiveFindings'];
+    key = json['key'];
   }
 
   Map<String, dynamic> toJson() {

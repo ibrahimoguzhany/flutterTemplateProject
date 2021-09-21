@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
@@ -41,12 +42,13 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           child: Icon(Icons.add),
         ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: viewModel.tourSnapshots,
+          stream: viewModel.tourSnapshots(context),
           builder: (context, snapshot) {
             if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
             if (snapshot.hasData) {
               final docs = snapshot.data!.docs;
+
               return buildListView(docs);
             }
 
@@ -81,6 +83,10 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
       itemCount: docs.length,
       itemBuilder: (context, index) {
         final data = docs[index].data();
+        final tourId = docs[index].reference.id;
+        data["key"] = tourId;
+
+        // print(data);
         return buildListTile(data, index);
       },
     );
@@ -94,9 +100,17 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
       child: ListTile(
         contentPadding: EdgeInsets.all(16.0),
         onTap: () {
-          NavigationService.instance.navigateToPage(
-              NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
-              data: PlannedTourModel.fromJson(data));
+          // NavigationService.instance.navigateToPage(
+          //     NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
+          //     data: PlannedTourModel.fromJson(data));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlannedTourDetailView(
+                tour: PlannedTourModel.fromJson(data),
+              ),
+            ),
+          );
         },
         leading: Text(
           data['location'],

@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/planned_tour_detail_view_model.dart';
 
 class FindingChip extends StatefulWidget {
   final String title;
   final PlannedTourDetailViewModel viewModel;
   final int index;
-
-  FindingChip(this.title, this.viewModel, this.index, {Key? key})
+  final String tourKey;
+  FindingChip(this.title, this.viewModel, this.index,
+      {Key? key, required this.tourKey})
       : super(key: key);
 
   @override
@@ -17,6 +19,13 @@ class FindingChip extends StatefulWidget {
 
 class _FindingChipState extends State<FindingChip> {
   bool active = false;
+  List<FindingModel> list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.findingList = widget.viewModel.getFindings(widget.tourKey);
+  }
 
   @override
   Widget build(BuildContext context) {

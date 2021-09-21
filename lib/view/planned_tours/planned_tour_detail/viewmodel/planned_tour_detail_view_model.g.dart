@@ -17,22 +17,6 @@ mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
           name: '_PlannedTourDetailViewModelBase.findingListLength'))
       .value;
 
-  final _$findingSnapshotsAtom =
-      Atom(name: '_PlannedTourDetailViewModelBase.findingSnapshots');
-
-  @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> get findingSnapshots {
-    _$findingSnapshotsAtom.reportRead();
-    return super.findingSnapshots;
-  }
-
-  @override
-  set findingSnapshots(Stream<QuerySnapshot<Map<String, dynamic>>> value) {
-    _$findingSnapshotsAtom.reportWrite(value, super.findingSnapshots, () {
-      super.findingSnapshots = value;
-    });
-  }
-
   final _$findingListAtom =
       Atom(name: '_PlannedTourDetailViewModelBase.findingList');
 
@@ -85,6 +69,17 @@ mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
       ActionController(name: '_PlannedTourDetailViewModelBase');
 
   @override
+  dynamic getFindings(String tourId) {
+    final _$actionInfo = _$_PlannedTourDetailViewModelBaseActionController
+        .startAction(name: '_PlannedTourDetailViewModelBase.getFindings');
+    try {
+      return super.getFindings(tourId);
+    } finally {
+      _$_PlannedTourDetailViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeVisibilityTrue() {
     final _$actionInfo =
         _$_PlannedTourDetailViewModelBaseActionController.startAction(
@@ -109,20 +104,8 @@ mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
   }
 
   @override
-  Future<List<FindingModel>> getFindings() {
-    final _$actionInfo = _$_PlannedTourDetailViewModelBaseActionController
-        .startAction(name: '_PlannedTourDetailViewModelBase.getFindings');
-    try {
-      return super.getFindings();
-    } finally {
-      _$_PlannedTourDetailViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
-findingSnapshots: ${findingSnapshots},
 findingList: ${findingList},
 selectedFinding: ${selectedFinding},
 isVisible: ${isVisible},

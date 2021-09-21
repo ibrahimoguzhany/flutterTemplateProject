@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationProvider {
@@ -8,6 +9,8 @@ class AuthenticationProvider {
 
   //Using Stream to listen to Authentication State
   Stream<User?> get authState => firebaseAuth.idTokenChanges();
+
+
 
   //............RUDIMENTARY METHODS FOR AUTHENTICATION................
 
