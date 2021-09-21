@@ -1,16 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/planned_tour_detail_view_model.dart';
 
 class FindingChip extends StatefulWidget {
   final String title;
-  final PlannedTourDetailViewModel viewModel;
-  final int index;
-  final String tourKey;
-  FindingChip(this.title, this.viewModel, this.index,
-      {Key? key, required this.tourKey})
+  final VoidCallback onPressed;
+  // final PlannedTourDetailViewModel viewModel;
+  // final int index;
+  // final String tourKey;
+  FindingChip(this.title, {Key? key, required this.onPressed})
       : super(key: key);
 
   @override
@@ -19,12 +17,12 @@ class FindingChip extends StatefulWidget {
 
 class _FindingChipState extends State<FindingChip> {
   bool active = false;
-  List<FindingModel> list = [];
+  // List<FindingModel> list = [];
 
   @override
   void initState() {
     super.initState();
-    widget.viewModel.findingList = widget.viewModel.getFindings(widget.tourKey);
+    // widget.viewModel.findingList = widget.viewModel.getFindings(widget.tourKey);
   }
 
   @override
@@ -40,20 +38,20 @@ class _FindingChipState extends State<FindingChip> {
               //set border radius, color and width
               ),
           onPressed: () {
-            widget.viewModel.selectedFinding =
-                widget.viewModel.findingList[widget.index];
+            // widget.viewModel.selectedFinding =
+            //     widget.viewModel.findingList[widget.index];
 
-            setState(() {
-              if (!active) {
-                active = widget.index ==
-                    widget.viewModel.findingList
-                        .indexOf(widget.viewModel.selectedFinding);
-                widget.viewModel.changeVisibilityTrue();
-              } else {
-                active = false;
-                widget.viewModel.changeVisibilityFalse();
-              }
-            });
+            // setState(() {
+            //   if (!active) {
+            //     active = widget.index ==
+            //         widget.viewModel.findingList
+            //             .indexOf(widget.viewModel.selectedFinding);
+            //     widget.viewModel.changeVisibilityTrue();
+            //   } else {
+            //     active = false;
+            //     widget.viewModel.changeVisibilityFalse();
+            //   }
+            // });
           }, //set function
           child: Text(widget.title) //set title
           ),

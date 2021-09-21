@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../../../_product/_widgets/little_text_widget.dart';
+import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../home/home_esd/model/finding_model.dart';
 import '../../add_planned_tour/model/planned_tour_model.dart';
 import '../viewmodel/add_planned_tour_finding_view_model.dart';
@@ -126,9 +126,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            setState(() {
-              finding!.category = newValue!;
-            });
+            finding!.category = newValue!;
           },
           items:
               findingCategories.map<DropdownMenuItem<String>>((String value) {
@@ -144,7 +142,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: DropdownButtonFormField<String>(
           validator: (val) {
-            if (val != null) {
+            if (val!.isEmpty) {
               return "Bulgu Türü alanı boş bırakılamaz.";
             }
           },
@@ -157,9 +155,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            setState(() {
-              finding!.findingType = newValue!;
-            });
+            finding!.findingType = newValue!;
           },
           items: findingTypes.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -196,7 +192,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
 
   TextFormField get buildActionTakenInField => TextFormField(
         validator: (val) {
-          if (val == null) {
+          if (val!.isEmpty) {
             return "Lütfen sahada alınması gereken aksiyonlar alanını doldurunuz.";
           }
         },
@@ -220,7 +216,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
 
   TextFormField get buildFieldManagerStatements => TextFormField(
         validator: (val) {
-          if (val == null) {
+          if (val!.isEmpty) {
             return "Lütfen Saha Yöneticisi Açıklaması alanını doldurunuz.";
           }
         },
@@ -244,7 +240,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
 
   TextFormField get buildObservations => TextFormField(
         validator: (val) {
-          if (val == null) {
+          if (val!.isEmpty) {
             return "Gözlemler alanını doldurunuz.";
           }
         },

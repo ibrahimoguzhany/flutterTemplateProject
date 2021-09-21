@@ -4,6 +4,7 @@ import 'package:fluttermvvmtemplate/view/authenticate/login/view/login_view.dart
 import 'package:fluttermvvmtemplate/view/home/home_esd/view/home_view.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/view/add_planned_tour_view.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/add_planned_tour_finding_view.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/finding_detail.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
 
@@ -31,7 +32,6 @@ class NavigationRoute {
         return navigateWithData(AddPlannedTourFindingView(), args.arguments);
       case NavigationConstants.PLANNED_TOUR_LIST_VIEW:
         return normalNavigate(PlannedTourListView());
-
       case NavigationConstants.PLANNED_TOUR_DETAIL_VIEW:
         return navigateWithData(PlannedTourDetailView(), args.arguments);
 

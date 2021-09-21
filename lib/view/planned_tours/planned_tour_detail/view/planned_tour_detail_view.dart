@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
-import 'package:fluttermvvmtemplate/view/_product/_widgets/finding_chip.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/finding_detail.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../add_planned_tour/model/planned_tour_model.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +25,28 @@ class PlannedTourDetailView extends StatefulWidget {
 }
 
 class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
+  dynamic getFindings(String tourId) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<AuthenticationProvider>(context, listen: false)
+            .firebaseAuth
+            .currentUser!
+            .uid)
+        .collection("tours")
+        .doc(tourId)
+        .collection("findings")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      List<FindingModel> findingList = <FindingModel>[];
+      querySnapshot.docs.forEach((doc) {
+        findingList.add(FindingModel.fromDocumentSnapshot(doc));
+      });
+      return findingList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final tour = ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
-
     var findingSnapshots = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<AuthenticationProvider>(context)
@@ -43,6 +58,9 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         .collection("findings")
         .snapshots();
     print(widget.tour);
+
+    // List<FindingModel> findingList = [];
+    // findingList = getFindings(widget.tour!.key);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -58,9 +76,6 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
             NavigationService.instance.navigateToPage(
                 NavigationConstants.ADD_PLANNED_TOUR_FINDING,
                 data: widget.tour);
-            // NavigationService.instance.navigateToPage(
-            //     NavigationConstants.ADD_PLANNED_TOUR_FINDING,
-            //     data: tour);
           },
           child: Icon(Icons.add),
         ),
@@ -98,30 +113,14 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                 );
               }),
             ),
+            Text(
+              'Tur Bilgileri',
+              style: TextStyle(fontSize: 18),
+            ),
             Observer(builder: (_) {
-              return Text(
-                viewModel.isVisible == false
-                    ? 'Tur Bilgileri'
-                    : "Bulgu ${viewModel.findingList.indexOf(viewModel.selectedFinding)}",
-                style: TextStyle(fontSize: 18),
-              );
-            }),
-            Observer(builder: (_) {
-              return Visibility(
-                visible: !viewModel.isVisible,
-                child: Expanded(
-                  flex: 12,
-                  child: buildExpandedTourDetails(widget.tour!),
-                ),
-              );
-            }),
-            Observer(builder: (_) {
-              return Visibility(
-                visible: viewModel.isVisible,
-                child: Expanded(
-                  flex: 12,
-                  child: buildExpandedFindingDetails(viewModel.selectedFinding),
-                ),
+              return Expanded(
+                flex: 12,
+                child: buildExpandedTourDetails(widget.tour!),
               );
             }),
           ],
@@ -138,11 +137,37 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: docs.length,
-        itemBuilder: (BuildContext context, int index) => FindingChip(
-              "Bulgu $index",
-              viewModel,
-              index,
-              tourKey: tourKey,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        itemBuilder: (BuildContext context, int index) => Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: GestureDetector(
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FindingDetailView(
+                          finding: FindingModel.fromJson(docs[index].data()),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Chip(
+                    labelPadding: EdgeInsets.symmetric(horizontal: 10),
+                    label: Text(
+                      "Bulgu $index",
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                          fontSize: 15),
+                    ),
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    // disabledColor: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: 3,
+                    shadowColor: Colors.grey[60],
+                    padding: EdgeInsets.all(8.0),
+                    // selected: false,
+                  )),
             ));
   }
 
@@ -176,48 +201,6 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
               buildBiggerDataTextWidget(tour.observedPositiveFindings),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding buildExpandedFindingDetails(FindingModel finding) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildLittleTextWidget("Kategori"),
-              buildBiggerDataTextWidget(finding.category as String),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
-              buildBiggerDataTextWidget(finding.actionsMustBeTaken != null
-                  ? finding.actionsMustBeTaken!
-                  : ""),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Saha Alınan Aksiyonlar"),
-              buildBiggerDataTextWidget(finding.actionsTakenInField as String),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
-              buildBiggerDataTextWidget(
-                  finding.fieldManagerStatements as String),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Gözlemler"),
-              buildBiggerDataTextWidget(finding.observations != null
-                  ? finding.observations as String
-                  : ""),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Bulgu Türü"),
-              buildBiggerDataTextWidget(finding.findingType as String),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Dosya"),
-              buildBiggerDataTextWidget(finding.file as String),
             ],
           ),
         ],
@@ -265,31 +248,11 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
     );
   }
 
-  Widget chipOne(String title, Function clickAction, {bool active = false}) {
-    //active argument is optional
-    return Container(
-      margin: const EdgeInsets.all(5),
-      child: FlatButton(
-          color: active ? Colors.black12 : Colors.white,
-          //if active == true then background color is black
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(color: Colors.black12, width: 2)
-              //set border radius, color and width
-              ),
-          onPressed: () {}, //set function
-          child: Text(title) //set title
-          ),
-    );
-  }
-
   buildBiggerDataTextWidget(dynamic data) {
-    // var result = "";
     var finalResult = "";
     if (data is List) {
       data.forEach((dynamic element) {
         finalResult += element['name'] + ", ";
-        // result.trimRight(',');
       });
     }
 

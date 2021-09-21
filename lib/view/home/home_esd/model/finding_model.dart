@@ -1,11 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
 
-part 'finding_model.g.dart';
-
-@JsonSerializable()
-class FindingModel extends INetworkModel<FindingModel> {
+class FindingModel {
   String? findingType;
   String? category;
   String? observations;
@@ -35,13 +30,27 @@ class FindingModel extends INetworkModel<FindingModel> {
     observations = documentSnapshot.get("observations");
   }
 
-  @override
-  FindingModel fromJson(Map<String, dynamic> json) {
-    return _$FindingModelFromJson(json);
+  FindingModel.fromJson(Map<String, dynamic> json) {
+    actionsMustBeTaken = json['actionsMustBeTaken'];
+    actionsTakenInField = json['actionsTakenInField'];
+    category = json['category'];
+    fieldManagerStatements = json['fieldManagerStatements'];
+    file = json['file'];
+    findingType = json['findingType'];
+    observations = json['observations'];
+    key = json['key'];
   }
 
-  @override
   Map<String, dynamic> toJson() {
-    return _$FindingModelToJson(this);
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['actionsMustBeTaken'] = actionsMustBeTaken;
+    data['actionsTakenInField'] = actionsTakenInField;
+    data['category'] = category;
+    data['fieldManagerStatements'] = fieldManagerStatements;
+    data['file'] = file;
+    data['fieldOrganizationScfindingTypeore'] = findingType;
+    data['observations'] = observations;
+    data['key'] = key;
+    return data;
   }
 }
