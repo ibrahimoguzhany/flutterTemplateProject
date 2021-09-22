@@ -22,11 +22,6 @@ abstract class _PlannedTourListViewModelBase with Store, BaseViewModel {
 
   List<FindingModel> get currentFindingList => findingList;
 
-  // @observable
-  // Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnaps;
-
-  // Stream<QuerySnapshot<Map<String, dynamic>>>? get getTourSnaps => tourSnaps;
-
   @action
   Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots(
       BuildContext context) {
@@ -41,17 +36,4 @@ abstract class _PlannedTourListViewModelBase with Store, BaseViewModel {
             .snapshots();
     return tourSnapshots;
   }
-
-  // @action
-  // Future<List<FindingModel>> getFindings() {
-  //   return FindingService.instance!.findingsCollection
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     List<FindingModel> findingList = <FindingModel>[];
-  //     querySnapshot.docs.forEach((doc) {
-  //       findingList.add(FindingModel.fromDocumentSnapshot(doc));
-  //     });
-  //     return findingList;
-  //   });
-  // }
 }

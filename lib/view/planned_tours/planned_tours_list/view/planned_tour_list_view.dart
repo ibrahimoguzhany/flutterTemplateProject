@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/add_planned_tour/model/planned_tour_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
+import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
+import '../../add_planned_tour/model/planned_tour_model.dart';
+import '../../planned_tour_detail/view/planned_tour_detail_view.dart';
 import '../viewmodel/planned_tour_list_view_model.dart';
 
 class PlannedTourListView extends StatefulWidget {
@@ -17,10 +17,6 @@ class PlannedTourListView extends StatefulWidget {
 }
 
 class _PlannedTourListViewState extends State<PlannedTourListView> {
-  // final Stream<QuerySnapshot> _toursStream = FirebaseFirestore.instance
-  //     .collection('tours')
-  //     .snapshots(includeMetadataChanges: true);
-
   @override
   Widget build(BuildContext context) {
     return BaseView<PlannedTourListViewModel>(
@@ -108,9 +104,6 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
       child: ListTile(
         contentPadding: EdgeInsets.all(16.0),
         onTap: () {
-          // NavigationService.instance.navigateToPage(
-          //     NavigationConstants.PLANNED_TOUR_DETAIL_VIEW,
-          //     data: PlannedTourModel.fromJson(data));
           Navigator.push(
             context,
             MaterialPageRoute(

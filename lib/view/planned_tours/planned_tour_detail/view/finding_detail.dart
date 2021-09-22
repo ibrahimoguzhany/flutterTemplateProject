@@ -1,21 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
+import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
 import 'package:fluttermvvmtemplate/view/_product/_widgets/big_little_text_widget.dart';
 import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/finding_detail_view_model.dart';
+import 'package:provider/provider.dart';
 
 class FindingDetailView extends StatelessWidget {
   final FindingModel finding;
-  FindingDetailView({Key? key, required this.finding}) : super(key: key);
+  final String tourKey;
+  FindingDetailView({Key? key, required this.finding, required this.tourKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final finding = ModalRoute.of(context)!.settings.arguments as FindingModel;
-    print(finding.category);
-    print(finding.actionsMustBeTaken);
-    print(finding.fieldManagerStatements);
-    print(finding.observations);
-    print(finding.imageUrl);
+    final selectedFinding = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<AuthenticationProvider>(context)
+            .firebaseAuth
+            .currentUser!
+            .uid)
+        .collection('tours')
+        .doc(tourKey)
+        .collection("findings")
+        .doc(finding.key);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -28,7 +37,15 @@ class FindingDetailView extends StatelessWidget {
           title: Text("Bulgu Detayı"),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await selectedFinding.delete();
+                Navigator.pop(context);
+                final snackBar = SnackBar(
+                  content: Text("Bulgu Başarıyla Silindi."),
+                  backgroundColor: Colors.blueGrey.shade700,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
               icon: Icon(Icons.delete_forever_rounded),
             )
           ],

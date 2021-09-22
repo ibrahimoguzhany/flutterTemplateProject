@@ -47,7 +47,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    var findingSnapshots = FirebaseFirestore.instance
+    final findingSnapshots = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<AuthenticationProvider>(context)
             .firebaseAuth
@@ -59,8 +59,14 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         .snapshots();
     print(widget.tour);
 
-    // List<FindingModel> findingList = [];
-    // findingList = getFindings(widget.tour!.key);
+    final selectedTour = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<AuthenticationProvider>(context)
+            .firebaseAuth
+            .currentUser!
+            .uid)
+        .collection('tours')
+        .doc(widget.tour!.key);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -83,10 +89,24 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
           title: Text("Planlı Turlar Detay"),
           actions: [
             IconButton(
-              onPressed: () {
-                context.read<AuthenticationProvider>().signOut();
+              onPressed: () async {
+                await selectedTour
+                    .collection("findings")
+                    .get()
+                    .then((snapshot) {
+                  for (DocumentSnapshot ds in snapshot.docs) {
+                    ds.reference.delete();
+                  }
+                });
+                await selectedTour.delete();
+                Navigator.pop(context);
+                final snackBar = SnackBar(
+                  content: Text("Tur başarıyla silindi."),
+                  backgroundColor: Colors.blueGrey.shade700,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
-              icon: Icon(Icons.logout),
+              icon: Icon(Icons.delete_forever_rounded),
             ),
           ],
         ),
@@ -134,41 +154,50 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
       PlannedTourDetailViewModel viewModel,
       String tourKey) {
     return ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: docs.length,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        itemBuilder: (BuildContext context, int index) => Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: GestureDetector(
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FindingDetailView(
-                          finding: FindingModel.fromJson(docs[index].data()),
-                        ),
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: docs.length,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      itemBuilder: (BuildContext context, int index) {
+        final data = docs[index].data();
+        final findingId = docs[index].reference.id;
+        data['key'] = findingId;
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: GestureDetector(
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FindingDetailView(
+                      finding: FindingModel.fromJson(
+                        data,
                       ),
-                    );
-                  },
-                  child: Chip(
-                    labelPadding: EdgeInsets.symmetric(horizontal: 10),
-                    label: Text(
-                      "Bulgu $index",
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: "Poppins",
-                          fontSize: 15),
+                      tourKey: tourKey,
                     ),
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    // disabledColor: Theme.of(context).scaffoldBackgroundColor,
-                    elevation: 3,
-                    shadowColor: Colors.grey[60],
-                    padding: EdgeInsets.all(8.0),
-                    // selected: false,
-                  )),
-            ));
+                  ),
+                );
+              },
+              child: Chip(
+                labelPadding: EdgeInsets.symmetric(horizontal: 10),
+                label: Text(
+                  "Bulgu $index",
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Poppins",
+                      fontSize: 15),
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                // disabledColor: Theme.of(context).scaffoldBackgroundColor,
+                elevation: 3,
+                shadowColor: Colors.grey[60],
+                padding: EdgeInsets.all(8.0),
+                // selected: false,
+              )),
+        );
+      },
+    );
   }
 
   Padding buildExpandedTourDetails(PlannedTourModel tour) {
