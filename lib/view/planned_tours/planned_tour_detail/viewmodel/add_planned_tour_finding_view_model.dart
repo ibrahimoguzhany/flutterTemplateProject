@@ -23,4 +23,7 @@ abstract class _AddPlannedTourFindingViewModelBase with Store, BaseViewModel {
       FindingModel model, BuildContext context, String key) async {
     await service.addFinding(model, context, key);
   }
+
+  @observable
+  String? imageUrl;
 }

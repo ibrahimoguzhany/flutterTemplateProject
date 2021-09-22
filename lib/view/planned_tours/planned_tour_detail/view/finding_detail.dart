@@ -15,6 +15,7 @@ class FindingDetailView extends StatelessWidget {
     print(finding.actionsMustBeTaken);
     print(finding.fieldManagerStatements);
     print(finding.observations);
+    print(finding.imageUrl);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -25,6 +26,12 @@ class FindingDetailView extends StatelessWidget {
           Scaffold(
         appBar: AppBar(
           title: Text("Bulgu Detayı"),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.delete_forever_rounded),
+            )
+          ],
         ),
         body: buildExpandedFindingDetails(finding),
       ),
@@ -63,7 +70,9 @@ class FindingDetailView extends StatelessWidget {
               buildBiggerDataTextWidget(finding.findingType),
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
-              buildBiggerDataTextWidget(finding.file),
+              finding.imageUrl == null
+                  ? Container()
+                  : Image.network(finding.imageUrl ?? "")
             ],
           ),
         ],

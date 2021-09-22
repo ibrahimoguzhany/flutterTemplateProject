@@ -265,10 +265,18 @@ class LoginView extends StatelessWidget {
         onPressed: viewModel.isLoading
             ? null
             : () async {
-                context.read<AuthenticationProvider>().signIn(
+                await context.read<AuthenticationProvider>().signIn(
                       email: viewModel.emailController.text.trim(),
                       password: viewModel.passwordController.text.trim(),
                     );
+                SnackBar snackBar = SnackBar(
+                  content: Text("Giriş Yapıldı."),
+                  elevation: 5,
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.green[400],
+                  padding: EdgeInsets.all(10),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
         child: Center(
             child: Text(

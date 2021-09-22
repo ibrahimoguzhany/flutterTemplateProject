@@ -64,9 +64,17 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
       actions: [
         IconButton(
           icon: Icon(Icons.logout),
-          onPressed: () {
-            Provider.of<AuthenticationProvider>(context, listen: false)
+          onPressed: () async {
+            await Provider.of<AuthenticationProvider>(context, listen: false)
                 .signOut();
+            SnackBar snackBar = SnackBar(
+              content: Text("Çıkış yapıldı."),
+              elevation: 5,
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.red[400],
+              padding: EdgeInsets.all(10),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           },
         )
       ],

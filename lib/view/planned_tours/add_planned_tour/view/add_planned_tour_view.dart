@@ -80,10 +80,12 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         key: "");
   }
 
+  var _controllerPositiveFindings = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
     return BaseView<AddPlannedTourViewModel>(
       viewModel: AddPlannedTourViewModel(),
       onModelReady: (AddPlannedTourViewModel model) {
@@ -122,7 +124,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
               SizedBox(height: 20),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
               SizedBox(height: 5),
-              buildPositiveFindingsTextField,
+              buildPositiveFindingTextFormField,
               SizedBox(height: 20),
               FloatingActionButton.extended(
                 label: Text("Kaydet"),
@@ -137,6 +139,12 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
                       backgroundColor: Colors.green,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    final snackBar = SnackBar(
+                      content: Text("Lütfen gerekli alanları doldurunuz."),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
               )
@@ -149,7 +157,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
 
   DateTimePicker get buildTourDatePicker => DateTimePicker(
         validator: (val) {
-          if (val!.isEmpty) {
+          if (val == null) {
             return "Tur Tarihi Boş Bırakılamaz.";
           }
         },
@@ -163,8 +171,10 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         icon: Icon(Icons.event),
         dateLabelText: 'Tur Tarihi',
         onChanged: (val) {
-          tour.tourDate = _datePickerController.text;
-          print(tour.tourDate);
+          setState(() {
+            tour.tourDate = _datePickerController.text;
+            print(tour.tourDate);
+          });
         },
         // onSaved: (val) {
         //   tour.tourDate = _datePickerController.text;
@@ -172,13 +182,16 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         // },
       );
 
-  TextFormField get buildPositiveFindingsTextField => TextFormField(
+  TextFormField get buildPositiveFindingTextFormField => TextFormField(
+        focusNode: FocusNode(canRequestFocus: false),
         validator: (val) {
-          if (val!.isEmpty) {
-            return "Bu alan boş bırakılamaz.";
+          if (val == null) {
+            return "Lütfen alınması gereken aksiyonlar alanını doldurunuz.";
           }
         },
+        controller: _controllerPositiveFindings,
         keyboardType: TextInputType.multiline,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: 5,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -191,8 +204,11 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
+        onSaved: (val) {
+          tour.observedPositiveFindings = _controllerPositiveFindings.text;
+        },
         onChanged: (val) {
-          tour.observedPositiveFindings = val;
+          tour.observedPositiveFindings = _controllerPositiveFindings.text;
         },
       );
 
@@ -203,13 +219,16 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
           minValue: 0,
           step: 1,
           onValue: (value) {
-            tour.fieldOrganizationScore = value.toString();
+            setState(() {
+              tour.fieldOrganizationScore = value.toString();
+            });
           },
         ),
       );
 
   MultiSelectDialogField<TourTeamMembersDDModel>
       get buildTourTeamMembersMultiDropdownField => MultiSelectDialogField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val == null) {
                 return "Bu alan boş bırakılamaz.";
@@ -217,6 +236,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             },
             items: _itemsTourTeamMembers,
             title: Text("Tur Takım Üyeleri"),
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             selectedColor: Colors.blue,
             decoration: BoxDecoration(
               // color: Colors.black26.withOpacity(0.1),
@@ -245,12 +265,15 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
               results!.forEach((item) {
                 result.add(item!.toJson());
               });
-              tour.tourTeamMembers = result;
+              setState(() {
+                tour.tourTeamMembers = result;
+              });
             },
           );
 
   MultiSelectDialogField<TourAccompaniesDDModel>
       get buildTourAccompaniesMultiDropdownField => MultiSelectDialogField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val == null) {
                 return "Bu alan boş bırakılamaz.";
@@ -258,12 +281,15 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             },
             items: _itemsTourAccompanies,
             title: Text("Tura Eşlik Edenler"),
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             selectedColor: Colors.blue,
             decoration: BoxDecoration(
-              // color: Colors.black26.withOpacity(0.1),
+              // color: Colors.black26.withOpacity(0.1),4
+
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
+
               border: Border.all(color: Colors.black26, width: 2),
             ),
             buttonIcon: Icon(
@@ -284,7 +310,9 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
               results!.forEach((item) {
                 result.add(item!.toJson());
               });
-              tour.tourAccompanies = result;
+              setState(() {
+                tour.tourAccompanies = result;
+              });
               // print(results);
               // print(tourAccompanies);
             },
@@ -295,10 +323,11 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         child: DropdownButtonFormField<String>(
           validator: (val) {
             if (val == null) {
-              return "Bu alan boş bırakılamaz.";
+              return "Bu alan boş bırakılamaz";
             }
           },
           hint: Text('Saha Seçiniz. '),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           value: field,
           icon: const Icon(
             Icons.arrow_downward,
@@ -306,8 +335,25 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
           ),
           iconSize: 24,
           elevation: 20,
-          onChanged: (String? newValue2) {
-            tour.field = newValue2!;
+          onChanged: (String? newValue) {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            setState(() {
+              tour.field = newValue!;
+            });
+            print(tour.field);
+          },
+          onSaved: (String? newValue) {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            setState(() {
+              tour.field = newValue!;
+            });
+            print(tour.field);
           },
           items: fieldList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -323,11 +369,13 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         child: DropdownButtonFormField<String>(
           validator: (val) {
             if (val == null) {
-              return "Bu alan boş bırakılamaz.";
+              return "Bu alan boş bırakılamaz";
             }
           },
           hint: Text('Lokasyon Seçiniz'),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           value: location,
+          // autovalidateMode: AutovalidateMode.onUserInteraction,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -335,7 +383,14 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            tour.location = newValue!;
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            setState(() {
+              tour.location = newValue!;
+            });
           },
           items: locationList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(

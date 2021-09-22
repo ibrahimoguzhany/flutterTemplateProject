@@ -9,6 +9,7 @@ class FindingModel {
   String? fieldManagerStatements;
   String? file;
   String? key;
+  String? imageUrl;
 
   FindingModel(
       {this.findingType,
@@ -18,7 +19,8 @@ class FindingModel {
       this.actionsMustBeTaken,
       this.fieldManagerStatements,
       this.file,
-      this.key});
+      this.key,
+      this.imageUrl});
 
   FindingModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     actionsMustBeTaken = documentSnapshot.get("actionsMustBeTaken");
@@ -28,6 +30,7 @@ class FindingModel {
     file = documentSnapshot.get("file");
     findingType = documentSnapshot.get("findingType");
     observations = documentSnapshot.get("observations");
+    imageUrl = documentSnapshot.get("imageUrl");
   }
 
   FindingModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +42,7 @@ class FindingModel {
     findingType = json['findingType'];
     observations = json['observations'];
     key = json['key'];
+    imageUrl = json["imageUrl"];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +55,8 @@ class FindingModel {
     data['fieldOrganizationScfindingTypeore'] = findingType;
     data['observations'] = observations;
     data['key'] = key;
+    data['imageUrl'] = imageUrl;
+
     return data;
   }
 }

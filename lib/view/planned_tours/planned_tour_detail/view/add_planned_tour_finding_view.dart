@@ -1,4 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:fluttermvvmtemplate/view/_widgets/button/button_widget.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/service/planned_tour_detail_service.dart';
+import 'package:path/path.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -16,6 +25,9 @@ class AddPlannedTourFindingView extends StatefulWidget {
 }
 
 class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
+  UploadTask? task;
+  File? file;
+
   List<String> findingTypes = ['Emniyetsiz Durum', "Emniyetsiz Davranış"];
   List<String> findingCategories = [
     'Kaygan Zemin',
@@ -24,10 +36,23 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
     "Uykusuz Çalışma"
   ];
 
-  FindingModel? finding = FindingModel();
+  late FindingModel finding;
+  @override
+  void initState() {
+    super.initState();
+
+    finding = FindingModel();
+  }
+
+  final _controllerActionMustBeTaken = TextEditingController();
+  final _controllerActionMustBeTakenInField = TextEditingController();
+  final _controllerFieldManagerStatements = TextEditingController();
+  final _controllerObservations = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final fileName =
+        file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
     PlannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
 
@@ -78,20 +103,77 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
               buildObservations,
               SizedBox(height: 20),
               buildLittleTextWidget("Dosya"),
-              TextField(
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: "Dosya"),
-                onChanged: (val) {
-                  finding!.file = val;
-                },
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.black12,
+                        width: 2,
+                      ),
+                      right: BorderSide(
+                        color: Colors.black12,
+                        width: 2,
+                      ),
+                      bottom: BorderSide(
+                        color: Colors.black12,
+                        width: 2,
+                      ),
+                      top: BorderSide(
+                        color: Colors.black12,
+                        width: 2,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(3)),
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    ButtonWidget(
+                      text: 'Galeriden Dosya Seç / Resim Çek',
+                      icon: Icons.attach_file,
+                      onClicked: selectFile,
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () {
+                        if (viewModel.imageUrl != null) {
+                          _launchURL(viewModel);
+                        }
+                      },
+                      child: Text(
+                        fileName,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    ButtonWidget(
+                      text: 'Yükle',
+                      icon: Icons.cloud_upload_outlined,
+                      onClicked: () async {
+                        finding.imageUrl = await uploadFile();
+                        if (viewModel.imageUrl != null) {
+                          final snackBar = SnackBar(
+                            backgroundColor: Colors.green[600],
+                            content:
+                                Text("Seçilen Dosyalar Başarıyla Yüklendi"),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    task != null ? buildUploadStatus(task!) : Container(),
+                    SizedBox(height: 10),
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
               FloatingActionButton.extended(
                 onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (isValid) {
                     _formKey.currentState!.save();
-                    await viewModel.addFinding(finding!, context, tour.key);
+                    await viewModel.addFinding(finding, context, tour.key);
                     Navigator.pop(context);
                     final snackBar = SnackBar(
                       content: Text("Bulgu başarıyla eklendi."),
@@ -109,16 +191,74 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
     );
   }
 
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result == null) return;
+    final path = result.files.single.path!;
+
+    setState(() => file = File(path));
+  }
+
+  Future<String> uploadFile() async {
+    if (file == null) return "";
+
+    final fileName = basename(file!.path);
+    final destination = 'files/$fileName';
+
+    task = PlannedTourDetailService.instance!.uploadFile(destination, file!);
+    setState(() {});
+
+    if (task == null) return "";
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+
+    return urlDownload;
+  }
+
+  void _launchURL(AddPlannedTourFindingViewModel vm) async =>
+      await canLaunch(vm.imageUrl!)
+          ? await launch(vm.imageUrl!)
+          : throw 'Could not launch ${vm.imageUrl!}';
+
+  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+        stream: task.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final snap = snapshot.data!;
+            final progress = snap.bytesTransferred / snap.totalBytes;
+            final percentage = (progress * 100).toStringAsFixed(2);
+
+            if (percentage != "100.00") {
+              return Text(
+                '$percentage %',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              );
+            }
+            return Text(
+              'Yüklendi',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            );
+          } else {
+            return Container();
+          }
+        },
+      );
+
   Padding get buildFindingCategoryDropdown => Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: DropdownButtonFormField<String>(
           validator: (val) {
-            if (val != null) {
+            if (val!.isEmpty) {
               return "Kategori alanı boş bırakılamaz.";
             }
           },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: Text('Bulgu Türü'),
-          value: finding!.category,
+          value: finding.category,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -126,7 +266,9 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            finding!.category = newValue!;
+            setState(() {
+              finding.category = newValue!;
+            });
           },
           items:
               findingCategories.map<DropdownMenuItem<String>>((String value) {
@@ -147,7 +289,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             }
           },
           hint: Text('Bulgu Türü'),
-          value: finding!.findingType,
+          value: finding.findingType,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -155,7 +297,9 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            finding!.findingType = newValue!;
+            setState(() {
+              finding.findingType = newValue!;
+            });
           },
           items: findingTypes.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -168,11 +312,13 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
 
   TextFormField get buildActionsMustBeTaken => TextFormField(
         validator: (val) {
-          if (val == null) {
+          if (val!.isEmpty) {
             return "Lütfen alınması gereken aksiyonlar alanını doldurunuz.";
           }
         },
+        controller: _controllerActionMustBeTaken,
         keyboardType: TextInputType.multiline,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: 5,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -185,8 +331,13 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
+        onSaved: (val) {
+          setState(() {
+            finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
+          });
+        },
         onChanged: (val) {
-          finding!.actionsMustBeTaken = val;
+          finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
         },
       );
 
@@ -196,8 +347,10 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             return "Lütfen sahada alınması gereken aksiyonlar alanını doldurunuz.";
           }
         },
+        controller: _controllerActionMustBeTakenInField,
         keyboardType: TextInputType.multiline,
         maxLines: 5,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           fillColor: Colors.white,
           focusedBorder: OutlineInputBorder(
@@ -209,8 +362,15 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
+        onSaved: (val) {
+          setState(() {
+            finding.actionsTakenInField =
+                _controllerActionMustBeTakenInField.text;
+          });
+        },
         onChanged: (val) {
-          finding!.actionsTakenInField = val;
+          finding.actionsTakenInField =
+              _controllerActionMustBeTakenInField.text;
         },
       );
 
@@ -220,8 +380,10 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             return "Lütfen Saha Yöneticisi Açıklaması alanını doldurunuz.";
           }
         },
+        controller: _controllerFieldManagerStatements,
         keyboardType: TextInputType.multiline,
         maxLines: 5,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           fillColor: Colors.white,
           focusedBorder: OutlineInputBorder(
@@ -233,8 +395,15 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
+        onSaved: (val) {
+          setState(() {
+            finding.fieldManagerStatements =
+                _controllerFieldManagerStatements.text;
+          });
+        },
         onChanged: (val) {
-          finding!.fieldManagerStatements = val;
+          finding.fieldManagerStatements =
+              _controllerFieldManagerStatements.text;
         },
       );
 
@@ -244,7 +413,9 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             return "Gözlemler alanını doldurunuz.";
           }
         },
+        controller: _controllerObservations,
         keyboardType: TextInputType.multiline,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: 5,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -257,8 +428,13 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
+        onSaved: (val) {
+          setState(() {
+            finding.observations = _controllerObservations.text;
+          });
+        },
         onChanged: (val) {
-          finding!.observations = val;
+          finding.observations = _controllerObservations.text;
         },
       );
 }

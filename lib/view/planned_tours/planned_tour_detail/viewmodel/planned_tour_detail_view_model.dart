@@ -60,17 +60,4 @@ abstract class _PlannedTourDetailViewModelBase with Store, BaseViewModel {
   void changeVisibilityFalse() {
     isVisible = false;
   }
-
-  // @action
-  // Future<List<FindingModel>> getFindings() {
-  //   return FindingService.instance!.findingsCollection
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     List<FindingModel> findingList = <FindingModel>[];
-  //     querySnapshot.docs.forEach((doc) {
-  //       findingList.add(FindingModel.fromDocumentSnapshot(doc));
-  //     });
-  //     return findingList;
-  //   });
-  // }
 }
