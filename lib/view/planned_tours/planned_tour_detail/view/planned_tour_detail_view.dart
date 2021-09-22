@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/service/planned_tour_detail_service.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/finding_detail.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
@@ -25,48 +26,13 @@ class PlannedTourDetailView extends StatefulWidget {
 }
 
 class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
-  dynamic getFindings(String tourId) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection("tours")
-        .doc(tourId)
-        .collection("findings")
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      List<FindingModel> findingList = <FindingModel>[];
-      querySnapshot.docs.forEach((doc) {
-        findingList.add(FindingModel.fromDocumentSnapshot(doc));
-      });
-      return findingList;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final findingSnapshots = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection('tours')
-        .doc(widget.tour!.key)
-        .collection("findings")
-        .snapshots();
-    print(widget.tour);
+    final findingSnapshots = PlannedTourDetailService.instance
+        ?.getFindingsSnapshots(context, widget.tour!.key);
 
-    final selectedTour = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection('tours')
-        .doc(widget.tour!.key);
+    final selectedTour = PlannedTourDetailService.instance
+        ?.getSelectedTour(context, widget.tour!.key);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -90,21 +56,41 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
           actions: [
             IconButton(
               onPressed: () async {
-                await selectedTour
-                    .collection("findings")
-                    .get()
-                    .then((snapshot) {
-                  for (DocumentSnapshot ds in snapshot.docs) {
-                    ds.reference.delete();
-                  }
-                });
-                await selectedTour.delete();
-                Navigator.pop(context);
-                final snackBar = SnackBar(
-                  content: Text("Tur başarıyla silindi."),
-                  backgroundColor: Colors.blueGrey.shade700,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: Text("Planlı Tur Sil"),
+                          content:
+                              Text("Turu silmek istediğinize emin misiniz?"),
+                          actions: [
+                            TextButton(
+                                child: Text("Evet"),
+                                onPressed: () async {
+                                  await selectedTour
+                                      .collection("findings")
+                                      .get()
+                                      .then((snapshot) {
+                                    for (DocumentSnapshot ds in snapshot.docs) {
+                                      ds.reference.delete();
+                                    }
+                                  });
+                                  await selectedTour.delete();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  final snackBar = SnackBar(
+                                    content: Text("Tur Başarıyla Silindi."),
+                                    backgroundColor: Colors.blueGrey.shade700,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }),
+                            TextButton(
+                                child: Text("Hayır"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ],
+                        ));
               },
               icon: Icon(Icons.delete_forever_rounded),
             ),
@@ -149,10 +135,18 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
     );
   }
 
-  ListView buildHorizontalChips(
+  Widget buildHorizontalChips(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
       PlannedTourDetailViewModel viewModel,
       String tourKey) {
+    if (docs.isEmpty) {
+      return Center(
+          child: Text(
+        "Henüz eklenmiş bir bulgu bulunmamaktadır.",
+        style: TextStyle(
+            fontFamily: "Poppins", fontSize: 14, fontWeight: FontWeight.w400),
+      ));
+    }
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
@@ -162,6 +156,8 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         final data = docs[index].data();
         final findingId = docs[index].reference.id;
         data['key'] = findingId;
+        if (data.isEmpty)
+          return Text("Henüz eklenmiş bir bulgu bulunmamaktadır.");
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
@@ -234,26 +230,6 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
           ),
         ],
       ),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.blue,
-      leading: Icon(Icons.work),
-      //using YouTube Icon from FontAwesome Icon Packs
-      title: Text("Turlar"),
-      actions: <Widget>[
-        //actions list in appbar
-        IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              //action for this button
-            }),
-
-        //actions list in appbar
-        IconButton(icon: const Icon(Icons.logout), onPressed: () {}),
-      ],
     );
   }
 

@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/view/_widgets/button/button_widget.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/service/planned_tour_detail_service.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
+import '../../../_widgets/button/button_widget.dart';
 import '../../../home/home_esd/model/finding_model.dart';
 import '../../add_planned_tour/model/planned_tour_model.dart';
+import '../service/planned_tour_detail_service.dart';
 import '../viewmodel/add_planned_tour_finding_view_model.dart';
 
 class AddPlannedTourFindingView extends StatefulWidget {
@@ -104,7 +103,8 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
               SizedBox(height: 20),
               buildLittleTextWidget("Dosya"),
               Container(
-                padding: EdgeInsets.all(20),
+                padding:
+                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 0),
                 decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
@@ -126,47 +126,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
                     ),
                     borderRadius: BorderRadius.circular(3)),
                 margin: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    ButtonWidget(
-                      text: 'Galeriden Dosya Seç / Resim Çek',
-                      icon: Icons.attach_file,
-                      onClicked: selectFile,
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () {
-                        if (viewModel.imageUrl != null) {
-                          _launchURL(viewModel);
-                        }
-                      },
-                      child: Text(
-                        fileName,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    ButtonWidget(
-                      text: 'Yükle',
-                      icon: Icons.cloud_upload_outlined,
-                      onClicked: () async {
-                        finding.imageUrl = await uploadFile();
-                        if (viewModel.imageUrl != null) {
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.green[600],
-                            content:
-                                Text("Seçilen Dosyalar Başarıyla Yüklendi"),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    task != null ? buildUploadStatus(task!) : Container(),
-                    SizedBox(height: 10),
-                  ],
-                ),
+                child: buildButtonWidgets(viewModel, fileName, context),
               ),
               FloatingActionButton.extended(
                 onPressed: () async {
@@ -188,6 +148,49 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           ),
         ),
       ),
+    );
+  }
+
+  Column buildButtonWidgets(AddPlannedTourFindingViewModel viewModel,
+      String fileName, BuildContext context) {
+    return Column(
+      children: [
+        ButtonWidget(
+          text: 'Galeriden Dosya Seç / Resim Çek',
+          icon: Icons.attach_file,
+          onClicked: selectFile,
+        ),
+        SizedBox(height: 8),
+        GestureDetector(
+          onTap: () {
+            if (viewModel.imageUrl != null) {
+              _launchURL(viewModel);
+            }
+          },
+          child: Text(
+            fileName,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        SizedBox(height: 24),
+        ButtonWidget(
+          text: 'Yükle',
+          icon: Icons.cloud_upload_outlined,
+          onClicked: () async {
+            finding.imageUrl = await uploadFile();
+            if (viewModel.imageUrl != null) {
+              final snackBar = SnackBar(
+                backgroundColor: Colors.green[600],
+                content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          },
+        ),
+        SizedBox(height: 20),
+        task != null ? buildUploadStatus(task!) : Container(),
+        SizedBox(height: 10),
+      ],
     );
   }
 

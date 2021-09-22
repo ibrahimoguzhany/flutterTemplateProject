@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/view/base_view.dart';
-import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
-import 'package:fluttermvvmtemplate/view/_product/_widgets/big_little_text_widget.dart';
-import 'package:fluttermvvmtemplate/view/home/home_esd/model/finding_model.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/viewmodel/finding_detail_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/init/auth/authentication_provider.dart';
+import '../../../_product/_widgets/big_little_text_widget.dart';
+import '../../../home/home_esd/model/finding_model.dart';
+import '../viewmodel/finding_detail_view_model.dart';
 
 class FindingDetailView extends StatelessWidget {
   final FindingModel finding;
@@ -15,6 +16,7 @@ class FindingDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(finding.imageUrl);
     final selectedFinding = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<AuthenticationProvider>(context)
@@ -38,13 +40,33 @@ class FindingDetailView extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                await selectedFinding.delete();
-                Navigator.pop(context);
-                final snackBar = SnackBar(
-                  content: Text("Bulgu Başarıyla Silindi."),
-                  backgroundColor: Colors.blueGrey.shade700,
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Bulgu Sil"),
+                    content: Text("Bulguyu silmek istediğinize emin misiniz?"),
+                    actions: [
+                      TextButton(
+                          child: Text("Evet"),
+                          onPressed: () async {
+                            await selectedFinding.delete();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            final snackBar = SnackBar(
+                              content: Text("Bulgu Başarıyla Silindi."),
+                              backgroundColor: Colors.blueGrey.shade700,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }),
+                      TextButton(
+                          child: Text("Hayır"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
                 );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: Icon(Icons.delete_forever_rounded),
             )
@@ -89,7 +111,13 @@ class FindingDetailView extends StatelessWidget {
               buildLittleTextWidget("Dosya"),
               finding.imageUrl == null
                   ? Container()
-                  : Image.network(finding.imageUrl ?? "")
+                  : Center(
+                      child: Image.network(
+                        finding.imageUrl ?? "",
+                        width: 500,
+                        height: 500,
+                      ),
+                    )
             ],
           ),
         ],
