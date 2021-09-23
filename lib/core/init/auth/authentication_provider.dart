@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthenticationProvider {
   final FirebaseAuth firebaseAuth;
@@ -9,8 +10,6 @@ class AuthenticationProvider {
 
   //Using Stream to listen to Authentication State
   Stream<User?> get authState => firebaseAuth.idTokenChanges();
-
-
 
   //............RUDIMENTARY METHODS FOR AUTHENTICATION................
 
@@ -28,10 +27,18 @@ class AuthenticationProvider {
 
   //SIGN IN METHOD
   Future<String> signIn(
-      {required String email, required String password}) async {
+      String email, String password, BuildContext context) async {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      SnackBar snackBar = SnackBar(
+        content: Text("Giriş Yapıldı."),
+        elevation: 5,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.green[400],
+        padding: EdgeInsets.all(10),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       return "Oturum Açıldı!";
     } on FirebaseAuthException catch (e) {
@@ -40,7 +47,15 @@ class AuthenticationProvider {
   }
 
   //SIGN OUT METHOD
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     await firebaseAuth.signOut();
+    SnackBar snackBar = SnackBar(
+      content: Text("Çıkış yapıldı."),
+      elevation: 5,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.red[400],
+      padding: EdgeInsets.all(10),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

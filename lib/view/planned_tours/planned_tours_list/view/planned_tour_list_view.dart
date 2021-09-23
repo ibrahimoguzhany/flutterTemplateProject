@@ -33,7 +33,6 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           onPressed: () {
             NavigationService.instance
                 .navigateToPage(NavigationConstants.ADD_PLANNED_TOUR_VIEW);
-            // Get.toNamed("add_tour_page");
           },
           child: Icon(Icons.add),
         ),
@@ -62,15 +61,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           icon: Icon(Icons.logout),
           onPressed: () async {
             await Provider.of<AuthenticationProvider>(context, listen: false)
-                .signOut();
-            SnackBar snackBar = SnackBar(
-              content: Text("Çıkış yapıldı."),
-              elevation: 5,
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.red[400],
-              padding: EdgeInsets.all(10),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                .signOut(context);
           },
         )
       ],
@@ -81,6 +72,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
   ListView buildListView(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
     return ListView.separated(
+      padding: EdgeInsets.all(8),
       separatorBuilder: (context, index) => Divider(
         color: Colors.black26,
       ),
@@ -102,7 +94,8 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
-        contentPadding: EdgeInsets.all(16.0),
+        enableFeedback: true,
+        contentPadding: EdgeInsets.all(12.0),
         onTap: () {
           Navigator.push(
             context,
@@ -113,21 +106,25 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
             ),
           );
         },
+        selectedTileColor: Colors.black12,
+        hoverColor: Colors.black12,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         leading: Text(
           data['location'],
           style: TextStyle(fontSize: 18),
         ),
         title: Text(
-          data['field'],
-          style: TextStyle(fontSize: 18),
+          data['key'],
+          style: TextStyle(fontSize: 16),
         ),
         subtitle: AutoLocaleText(
           value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 12),
         ),
         trailing: Text(
           data['tourDate'],
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 14),
         ),
       ),
     );

@@ -7,4 +7,6 @@ class NavigationConstants {
   static const ADD_PLANNED_TOUR_FINDING = "/add_planned_tour_finding";
   static const PLANNED_TOUR_LIST_VIEW = "/planned_tour_list_view";
   static const FINDING_DETAIL_VIEW = "/finding_detail_view";
+  static const EDIT_PLANNED_TOUR_VIEW = "/edit_planned_tour_view";
+  static const CHANGE_PASSWORD_VIEW = "/change_password_view";
 }

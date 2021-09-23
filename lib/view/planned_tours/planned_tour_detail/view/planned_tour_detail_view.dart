@@ -1,21 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/service/planned_tour_detail_service.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/finding_detail.dart';
-import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
-import '../../add_planned_tour/model/planned_tour_model.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../../../../core/init/auth/authentication_provider.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import '../../../home/home_esd/model/finding_model.dart';
+import '../../add_planned_tour/model/planned_tour_model.dart';
+import '../../edit_planned_tour/view/edit_planned_tour_view.dart';
+import '../service/planned_tour_detail_service.dart';
 import '../viewmodel/planned_tour_detail_view_model.dart';
+import 'finding_detail.dart';
 
 class PlannedTourDetailView extends StatefulWidget {
   final PlannedTourModel? tour;
@@ -54,6 +52,17 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
         appBar: AppBar(
           title: Text("Planlı Turlar Detay"),
           actions: [
+            IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditPlannedTourView(tour: widget.tour!),
+                    ),
+                  );
+                }),
             IconButton(
               onPressed: () async {
                 showDialog(
@@ -166,11 +175,11 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => FindingDetailView(
-                      finding: FindingModel.fromJson(
-                        data,
-                      ),
-                      tourKey: tourKey,
-                    ),
+                        finding: FindingModel.fromJson(
+                          data,
+                        ),
+                        tourKey: tourKey,
+                        findingNumber: index),
                   ),
                 );
               },
@@ -185,11 +194,9 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                       fontSize: 15),
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                // disabledColor: Theme.of(context).scaffoldBackgroundColor,
                 elevation: 3,
                 shadowColor: Colors.grey[60],
                 padding: EdgeInsets.all(8.0),
-                // selected: false,
               )),
         );
       },
@@ -206,6 +213,8 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              buildLittleTextWidget("Tur ID"),
+              buildBiggerDataTextWidget(tour.key),
               buildLittleTextWidget("Lokasyon"),
               buildBiggerDataTextWidget(tour.location),
               SizedBox(height: 10),
@@ -225,7 +234,9 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
               buildBiggerDataTextWidget(tour.fieldOrganizationScore),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
+              SizedBox(height: 10),
               buildBiggerDataTextWidget(tour.observedPositiveFindings),
+              SizedBox(height: 10),
             ],
           ),
         ],

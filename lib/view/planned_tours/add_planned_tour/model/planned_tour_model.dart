@@ -57,5 +57,6 @@ class PlannedTourModel {
     tourAccompanies = documentSnapshot.get("tourAccompanies");
     tourDate = documentSnapshot.get("tourDate");
     tourTeamMembers = documentSnapshot.get("tourTeamMembers");
+    key = documentSnapshot.get("key");
   }
 }

@@ -11,12 +11,17 @@ import '../viewmodel/finding_detail_view_model.dart';
 class FindingDetailView extends StatelessWidget {
   final FindingModel finding;
   final String tourKey;
-  FindingDetailView({Key? key, required this.finding, required this.tourKey})
+  final int findingNumber;
+  FindingDetailView(
+      {Key? key,
+      required this.finding,
+      required this.tourKey,
+      required this.findingNumber})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(finding.imageUrl);
+    // print(finding.imageUrl);
     final selectedFinding = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<AuthenticationProvider>(context)
@@ -53,7 +58,8 @@ class FindingDetailView extends StatelessWidget {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             final snackBar = SnackBar(
-                              content: Text("Bulgu Başarıyla Silindi."),
+                              content: Text(
+                                  "Bulgu $findingNumber Başarıyla Silindi."),
                               backgroundColor: Colors.blueGrey.shade700,
                             );
                             ScaffoldMessenger.of(context)
@@ -87,6 +93,15 @@ class FindingDetailView extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Text(
+                  "Bulgu $findingNumber",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
               buildLittleTextWidget("Kategori"),
               buildBiggerDataTextWidget(finding.category),
               SizedBox(height: 10),
@@ -113,7 +128,7 @@ class FindingDetailView extends StatelessWidget {
                   ? Container()
                   : Center(
                       child: Image.network(
-                        finding.imageUrl ?? "",
+                        finding.imageUrl ??= "",
                         width: 500,
                         height: 500,
                       ),

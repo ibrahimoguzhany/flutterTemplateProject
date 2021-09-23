@@ -173,7 +173,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         onChanged: (val) {
           setState(() {
             tour.tourDate = _datePickerController.text;
-            print(tour.tourDate);
+            // print(tour.tourDate);
           });
         },
         // onSaved: (val) {
@@ -343,7 +343,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             setState(() {
               tour.field = newValue!;
             });
-            print(tour.field);
+            // print(tour.field);
           },
           onSaved: (String? newValue) {
             FocusScopeNode currentFocus = FocusScope.of(context);
@@ -353,7 +353,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
             setState(() {
               tour.field = newValue!;
             });
-            print(tour.field);
+            // print(tour.field);
           },
           items: fieldList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
