@@ -32,11 +32,11 @@ class _HomeViewState extends State<HomeView> {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Planlı Turlar',
+          label: 'Plansız Turlar',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.mail),
-          label: 'Plansız Turlar',
+          label: 'Planlı Turlar',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
@@ -50,15 +50,9 @@ class _HomeViewState extends State<HomeView> {
     return AppBar(
       backgroundColor: Colors.blue,
       leading: Icon(Icons.work),
-      //using YouTube Icon from FontAwesome Icon Packs
       title: Text("Turlar"),
       actions: <Widget>[
-        //actions list in appbar
-        IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              //action for this button
-            }),
+        IconButton(icon: Icon(Icons.search), onPressed: () {}),
 
         //actions list in appbar
         IconButton(icon: const Icon(Icons.logout), onPressed: () {}),

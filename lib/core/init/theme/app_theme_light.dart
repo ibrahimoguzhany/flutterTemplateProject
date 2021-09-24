@@ -23,14 +23,19 @@ class AppThemeLight extends AppTheme with ILightTheme {
                 borderSide: BorderSide(color: Colors.black54))),
         scaffoldBackgroundColor: Color(0xfff1f3f8),
         fontFamily: ApplicationConstants.FONT_FAMILY,
-        // floatingActionButtonTheme:
-        // ThemeData.light().floatingActionButtonTheme.copyWith(),
-
+        floatingActionButtonTheme: ThemeData.light()
+            .floatingActionButtonTheme
+            .copyWith(backgroundColor: colorSchemeLight.lightGray),
         tabBarTheme: TabBarTheme(
           labelPadding: insets.lowPaddingAll,
           unselectedLabelStyle:
               textThemeLight.headline4.copyWith(color: colorSchemeLight.gray),
         ),
+        appBarTheme: AppBarTheme(
+          color: colorSchemeLight.boldGreen,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: colorSchemeLight.lightGray),
       );
 
   TextTheme buildTextTheme() {
@@ -56,6 +61,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
       onBackground: Colors.black12,
       onError: colorSchemeLight.onError, //xx
       brightness: Brightness.light,
+      
     );
   }
 }

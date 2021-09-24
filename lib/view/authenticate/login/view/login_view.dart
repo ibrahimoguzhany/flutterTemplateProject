@@ -224,7 +224,7 @@ class LoginView extends StatelessWidget {
       labelColor: Colors.black,
       indicatorSize: TabBarIndicatorSize.label,
       unselectedLabelStyle: context.textTheme.headline6,
-      indicatorColor: Colors.blueAccent,
+      indicatorColor: context.colors.secondaryVariant,
       indicatorWeight: 5,
       tabs: [
         Tab(
@@ -239,7 +239,7 @@ class LoginView extends StatelessWidget {
 
   Container buildContainerIconField(BuildContext context, IconData icon) {
     return Container(
-      color: context.colors.onSurface,
+      color: context.colors.secondaryVariant,
       padding: context.paddingLowAll,
       child: Icon(
         icon,
@@ -275,7 +275,7 @@ class LoginView extends StatelessWidget {
           "Giriş Yap",
           style: context.textTheme.headline6,
         )),
-        color: context.colors.onSurface,
+        color: context.colors.secondaryVariant,
       );
     });
   }
@@ -299,7 +299,7 @@ class LoginView extends StatelessWidget {
           "Kayıt Ol",
           style: context.textTheme.headline6,
         )),
-        color: context.colors.onSurface,
+        color: context.colors.secondaryVariant,
       );
     });
   }

@@ -42,6 +42,14 @@ class AuthenticationProvider {
 
       return "Oturum Açıldı!";
     } on FirebaseAuthException catch (e) {
+      SnackBar snackBar = SnackBar(
+        content: Text("Hatalı Email ya da Şifre."),
+        elevation: 5,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.green[400],
+        padding: EdgeInsets.all(10),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return e.message!;
     }
   }

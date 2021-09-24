@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
-import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
@@ -65,7 +64,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           },
         )
       ],
-      title: Text("Planlı Turlar"),
+      title: Text("Plansız Turlar"),
     );
   }
 
@@ -88,44 +87,46 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
     );
   }
 
-  Padding buildListTile(Map<String, dynamic> data, int index) {
+  ListTile buildListTile(Map<String, dynamic> data, int index) {
     var _data = data['observedPositiveFindings'].toString();
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        enableFeedback: true,
-        contentPadding: EdgeInsets.all(12.0),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlannedTourDetailView(
-                tour: PlannedTourModel.fromJson(data),
-              ),
+    return ListTile(
+      enableFeedback: true,
+      contentPadding: EdgeInsets.all(8.0),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlannedTourDetailView(
+              tour: PlannedTourModel.fromJson(data),
             ),
-          );
-        },
-        selectedTileColor: Colors.black12,
-        hoverColor: Colors.black12,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        leading: Text(
-          data['location'],
-          style: TextStyle(fontSize: 18),
-        ),
-        title: Text(
-          data['key'],
-          style: TextStyle(fontSize: 16),
-        ),
-        subtitle: AutoLocaleText(
-          value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
-          style: TextStyle(fontSize: 12),
-        ),
-        trailing: Text(
-          data['tourDate'],
-          style: TextStyle(fontSize: 14),
-        ),
+          ),
+        );
+      },
+      selectedTileColor: Colors.black12,
+      hoverColor: Colors.black12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      leading: Text(
+        data['location'],
+        style: TextStyle(fontSize: 16),
+      ),
+      subtitle: Text(
+        data['key'],
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 14),
+      ),
+      // subtitle: AutoLocaleText(
+      //   value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
+      //   style: TextStyle(fontSize: 12),
+      // ),
+      title: Text(
+        data['field'],
+        style: TextStyle(fontSize: 14),
+      ),
+      trailing: Text(
+        data['tourDate'],
+        textAlign: TextAlign.right,
+        style: TextStyle(fontSize: 14),
       ),
     );
   }

@@ -46,6 +46,13 @@ class _ProfileViewState extends State<ProfileView> {
                 NavigationService.instance
                     .navigateToPage(NavigationConstants.CHANGE_PASSWORD_VIEW);
               },
+              icon: Icon(Icons.settings),
+            ),
+            IconButton(
+              onPressed: () async {
+                NavigationService.instance
+                    .navigateToPage(NavigationConstants.CHANGE_PASSWORD_VIEW);
+              },
               icon: Icon(Icons.edit),
             ),
           ],
@@ -75,7 +82,6 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       Center(
                         child: FloatingActionButton.extended(
-                          backgroundColor: Colors.blue,
                           onPressed: () {
                             Provider.of<AuthenticationProvider>(context,
                                     listen: false)

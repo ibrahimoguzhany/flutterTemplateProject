@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
-import 'package:fluttermvvmtemplate/view/profile/model/app_user._model.dart';
-import 'package:fluttermvvmtemplate/view/profile/service/profile_service.dart';
 
 import '../../../core/base/view/base_view.dart';
+import '../../../core/constants/navigation/navigation_constants.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/init/navigation/navigation_service.dart';
 import '../../_product/_widgets/big_little_text_widget.dart';
+import '../model/app_user._model.dart';
+import '../service/profile_service.dart';
 import '../viewmodel/change_password_view_model.dart';
 
 class ChangePasswordView extends StatefulWidget {
@@ -113,7 +113,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 SizedBox(height: 20),
                 FloatingActionButton.extended(
                   label: Text("Kaydet"),
-                  backgroundColor: Colors.blue,
                   onPressed: () async {
                     final isValid = _formKey.currentState!.validate();
                     if (isValid) {

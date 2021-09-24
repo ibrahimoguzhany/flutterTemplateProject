@@ -10,6 +10,7 @@ import '../model/planned_tour_model.dart';
 import '../model/tour_accompanies_dd_model.dart';
 import '../model/tour_team_members_model.dart';
 import '../viewmodel/add_planned_tour_view_model.dart';
+import 'package:intl/intl.dart';
 
 class AddPlannedTourView extends StatefulWidget {
   const AddPlannedTourView({Key? key}) : super(key: key);
@@ -69,13 +70,15 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
     _datePickerController =
         TextEditingController(text: DateTime.now().toString());
 
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     tour = PlannedTourModel(
         location: "",
         field: "",
         tourTeamMembers: [],
         tourAccompanies: [],
-        tourDate: "",
-        fieldOrganizationScore: "",
+        tourDate: formattedDate,
+        fieldOrganizationScore: "0",
         observedPositiveFindings: "",
         key: "");
   }

@@ -194,10 +194,10 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
     );
   }
 
-  DateTimePicker buildTourDatePicker(String date) {
+  DateTimePicker buildTourDatePicker(String? date) {
     return DateTimePicker(
-      initialValue: date,
-      initialDate: DateTime.parse(date),
+      initialValue: date ?? "",
+      initialDate: DateTime.tryParse(date ?? ""),
       validator: (val) {
         if (val == null) {
           return "Tur Tarihi Boş Bırakılamaz.";
@@ -205,8 +205,6 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
       },
       type: DateTimePickerType.date,
       dateMask: 'dd/MM/yyyy',
-      // controller: _datePickerController,
-      // initialValue: _datePickerController.text,
       firstDate: DateTime(2000),
       calendarTitle: "Tur Tarihi",
       lastDate: DateTime(2100),
@@ -220,7 +218,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
     );
   }
 
-  TextFormField buildPositiveFindingTextFormField(String initialValue) {
+  TextFormField buildPositiveFindingTextFormField(String? initialValue) {
     return TextFormField(
       focusNode: FocusNode(canRequestFocus: false),
       validator: (val) {
@@ -228,7 +226,6 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
           return "Lütfen alınması gereken aksiyonlar alanını doldurunuz.";
         }
       },
-      // initialValue: _controllerPositiveFindings.value.text,
       controller: _controllerPositiveFindings,
       keyboardType: TextInputType.multiline,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -253,10 +250,10 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
     );
   }
 
-  Center buildFieldOrganizationScoreField(String val) {
+  Center buildFieldOrganizationScoreField(String? val) {
     return Center(
       child: CustomNumberPicker(
-        initialValue: int.parse(val),
+        initialValue: int.parse(val ?? "0"),
         maxValue: 10,
         minValue: 0,
         step: 1,
