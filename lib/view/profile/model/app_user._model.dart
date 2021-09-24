@@ -2,7 +2,7 @@ class AppUser {
   String? name;
   String? surname;
   String? email;
-  int? password;
+  String? password;
 
   AppUser({this.name, this.surname, this.email, this.password});
 

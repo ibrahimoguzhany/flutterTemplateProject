@@ -8,6 +8,7 @@ import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
 import 'package:fluttermvvmtemplate/view/profile/view/change_password_view.dart';
+import 'package:fluttermvvmtemplate/view/profile/view/profile_view.dart';
 
 import '../../../view/authenticate/test/view/test_view.dart';
 import '../../components/card/not_found_navigation_widget.dart';
@@ -37,6 +38,8 @@ class NavigationRoute {
         return navigateWithData(PlannedTourDetailView(), args.arguments);
       case NavigationConstants.CHANGE_PASSWORD_VIEW:
         return normalNavigate(ChangePasswordView());
+      case NavigationConstants.PROFILE_VIEW:
+        return normalNavigate(ProfileView());
 
       default:
         return MaterialPageRoute(

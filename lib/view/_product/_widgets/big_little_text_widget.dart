@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/components/text/auto_locale.text.dart';
 
-Widget buildLittleTextWidget(String title) {
+Widget buildLittleTextWidget(String? title) {
+  if (title == null) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
   return AutoLocaleText(
     value: title,
     style: TextStyle(
@@ -12,6 +17,11 @@ Widget buildLittleTextWidget(String title) {
 }
 
 buildBiggerDataTextWidget(dynamic data) {
+  if (data == null) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
   var finalResult = "";
   if (data is List) {
     data.forEach((dynamic element) {

@@ -234,7 +234,6 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
               buildBiggerDataTextWidget(tour.fieldOrganizationScore),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-              SizedBox(height: 10),
               buildBiggerDataTextWidget(tour.observedPositiveFindings),
               SizedBox(height: 10),
             ],
@@ -284,10 +283,15 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
   }
 
   Widget buildLittleTextWidget(String title) {
+    if (title == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return AutoLocaleText(
       value: title,
       style: TextStyle(
-          fontSize: 12,
+          fontSize: 10,
           decoration: TextDecoration.underline,
           fontWeight: FontWeight.w800),
     );

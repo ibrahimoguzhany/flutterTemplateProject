@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
-import 'package:fluttermvvmtemplate/view/profile/viewmodel/change_password_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
+import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
+import 'package:fluttermvvmtemplate/view/profile/model/app_user._model.dart';
+import 'package:fluttermvvmtemplate/view/profile/service/profile_service.dart';
 
 import '../../../core/base/view/base_view.dart';
-import '../../../core/init/auth/authentication_provider.dart';
+import '../../../core/extensions/context_extension.dart';
 import '../../_product/_widgets/big_little_text_widget.dart';
+import '../viewmodel/change_password_view_model.dart';
 
 class ChangePasswordView extends StatefulWidget {
   ChangePasswordView({Key? key}) : super(key: key);
@@ -15,11 +18,32 @@ class ChangePasswordView extends StatefulWidget {
 }
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
+  // late TextEditingController _oldPasswordController;
+  late TextEditingController _newPasswordController;
+  late TextEditingController _newPasswordAgainController;
+  late TextEditingController _oldPasswordController;
+  late final User? currentUser;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _newPasswordAgainController.dispose();
+    _newPasswordAgainController.dispose();
+    _oldPasswordController.dispose();
+  }
+
+  bool checkCurrentPasswordIsValid = true;
+
   @override
   void initState() {
     super.initState();
+    _newPasswordController = TextEditingController();
+    _newPasswordAgainController = TextEditingController();
+    _oldPasswordController = TextEditingController();
+    currentUser = FirebaseAuth.instance.currentUser;
   }
 
+  var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BaseView<ChangePasswordViewModel>(
@@ -35,46 +59,98 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildLittleTextWidget("Eski Şifre"),
-              SizedBox(height: 5),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Eski Şifre",
-                  labelStyle: context.textTheme.subtitle1,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildLittleTextWidget("Şifre"),
+                SizedBox(height: 5),
+                TextFormField(
+                  obscureText: true,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: _oldPasswordController,
+                  decoration: InputDecoration(
+                    errorText: checkCurrentPasswordIsValid
+                        ? null
+                        : "Lütfen şuanki şifrenizi kontrol ediniz.",
+                    labelStyle: context.textTheme.subtitle1,
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              buildLittleTextWidget("Yeni Şifre"),
-              SizedBox(height: 5),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Şifre",
-                  labelStyle: context.textTheme.subtitle1,
+                SizedBox(height: 5),
+                buildLittleTextWidget("Yeni Şifre"),
+                SizedBox(height: 5),
+                TextFormField(
+                  obscureText: true,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (val) {
+                    if (val!.length < 6) {
+                      return "Şifreniz en az 6 karakterden oluşmalıdır.";
+                    }
+                  },
+                  controller: _newPasswordController,
+                  decoration: InputDecoration(
+                    labelStyle: context.textTheme.subtitle1,
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              buildLittleTextWidget("Tekrar Yeni Şifre"),
-              SizedBox(height: 5),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Tekrar Yeni Şifre",
-                  labelStyle: context.textTheme.subtitle1,
+                SizedBox(height: 5),
+                buildLittleTextWidget("Tekrar Yeni Şifre"),
+                SizedBox(height: 5),
+                TextFormField(
+                  obscureText: true,
+                  validator: (val) {
+                    if (val!.length < 6) {
+                      return "Şifreniz en az 6 karakterden oluşmalıdır.";
+                    }
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: _newPasswordAgainController,
+                  decoration: InputDecoration(
+                    labelStyle: context.textTheme.subtitle1,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              FloatingActionButton.extended(
-                backgroundColor: Colors.blue,
-                onPressed: () {
-                  Provider.of<AuthenticationProvider>(context, listen: false)
-                      .signOut(context);
-                },
-                label: Text("Kaydet"),
-              ),
-            ],
+                SizedBox(height: 20),
+                FloatingActionButton.extended(
+                  label: Text("Kaydet"),
+                  backgroundColor: Colors.blue,
+                  onPressed: () async {
+                    final isValid = _formKey.currentState!.validate();
+                    if (isValid) {
+                      _formKey.currentState!.save();
+                      if (_newPasswordController.text ==
+                          _newPasswordAgainController.text) {
+                        checkCurrentPasswordIsValid =
+                            await viewModel.validateCurrentPassword(
+                                _oldPasswordController.text);
+                        if (checkCurrentPasswordIsValid == false) {
+                          final snackBar = SnackBar(
+                            content: Text("Mevcut şifrenizi hatalı girdiniz."),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                        setState(() {});
+                        if (_formKey.currentState!.validate() &&
+                            checkCurrentPasswordIsValid) {
+                          AppUser user = await ProfileService.instance!
+                              .getUserById(currentUser!.uid);
+                          await viewModel.updateUserPassword(
+                              _newPasswordController.text,
+                              currentUser!.uid,
+                              user);
+                          final snackBar = SnackBar(
+                            content: Text("Şifreniz başarıyla değiştirildi."),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          NavigationService.instance.navigateToPageClear(
+                              NavigationConstants.PROFILE_VIEW);
+                        }
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

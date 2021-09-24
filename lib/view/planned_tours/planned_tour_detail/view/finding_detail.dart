@@ -124,8 +124,17 @@ class FindingDetailView extends StatelessWidget {
               buildBiggerDataTextWidget(finding.findingType),
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
+              SizedBox(height: 5),
               finding.imageUrl == null
-                  ? Container()
+                  ? Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          "Eklenmiş dosya bulunmamaktadır.",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    )
                   : Center(
                       child: Image.network(
                         finding.imageUrl ??= "",

@@ -73,6 +73,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   }
 
   late TextEditingController _controllerPositiveFindings;
+  late TextEditingController _datePickerController;
 
   @override
   void initState() {
@@ -82,6 +83,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
     //     TextEditingController(text: DateTime.now().toString());
     _controllerPositiveFindings =
         TextEditingController(text: widget.tour.observedPositiveFindings);
+    _datePickerController = TextEditingController(text: widget.tour.tourDate);
 
     newTour = PlannedTourModel(
       location: widget.tour.location,
@@ -195,7 +197,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   DateTimePicker buildTourDatePicker(String date) {
     return DateTimePicker(
       initialValue: date,
-      // initialDate: DateTime.parse(date),
+      initialDate: DateTime.parse(date),
       validator: (val) {
         if (val == null) {
           return "Tur Tarihi Boş Bırakılamaz.";
@@ -213,13 +215,8 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
       onChanged: (val) {
         setState(() {
           newTour.tourDate = val;
-          // print(tour.tourDate);
         });
       },
-      // onSaved: (val) {
-      //   tour.tourDate = _datePickerController.text;
-      //   print(tour.tourDate);
-      // },
     );
   }
 

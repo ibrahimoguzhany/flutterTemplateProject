@@ -9,18 +9,18 @@ part of 'profile_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
-  final _$userAtom = Atom(name: '_ProfileViewModelBase.user');
+  final _$isLockOpenAtom = Atom(name: '_ProfileViewModelBase.isLockOpen');
 
   @override
-  AppUser? get user {
-    _$userAtom.reportRead();
-    return super.user;
+  bool get isLockOpen {
+    _$isLockOpenAtom.reportRead();
+    return super.isLockOpen;
   }
 
   @override
-  set user(AppUser? value) {
-    _$userAtom.reportWrite(value, super.user, () {
-      super.user = value;
+  set isLockOpen(bool value) {
+    _$isLockOpenAtom.reportWrite(value, super.isLockOpen, () {
+      super.isLockOpen = value;
     });
   }
 
@@ -28,14 +28,28 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
       AsyncAction('_ProfileViewModelBase.getUserById');
 
   @override
-  Future<AppUser?> getUserById(String id) {
+  Future<AppUser> getUserById(String id) {
     return _$getUserByIdAsyncAction.run(() => super.getUserById(id));
+  }
+
+  final _$_ProfileViewModelBaseActionController =
+      ActionController(name: '_ProfileViewModelBase');
+
+  @override
+  void isLockOpenChange() {
+    final _$actionInfo = _$_ProfileViewModelBaseActionController.startAction(
+        name: '_ProfileViewModelBase.isLockOpenChange');
+    try {
+      return super.isLockOpenChange();
+    } finally {
+      _$_ProfileViewModelBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
   String toString() {
     return '''
-user: ${user}
+isLockOpen: ${isLockOpen}
     ''';
   }
 }

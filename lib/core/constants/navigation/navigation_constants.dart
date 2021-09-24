@@ -9,4 +9,5 @@ class NavigationConstants {
   static const FINDING_DETAIL_VIEW = "/finding_detail_view";
   static const EDIT_PLANNED_TOUR_VIEW = "/edit_planned_tour_view";
   static const CHANGE_PASSWORD_VIEW = "/change_password_view";
+  static const PROFILE_VIEW = "/profile_view";
 }
