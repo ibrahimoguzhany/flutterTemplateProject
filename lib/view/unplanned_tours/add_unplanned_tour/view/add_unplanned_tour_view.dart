@@ -6,20 +6,20 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../model/planned_tour_model.dart';
+import '../model/unplanned_tour_model.dart';
 import '../model/tour_accompanies_dd_model.dart';
 import '../model/tour_team_members_model.dart';
-import '../viewmodel/add_planned_tour_view_model.dart';
+import '../viewmodel/add_unplanned_tour_view_model.dart';
 import 'package:intl/intl.dart';
 
-class AddPlannedTourView extends StatefulWidget {
-  const AddPlannedTourView({Key? key}) : super(key: key);
+class AddUnPlannedTourView extends StatefulWidget {
+  const AddUnPlannedTourView({Key? key}) : super(key: key);
 
   @override
-  _AddPlannedTourViewState createState() => _AddPlannedTourViewState();
+  _AddUnPlannedTourViewState createState() => _AddUnPlannedTourViewState();
 }
 
-class _AddPlannedTourViewState extends State<AddPlannedTourView> {
+class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   String? location;
   String? field;
   List<Map<String, dynamic>> tourTeamMembers = [];
@@ -28,7 +28,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
   String? fieldOrganizationScore;
   String? observedPositiveFindings;
 
-  late PlannedTourModel tour;
+  late UnPlannedTourModel tour;
   List<String> locationList = ['Bursa', 'İzmir', 'Ankara', 'İstanbul'];
   List<String> fieldList = [
     'Bursa Rafineri',
@@ -72,7 +72,7 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    tour = PlannedTourModel(
+    tour = UnPlannedTourModel(
         location: "",
         field: "",
         tourTeamMembers: [],
@@ -89,16 +89,17 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<AddPlannedTourViewModel>(
-      viewModel: AddPlannedTourViewModel(),
-      onModelReady: (AddPlannedTourViewModel model) {
+    return BaseView<AddUnPlannedTourViewModel>(
+      viewModel: AddUnPlannedTourViewModel(),
+      onModelReady: (AddUnPlannedTourViewModel model) {
         model.setContext(context);
         model.init();
       },
       onPageBuilder:
-          (BuildContext context, AddPlannedTourViewModel viewModel) => Scaffold(
+          (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
+              Scaffold(
         appBar: AppBar(
-          title: Text("Planlı Tur Ekleme Sayfası"),
+          title: Text("Plansız Tur Ekleme Sayfası"),
         ),
         body: Form(
           key: _formKey,
@@ -135,10 +136,10 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
                   final isValid = _formKey.currentState!.validate();
                   if (isValid) {
                     _formKey.currentState!.save();
-                    await viewModel.addTour(tour, context);
+                    await viewModel.addUnPlannedTour(tour, context);
                     Navigator.pop(context);
                     final snackBar = SnackBar(
-                      content: Text("Tur başarıyla eklendi."),
+                      content: Text("Plansız Tur başarıyla eklendi."),
                       backgroundColor: Colors.green,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -167,7 +168,6 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         type: DateTimePickerType.date,
         dateMask: 'dd/MM/yyyy',
         controller: _datePickerController,
-        // initialValue: _datePickerController.text,
         firstDate: DateTime(2000),
         calendarTitle: "Tur Tarihi",
         lastDate: DateTime(2100),
@@ -176,13 +176,8 @@ class _AddPlannedTourViewState extends State<AddPlannedTourView> {
         onChanged: (val) {
           setState(() {
             tour.tourDate = _datePickerController.text;
-            // print(tour.tourDate);
           });
         },
-        // onSaved: (val) {
-        //   tour.tourDate = _datePickerController.text;
-        //   print(tour.tourDate);
-        // },
       );
 
   TextFormField get buildPositiveFindingTextFormField => TextFormField(

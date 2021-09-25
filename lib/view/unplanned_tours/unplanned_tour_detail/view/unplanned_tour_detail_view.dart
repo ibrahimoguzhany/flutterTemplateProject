@@ -3,54 +3,55 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
 import '../../../home/home_esd/model/finding_model.dart';
-import '../../edit_planned_tour/view/edit_planned_tour_view.dart';
-import '../service/planned_tour_detail_service.dart';
-import '../viewmodel/planned_tour_detail_view_model.dart';
+import '../viewmodel/unplanned_tour_detail_view_model.dart';
 import 'finding_detail.dart';
 
-class PlannedTourDetailView extends StatefulWidget {
-  final PlannedTourModel? tour;
-  PlannedTourDetailView({Key? key, this.tour}) : super(key: key);
+class UnPlannedTourDetailView extends StatefulWidget {
+  final UnPlannedTourModel? tour;
+  UnPlannedTourDetailView({Key? key, this.tour}) : super(key: key);
 
   @override
-  _PlannedTourDetailViewState createState() => _PlannedTourDetailViewState();
+  _UnPlannedTourDetailViewState createState() =>
+      _UnPlannedTourDetailViewState();
 }
 
-class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
+class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   @override
   Widget build(BuildContext context) {
-    final findingSnapshots = PlannedTourDetailService.instance
+    final findingSnapshots = UnPlannedTourDetailService.instance
         ?.getFindingsSnapshots(context, widget.tour!.key);
 
-    final selectedTour = PlannedTourDetailService.instance
+    final selectedTour = UnPlannedTourDetailService.instance
         ?.getSelectedTour(context, widget.tour!.key);
 
-    return BaseView<PlannedTourDetailViewModel>(
-      viewModel: PlannedTourDetailViewModel(),
-      onModelReady: (PlannedTourDetailViewModel model) {
+    return BaseView<UnPlannedTourDetailViewModel>(
+      viewModel: UnPlannedTourDetailViewModel(),
+      onModelReady: (UnPlannedTourDetailViewModel model) {
         model.setContext(context);
         model.init();
       },
       onPageBuilder:
-          (BuildContext context, PlannedTourDetailViewModel viewModel) =>
+          (BuildContext context, UnPlannedTourDetailViewModel viewModel) =>
               Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             NavigationService.instance.navigateToPage(
-                NavigationConstants.ADD_PLANNED_TOUR_FINDING,
+                NavigationConstants.ADD_UNPLANNED_TOUR_FINDING,
                 data: widget.tour);
           },
           child: Icon(Icons.add),
         ),
         appBar: AppBar(
-          title: Text("Planlı Tur Detay"),
+          title: Text("Plansız Tur Detay"),
           actions: [
             IconButton(
                 icon: Icon(Icons.edit),
@@ -59,7 +60,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          EditPlannedTourView(tour: widget.tour!),
+                          EditUnPlannedTourView(tour: widget.tour!),
                     ),
                   );
                 }),
@@ -68,9 +69,9 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                 showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                          title: Text("Planlı Tur Sil"),
+                          title: Text("Plansız Tur Sil"),
                           content: Text(
-                              "Planlı Turu silmek istediğinize emin misiniz?"),
+                              "Plansız Turu silmek istediğinize emin misiniz?"),
                           actions: [
                             TextButton(
                                 child: Text("Evet"),
@@ -88,7 +89,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                                   Navigator.pop(context);
                                   final snackBar = SnackBar(
                                     content:
-                                        Text("Planlı Tur Başarıyla Silindi."),
+                                        Text("Plansız Tur Başarıyla Silindi."),
                                     backgroundColor: Colors.blueGrey.shade700,
                                   );
                                   ScaffoldMessenger.of(context)
@@ -130,7 +131,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
               }),
             ),
             Text(
-              'Planlı Tur Bilgileri',
+              'Plansız Tur Bilgileri',
               style: TextStyle(fontSize: 18),
             ),
             Observer(builder: (_) {
@@ -147,7 +148,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
 
   Widget buildHorizontalChips(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-      PlannedTourDetailViewModel viewModel,
+      UnPlannedTourDetailViewModel viewModel,
       String tourKey) {
     if (docs.isEmpty) {
       return Center(
@@ -204,7 +205,7 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
     );
   }
 
-  Padding buildExpandedTourDetails(PlannedTourModel tour) {
+  Padding buildExpandedTourDetails(UnPlannedTourModel tour) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(

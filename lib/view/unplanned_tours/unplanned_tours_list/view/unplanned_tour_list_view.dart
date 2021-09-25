@@ -2,32 +2,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttermvvmtemplate/view/_product/_constants/image_path_svg.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
-import '../../planned_tour_detail/view/planned_tour_detail_view.dart';
-import '../viewmodel/planned_tour_list_view_model.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
+import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import '../viewmodel/unplanned_tour_list_view_model.dart';
 
-class PlannedTourListView extends StatefulWidget {
+class UnPlannedTourListView extends StatefulWidget {
   @override
-  _PlannedTourListViewState createState() => _PlannedTourListViewState();
+  _UnPlannedTourListViewState createState() => _UnPlannedTourListViewState();
 }
 
-class _PlannedTourListViewState extends State<PlannedTourListView> {
+class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
   @override
   Widget build(BuildContext context) {
-    return BaseView<PlannedTourListViewModel>(
-      viewModel: PlannedTourListViewModel(),
-      onModelReady: (PlannedTourListViewModel model) {
+    return BaseView<UnPlannedTourListViewModel>(
+      viewModel: UnPlannedTourListViewModel(),
+      onModelReady: (UnPlannedTourListViewModel model) {
         model.setContext(context);
         model.init();
       },
       onPageBuilder:
-          (BuildContext context, PlannedTourListViewModel viewModel) =>
+          (BuildContext context, UnPlannedTourListViewModel viewModel) =>
               Scaffold(
         appBar: buildAppBar(context),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            NavigationService.instance
+                .navigateToPage(NavigationConstants.ADD_UNPLANNED_TOUR_VIEW);
+          },
+          child: Icon(Icons.add),
+        ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: viewModel.tourSnapshots(context),
           builder: (context, snapshot) {
@@ -57,7 +66,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           },
         )
       ],
-      title: Text("Planlı Turlar"),
+      title: Text("Plansız Turlar"),
     );
   }
 
@@ -76,7 +85,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           Expanded(
             flex: 2,
             child: Text(
-              "Henüz Eklenmiş Bir Planlı Tur Kaydı Bulunmamaktadır.",
+              "Henüz Eklenmiş Bir Plansız Tur Kaydı Bulunmamaktadır.",
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
@@ -101,7 +110,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
     );
   }
 
-  Widget buildListTile(Map<String, dynamic> data, int index) {
+  ListTile buildListTile(Map<String, dynamic> data, int index) {
     var _data = data['observedPositiveFindings'].toString();
 
     return ListTile(
@@ -111,8 +120,8 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PlannedTourDetailView(
-              tour: PlannedTourModel.fromJson(data),
+            builder: (context) => UnPlannedTourDetailView(
+              tour: UnPlannedTourModel.fromJson(data),
             ),
           ),
         );
@@ -129,6 +138,10 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
         textAlign: TextAlign.left,
         style: TextStyle(fontSize: 14),
       ),
+      // subtitle: AutoLocaleText(
+      //   value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
+      //   style: TextStyle(fontSize: 12),
+      // ),
       title: Text(
         data['field'],
         style: TextStyle(fontSize: 14),

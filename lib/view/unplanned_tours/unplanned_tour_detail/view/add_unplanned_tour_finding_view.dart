@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,18 +12,19 @@ import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
 import '../../../home/home_esd/model/finding_model.dart';
-import '../service/planned_tour_detail_service.dart';
-import '../viewmodel/add_planned_tour_finding_view_model.dart';
+import '../service/unplanned_tour_detail_service.dart';
+import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
 
-class AddPlannedTourFindingView extends StatefulWidget {
-  const AddPlannedTourFindingView({Key? key}) : super(key: key);
+class AddUnPlannedTourFindingView extends StatefulWidget {
+  const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
 
   @override
-  _AddPlannedTourFindingViewState createState() =>
-      _AddPlannedTourFindingViewState();
+  _AddUnPlannedTourFindingViewState createState() =>
+      _AddUnPlannedTourFindingViewState();
 }
 
-class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
+class _AddUnPlannedTourFindingViewState
+    extends State<AddUnPlannedTourFindingView> {
   UploadTask? task;
   File? file;
 
@@ -52,19 +53,19 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
   Widget build(BuildContext context) {
     final fileName =
         file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
-    PlannedTourModel tour =
-        ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
+    UnPlannedTourModel tour =
+        ModalRoute.of(context)!.settings.arguments as UnPlannedTourModel;
 
     final _formKey = GlobalKey<FormState>();
 
-    return BaseView<AddPlannedTourFindingViewModel>(
-      viewModel: AddPlannedTourFindingViewModel(),
-      onModelReady: (AddPlannedTourFindingViewModel model) {
+    return BaseView<AddUnPlannedTourFindingViewModel>(
+      viewModel: AddUnPlannedTourFindingViewModel(),
+      onModelReady: (AddUnPlannedTourFindingViewModel model) {
         model.setContext(context);
         model.init();
       },
       onPageBuilder:
-          (BuildContext context, AddPlannedTourFindingViewModel viewModel) =>
+          (BuildContext context, AddUnPlannedTourFindingViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
           title: AutoLocaleText(
@@ -151,7 +152,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
     );
   }
 
-  Column buildButtonWidgets(AddPlannedTourFindingViewModel viewModel,
+  Column buildButtonWidgets(AddUnPlannedTourFindingViewModel viewModel,
       String fileName, BuildContext context) {
     return Column(
       children: [
@@ -209,7 +210,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
     final fileName = basename(file!.path);
     final destination = 'files/$fileName';
 
-    task = PlannedTourDetailService.instance!.uploadFile(destination, file!);
+    task = UnPlannedTourDetailService.instance!.uploadFile(destination, file!);
     setState(() {});
 
     if (task == null) return "";
@@ -222,7 +223,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
     return urlDownload;
   }
 
-  void _launchURL(AddPlannedTourFindingViewModel vm) async =>
+  void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
       await canLaunch(vm.imageUrl!)
           ? await launch(vm.imageUrl!)
           : throw '${vm.imageUrl!} başlatılamadı.';

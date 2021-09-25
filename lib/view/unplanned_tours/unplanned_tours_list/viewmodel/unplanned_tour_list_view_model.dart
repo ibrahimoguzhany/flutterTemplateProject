@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 import '../../../../core/base/model/base_viewmodel.dart';
 import '../../../home/home_esd/model/finding_model.dart';
 
-part 'planned_tour_list_view_model.g.dart';
+part 'unplanned_tour_list_view_model.g.dart';
 
-class PlannedTourListViewModel = _PlannedTourListViewModelBase
-    with _$PlannedTourListViewModel;
+class UnPlannedTourListViewModel = _UnPlannedTourListViewModelBase
+    with _$UnPlannedTourListViewModel;
 
-abstract class _PlannedTourListViewModelBase with Store, BaseViewModel {
+abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   Future<void> init() async {
     // tourSnaps = tourSnapshots(context);
@@ -32,7 +32,7 @@ abstract class _PlannedTourListViewModelBase with Store, BaseViewModel {
                 .firebaseAuth
                 .currentUser!
                 .uid)
-            .collection("plannedtours")
+            .collection("unplannedtours")
             .snapshots();
     return tourSnapshots;
   }

@@ -2,26 +2,26 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
-import '../../model/planned_tour_model.dart';
-import '../../model/tour_accompanies_dd_model.dart';
-import '../../model/tour_team_members_model.dart';
-import '../../planned_tour_detail/view/planned_tour_detail_view.dart';
+import '../../../planned_tours/model/tour_accompanies_dd_model.dart';
+import '../../../planned_tours/model/tour_team_members_model.dart';
+import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
+import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../viewmodel/edit_planned_tour_view_model.dart';
+import '../viewmodel/edit_unplanned_tour_view_model.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
-class EditPlannedTourView extends StatefulWidget {
-  final PlannedTourModel tour;
-  EditPlannedTourView({Key? key, required this.tour}) : super(key: key);
+class EditUnPlannedTourView extends StatefulWidget {
+  final UnPlannedTourModel tour;
+  EditUnPlannedTourView({Key? key, required this.tour}) : super(key: key);
 
   @override
-  _EditPlannedTourViewState createState() => _EditPlannedTourViewState();
+  _EditUnPlannedTourViewState createState() => _EditUnPlannedTourViewState();
 }
 
-class _EditPlannedTourViewState extends State<EditPlannedTourView> {
-  late PlannedTourModel newTour;
+class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
+  late UnPlannedTourModel newTour;
 
   List<String> locationList = ['Bursa', 'İzmir', 'Ankara', 'İstanbul'];
   List<String> fieldList = [
@@ -68,7 +68,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
         TextEditingController(text: widget.tour.observedPositiveFindings);
     _datePickerController = TextEditingController(text: widget.tour.tourDate);
 
-    newTour = PlannedTourModel(
+    newTour = UnPlannedTourModel(
       location: widget.tour.location,
       field: widget.tour.field,
       tourTeamMembers: widget.tour.tourTeamMembers,
@@ -90,14 +90,14 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<EditPlannedTourViewModel>(
-      viewModel: EditPlannedTourViewModel(),
-      onModelReady: (EditPlannedTourViewModel model) {
+    return BaseView<EditUnPlannedTourViewModel>(
+      viewModel: EditUnPlannedTourViewModel(),
+      onModelReady: (EditUnPlannedTourViewModel model) {
         model.setContext(context);
         model.init();
       },
       onPageBuilder:
-          (BuildContext context, EditPlannedTourViewModel viewModel) =>
+          (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
           title: Text("Plansız Tur Düzenleme Sayfası"),
@@ -149,18 +149,19 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   }
 
   FloatingActionButton buildSaveFabButton(
-      EditPlannedTourViewModel viewModel, BuildContext context) {
+      EditUnPlannedTourViewModel viewModel, BuildContext context) {
     return FloatingActionButton.extended(
       label: Text("Kaydet"),
       onPressed: () async {
         final isValid = _formKey.currentState!.validate();
         if (isValid) {
           _formKey.currentState!.save();
-          // await viewModel.updateTour(newTour, context);
+          await viewModel.updateTour(newTour, context);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => PlannedTourDetailView(tour: newTour)));
+                  builder: (context) =>
+                      UnPlannedTourDetailView(tour: newTour)));
           final snackBar = SnackBar(
             content: Text("Tur başarıyla düzenlendi."),
             backgroundColor: Colors.green,
@@ -250,7 +251,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   }
 
   dynamic buildTourTeamMembersMultiDropdownField(
-      EditPlannedTourViewModel viewModel) {
+      EditUnPlannedTourViewModel viewModel) {
     return MultiSelectDialogField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
@@ -299,7 +300,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   }
 
   dynamic buildTourAccompaniesMultiDropdownField(
-      EditPlannedTourViewModel viewModel) {
+      EditUnPlannedTourViewModel viewModel) {
     return MultiSelectDialogField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
@@ -443,7 +444,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
     );
   }
 
-  Widget buildTeamMembers(dynamic data, EditPlannedTourViewModel viewModel) {
+  Widget buildTeamMembers(dynamic data, EditUnPlannedTourViewModel viewModel) {
     var finalResult = "";
     if (data is List) {
       data.forEach((dynamic element) {
@@ -468,7 +469,7 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
   }
 
   Widget buildTourAccompanies(
-      dynamic data, EditPlannedTourViewModel viewModel) {
+      dynamic data, EditUnPlannedTourViewModel viewModel) {
     var finalResult = "";
     if (data is List) {
       data.forEach((dynamic element) {

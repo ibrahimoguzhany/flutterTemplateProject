@@ -9,14 +9,14 @@ import 'package:provider/provider.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../home/home_esd/model/finding_model.dart';
 
-class PlannedTourDetailService {
-  static PlannedTourDetailService? _instance;
-  static PlannedTourDetailService? get instance {
-    if (_instance == null) _instance = PlannedTourDetailService._init();
+class UnPlannedTourDetailService {
+  static UnPlannedTourDetailService? _instance;
+  static UnPlannedTourDetailService? get instance {
+    if (_instance == null) _instance = UnPlannedTourDetailService._init();
     return _instance;
   }
 
-  PlannedTourDetailService._init();
+  UnPlannedTourDetailService._init();
   final firestoreInstance = FirebaseFirestore.instance;
 
   Future<void> addFinding(
@@ -27,7 +27,7 @@ class PlannedTourDetailService {
             .firebaseAuth
             .currentUser!
             .uid)
-        .collection("plannedtours")
+        .collection("unplannedtours")
         .doc(tourDocumentKey)
         .collection("findings")
         .add({
@@ -51,7 +51,7 @@ class PlannedTourDetailService {
             .firebaseAuth
             .currentUser!
             .uid)
-        .collection('plannedtours')
+        .collection('unplannedtours')
         .doc(key)
         .collection("findings")
         .snapshots();
@@ -64,7 +64,7 @@ class PlannedTourDetailService {
             .firebaseAuth
             .currentUser!
             .uid)
-        .collection('plannedtours')
+        .collection('unplannedtours')
         .doc(key);
   }
 

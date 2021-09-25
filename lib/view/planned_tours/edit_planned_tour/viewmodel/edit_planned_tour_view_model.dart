@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../add_planned_tour/model/planned_tour_model.dart';
 import '../../service/add_planned_tour_service.dart';
 
 part 'edit_planned_tour_view_model.g.dart';
@@ -30,10 +29,5 @@ abstract class _EditPlannedTourViewModelBase with Store, BaseViewModel {
   @action
   void changeIsTourTeamMembersSelected() {
     isTeamMembersSelected = false;
-  }
-
-  @action
-  updateTour(PlannedTourModel tour, BuildContext context) async {
-    await service.updateTour(tour, context);
   }
 }
