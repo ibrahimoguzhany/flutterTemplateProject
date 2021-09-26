@@ -40,6 +40,10 @@ abstract class _ChangePasswordViewModelBase with Store, BaseViewModel {
   //     });
   //   }).catchError((err) {});
   // }
+
+  @observable
+  bool checkCurrentPasswordIsValid = true;
+
   @action
   Future<void> updateUserPassword(
       String newPassword, String id, AppUser user) async {

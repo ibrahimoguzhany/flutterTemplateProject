@@ -9,6 +9,23 @@ part of 'change_password_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ChangePasswordViewModel on _ChangePasswordViewModelBase, Store {
+  final _$checkCurrentPasswordIsValidAtom =
+      Atom(name: '_ChangePasswordViewModelBase.checkCurrentPasswordIsValid');
+
+  @override
+  bool get checkCurrentPasswordIsValid {
+    _$checkCurrentPasswordIsValidAtom.reportRead();
+    return super.checkCurrentPasswordIsValid;
+  }
+
+  @override
+  set checkCurrentPasswordIsValid(bool value) {
+    _$checkCurrentPasswordIsValidAtom
+        .reportWrite(value, super.checkCurrentPasswordIsValid, () {
+      super.checkCurrentPasswordIsValid = value;
+    });
+  }
+
   final _$updateUserPasswordAsyncAction =
       AsyncAction('_ChangePasswordViewModelBase.updateUserPassword');
 
@@ -30,7 +47,7 @@ mixin _$ChangePasswordViewModel on _ChangePasswordViewModelBase, Store {
   @override
   String toString() {
     return '''
-
+checkCurrentPasswordIsValid: ${checkCurrentPasswordIsValid}
     ''';
   }
 }

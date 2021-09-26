@@ -78,7 +78,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
           Expanded(
               flex: 6,
               child: Padding(
-                padding: const EdgeInsets.only(top: 32, left: 32, right: 32),
+                padding: const EdgeInsets.only(top: 32.0, left: 32, right: 32),
                 child:
                     buildSvgPicture(SVGImagePaths.instance!.real_time_sync_SVG),
               )),
@@ -89,7 +89,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         ],
       );
     }

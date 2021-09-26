@@ -21,7 +21,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
             ),
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black54))),
-        scaffoldBackgroundColor: Color(0xfff1f3f8),
+        scaffoldBackgroundColor: Color(0xFFFAFAFA),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         floatingActionButtonTheme: ThemeData.light()
             .floatingActionButtonTheme
@@ -53,7 +53,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
       secondary: colorSchemeLight.socarGreen,
       secondaryVariant: colorSchemeLight.boldGreen, //xx
       surface: Colors.red[900]!,
-      background: Colors.greenAccent, //xx
+      background: Colors.white, //xx // green accent idi
       error: colorSchemeLight.socarRed,
       onPrimary: Colors.greenAccent,
       onSecondary: Colors.black, //xx
@@ -61,7 +61,6 @@ class AppThemeLight extends AppTheme with ILightTheme {
       onBackground: Colors.black12,
       onError: colorSchemeLight.onError, //xx
       brightness: Brightness.light,
-      
     );
   }
 }

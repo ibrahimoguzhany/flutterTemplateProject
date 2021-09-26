@@ -12,13 +12,19 @@ abstract class  LocaleKeys {
   static const onBoard_page3_desc = 'onBoard.page3.desc';
   static const onBoard_page3 = 'onBoard.page3';
   static const onBoard = 'onBoard';
-  static const login_tab1 = 'login.tab1';
-  static const login_tab2 = 'login.tab2';
-  static const login_email = 'login.email';
-  static const login_password = 'login.password';
-  static const login_forgotText = 'login.forgotText';
-  static const login_login = 'login.login';
-  static const login_noAccount = 'login.noAccount';
-  static const login = 'login';
+  static const home_login_tab1 = 'home.login.tab1';
+  static const home_login_tab2 = 'home.login.tab2';
+  static const home_login_email = 'home.login.email';
+  static const home_login_password = 'home.login.password';
+  static const home_login_forgotText = 'home.login.forgotText';
+  static const home_login_login = 'home.login.login';
+  static const home_login_noAccount = 'home.login.noAccount';
+  static const home_login = 'home.login';
+  static const home_setting_title = 'home.setting.title';
+  static const home_setting_about_title = 'home.setting.about.title';
+  static const home_setting_about_contribitions = 'home.setting.about.contribitions';
+  static const home_setting_about = 'home.setting.about';
+  static const home_setting = 'home.setting';
+  static const home = 'home';
 
 }

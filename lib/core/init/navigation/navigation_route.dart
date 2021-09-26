@@ -9,12 +9,15 @@ import '../../../view/planned_tours/planned_tour_detail/view/planned_tour_detail
 import '../../../view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
 import '../../../view/profile/view/change_password_view.dart';
 import '../../../view/profile/view/profile_view.dart';
+import '../../../view/settings/model/settings_dynamic_model.dart';
+import '../../../view/settings/view/subview/settings_dynamic_view.dart';
 import '../../../view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view.dart';
 import '../../../view/unplanned_tours/unplanned_tour_detail/view/add_unplanned_tour_finding_view.dart';
 import '../../../view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import '../../../view/unplanned_tours/unplanned_tours_list/view/unplanned_tour_list_view.dart';
 import '../../components/card/not_found_navigation_widget.dart';
 import '../../constants/navigation/navigation_constants.dart';
+import '../../product/exception/navigate_model_not_found.dart';
 
 class NavigationRoute {
   static NavigationRoute _instance = NavigationRoute._init();
@@ -59,6 +62,14 @@ class NavigationRoute {
 
       case NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW:
         return navigateWithData(UnPlannedTourDetailView(), args.arguments);
+
+      case NavigationConstants.SETTINGS_WEB_VIEW:
+        final model = args.arguments as SettingsDynamicModel;
+
+        if (args.arguments is SettingsDynamicModel) {
+          return normalNavigate(SettingsDynamicView(model: model));
+        }
+        throw NavigateException<SettingsDynamicModel>(args.arguments);
 
       default:
         return MaterialPageRoute(

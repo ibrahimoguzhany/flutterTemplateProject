@@ -15,4 +15,6 @@ class NavigationConstants {
   static const ADD_UNPLANNED_TOUR_FINDING = "/add_unplanned_tour_finding";
   static const UNPLANNED_TOUR_LIST_VIEW = "/unplanned_tour_list_view";
   static const UNPLANNED_TOUR_DETAIL_VIEW = "/unplanned_tour_detail_view";
+
+  static const SETTINGS_WEB_VIEW = '/settings_web_view';
 }

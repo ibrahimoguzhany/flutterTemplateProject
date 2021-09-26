@@ -14,13 +14,22 @@
             "desc": "You are not alone. You have unique abilities to go another world"
         }
     },
-    "login": {
-        "tab1": "Login",
-        "tab2": "SignUp",
-        "email": "Email",
-        "password": "Password",
-        "forgotText": "Forgot Password",
-        "login": "Login",
-        "noAccount": "Don't have account"
+    "home": {
+        "login": {
+            "tab1": "Log in",
+            "tab2": "Sign Up",
+            "email": "Email",
+            "password": "Password",
+            "forgotText": "Forgot Password",
+            "login": "Login",
+            "noAccount": "Don't have account"
+        },
+        "setting": {
+            "title": "Settings",
+            "about": {
+                "title": "About Project",
+                "contribitions": "Project Contributors"
+            }
+        }
     }
 }
