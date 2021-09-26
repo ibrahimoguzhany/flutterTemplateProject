@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
 import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
 import 'package:fluttermvvmtemplate/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
 import 'package:fluttermvvmtemplate/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
@@ -51,7 +53,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           child: Icon(Icons.add),
         ),
         appBar: AppBar(
-          title: Text("Plansız Tur Detay"),
+          title: Text(LocaleKeys.unplanned_tours_detail_appBarTitle.tr()),
           actions: [
             IconButton(
                 icon: Icon(Icons.edit),
@@ -131,7 +133,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
               }),
             ),
             Text(
-              'Plansız Tur Bilgileri',
+              LocaleKeys.unplanned_tours_detail_details.tr(),
               style: TextStyle(fontSize: 18),
             ),
             Observer(builder: (_) {
@@ -153,7 +155,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
     if (docs.isEmpty) {
       return Center(
           child: Text(
-        "Henüz eklenmiş bir bulgu bulunmamaktadır.",
+        LocaleKeys.planned_tours_finding_noFinding.tr(),
         style: TextStyle(
             fontFamily: "Poppins", fontSize: 14, fontWeight: FontWeight.w400),
       ));
@@ -168,7 +170,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
         final findingId = docs[index].reference.id;
         data['key'] = findingId;
         if (data.isEmpty)
-          return Text("Henüz eklenmiş bir bulgu bulunmamaktadır.");
+          return Text(LocaleKeys.planned_tours_finding_noFinding.tr());
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(

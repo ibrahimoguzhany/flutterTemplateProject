@@ -6,6 +6,13 @@
         "edit": {
             "app_bar_title": "Unplanned Tours Edit Page",
             "location": "Location"
+        },
+        "finding": {
+            "noFinding": "There are not any finding records yet."
+        },
+        "detail": {
+            "details": "Planned Tour Detail",
+            "appBarTitle": "Detail"
         }
     },
     "unplanned_tours": {
@@ -15,6 +22,13 @@
         "edit": {
             "app_bar_title": "Unplanned Tours Edit Page",
             "location": "Location"
+        },
+        "finding": {
+            "noFinding": "There are not any finding records yet."
+        },
+        "detail": {
+            "details": "Unplanned Tour Detail",
+            "appBarTitle": "Detail"
         }
     },
     "welcome": "Welcome to My App",

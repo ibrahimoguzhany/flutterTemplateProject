@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
+// import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/app/app_contansts.dart';
@@ -38,7 +38,7 @@ Future<void> _init() async {
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await LocaleManager.preferencesInit();
-  await DeviceUtility.instance.initPackageInfo();
+  // await DeviceUtility.instance.initPackageInfo();
 }
 
 class MyApp extends StatelessWidget {

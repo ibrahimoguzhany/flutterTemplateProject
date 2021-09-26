@@ -40,7 +40,8 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
 
   Future<void> logoutApp() async {
     await localeManager.clearAllSaveFirst();
-    await Provider.of<AuthenticationProvider>(context).signOut(context);
+    await Provider.of<AuthenticationProvider>(context, listen: false)
+        .signOut(context);
   }
 
   void navigateToOnBoard() {

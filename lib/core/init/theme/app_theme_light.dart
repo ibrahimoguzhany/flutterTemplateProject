@@ -31,9 +31,8 @@ class AppThemeLight extends AppTheme with ILightTheme {
           unselectedLabelStyle:
               textThemeLight.headline4.copyWith(color: colorSchemeLight.gray),
         ),
-        appBarTheme: AppBarTheme(
-          color: colorSchemeLight.boldGreen,
-        ),
+        appBarTheme:
+            AppBarTheme(color: colorSchemeLight.boldGreen.withOpacity(0.8)),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: colorSchemeLight.lightGray),
       );

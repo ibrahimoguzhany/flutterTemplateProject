@@ -6,6 +6,13 @@
         "edit": {
             "app_bar_title": "Plansız Tur Düzenleme Sayfası",
             "location": "Lokasyon"
+        },
+        "finding": {
+            "noFinding": "Henüz eklenmiş bir bulgu bulunmamaktadır."
+        },
+        "detail": {
+            "details": "Planned Tours Details",
+            "appBarTitle": "Planlı Tur Detayı"
         }
     },
     "unplanned_tours": {
@@ -15,6 +22,13 @@
         "edit": {
             "app_bar_title": "Unplanned Tours Edit Page",
             "location": "Location"
+        },
+        "finding": {
+            "noFinding": "Henüz eklenmiş bir bulgu bulunmamaktadır."
+        },
+        "detail": {
+            "details": "Unplanned Tour Details",
+            "appBarTitle": "Plansız Tur Detayı"
         }
     },
     "welcome": "Welcome to My App",
