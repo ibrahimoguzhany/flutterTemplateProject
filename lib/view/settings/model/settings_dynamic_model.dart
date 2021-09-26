@@ -10,6 +10,7 @@ class SettingsDynamicModel {
   }
 
   factory SettingsDynamicModel.fakeNull() {
-    return SettingsDynamicModel("Oğuzhan");
+    return SettingsDynamicModel("Oğuzhan",
+        url: "https://github.com/ibrahimoguzhany/flutter_starter_template");
   }
 }

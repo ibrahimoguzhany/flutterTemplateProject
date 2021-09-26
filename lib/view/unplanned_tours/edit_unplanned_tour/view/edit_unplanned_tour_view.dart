@@ -1,7 +1,9 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
 import '../../../planned_tours/model/tour_accompanies_dd_model.dart';
 import '../../../planned_tours/model/tour_team_members_model.dart';
 import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
@@ -100,14 +102,15 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
-          title: Text("Plansız Tur Düzenleme Sayfası"),
+          title: Text(LocaleKeys.planned_tours_edit_app_bar_title.tr()),
         ),
         body: Form(
           key: _formKey,
           child: ListView(
             padding: EdgeInsets.all(24),
             children: [
-              buildLittleTextWidget("Lokasyon"),
+              buildLittleTextWidget(
+                  LocaleKeys.planned_tours_edit_location.tr()),
               buildLocationDropDownFormField(widget.tour.location),
               SizedBox(height: 20),
               buildLittleTextWidget("Saha"),

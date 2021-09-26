@@ -1,4 +1,22 @@
 {
+    "planned_tours": {
+        "list": {
+            "noData": "There are not any added records yet."
+        },
+        "edit": {
+            "app_bar_title": "Unplanned Tours Edit Page",
+            "location": "Location"
+        }
+    },
+    "unplanned_tours": {
+        "list": {
+            "noData": "There are not any added records yet."
+        },
+        "edit": {
+            "app_bar_title": "Unplanned Tours Edit Page",
+            "location": "Location"
+        }
+    },
     "welcome": "Welcome to My App",
     "onBoard": {
         "page1": {
@@ -28,7 +46,21 @@
             "title": "Settings",
             "about": {
                 "title": "About Project",
-                "contribitions": "Project Contributors"
+                "contributions": "Project Contributors"
+            },
+            "core": {
+                "themeTitle": "Change Theme",
+                "themeDesc": "You can change application theme.",
+                "langDesc": "You can change application language.",
+                "langTitle": "Change Language"
+            },
+            "appSettings": "Application Settings"
+        },
+        "bottom_app_bar": {
+            "tabs": {
+                "planned_tours": "Planned Tours",
+                "unplanned_tours": "Unplanned Tours",
+                "settings": "Settings"
             }
         }
     }

@@ -28,7 +28,7 @@ class FindingDetailView extends StatelessWidget {
             .firebaseAuth
             .currentUser!
             .uid)
-        .collection('tours')
+        .collection('unplannedtours')
         .doc(tourKey)
         .collection("findings")
         .doc(finding.key);

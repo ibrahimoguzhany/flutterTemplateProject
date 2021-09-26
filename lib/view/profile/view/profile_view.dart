@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
@@ -39,15 +40,11 @@ class _ProfileViewState extends State<ProfileView> {
       onPageBuilder: (BuildContext context, ProfileViewModel viewModel) =>
           Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black54),
+          textTheme: TextTheme(headline6: context.textTheme.headline6),
           title: Text("Profil Bilgilerim"),
           actions: [
-            IconButton(
-              onPressed: () async {
-                NavigationService.instance
-                    .navigateToPage(NavigationConstants.CHANGE_PASSWORD_VIEW);
-              },
-              icon: Icon(Icons.settings),
-            ),
             IconButton(
               onPressed: () async {
                 NavigationService.instance

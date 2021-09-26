@@ -28,7 +28,7 @@ class FindingDetailView extends StatelessWidget {
             .firebaseAuth
             .currentUser!
             .uid)
-        .collection('tours')
+        .collection('plannedtours')
         .doc(tourKey)
         .collection("findings")
         .doc(finding.key);
@@ -45,7 +45,7 @@ class FindingDetailView extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                showDialog(
+                await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
                     title: Text("Bulgu Sil"),

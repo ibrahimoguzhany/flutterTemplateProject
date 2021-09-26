@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/core/constants/app/app_contansts.dart';
 import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
 import 'package:fluttermvvmtemplate/view/settings/model/settings_dynamic_model.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SettingsDynamicView extends StatelessWidget {
   final SettingsDynamicModel model;
@@ -17,6 +19,9 @@ class SettingsDynamicView extends StatelessWidget {
           model.title,
           style: context.textTheme.headline6,
         ),
+      ),
+      body: WebView(
+        initialUrl: model.url ?? ApplicationConstants.APP_WEB_SITE,
       ),
     );
   }

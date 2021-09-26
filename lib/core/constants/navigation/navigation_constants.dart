@@ -17,4 +17,6 @@ class NavigationConstants {
   static const UNPLANNED_TOUR_DETAIL_VIEW = "/unplanned_tour_detail_view";
 
   static const SETTINGS_WEB_VIEW = '/settings_web_view';
+  static const SETTINGS_WEB_PROJECT_VIEW = '/settings_web_project_view';
+  static const SETTINGS_VIEW = "/settings_view";
 }

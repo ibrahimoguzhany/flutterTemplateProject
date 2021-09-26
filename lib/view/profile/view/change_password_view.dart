@@ -55,6 +55,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
       onPageBuilder:
           (BuildContext context, ChangePasswordViewModel viewModel) => Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black54),
+          textTheme: TextTheme(headline6: context.textTheme.headline6),
           title: Text("Parola Değiştir"),
         ),
         body: Padding(

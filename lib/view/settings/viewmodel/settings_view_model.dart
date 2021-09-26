@@ -1,22 +1,38 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
-import 'package:fluttermvvmtemplate/core/product/model/user_model.dart';
-import 'package:fluttermvvmtemplate/view/settings/model/settings_dynamic_model.dart';
+import '../../../core/init/notifier/theme_notifier.dart';
+import '../../../product/model/user_model.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
+
+import '../../../core/base/model/base_viewmodel.dart';
+import '../../../core/constants/navigation/navigation_constants.dart';
+import '../model/settings_dynamic_model.dart';
+
+part './subviewmodel/about_view_model.dart';
 part 'settings_view_model.g.dart';
 
 class SettingsViewModel = _SettingsViewModelBase with _$SettingsViewModel;
 
 abstract class _SettingsViewModelBase with Store, BaseViewModel {
-  final userModel = UserModel.fake();
+  @override
   void setContext(BuildContext context) => this.context = context;
+  @override
   void init() {}
 
+  @observable
+  late Locale? appLocale = context.locale;
+
+  final userModel = UserModel.fake();
+
   @action
-  void navigateToContibution() {
-    navigation.navigateToPage(NavigationConstants.SETTINGS_WEB_VIEW,
-        data: SettingsDynamicModel.fake());
+  void changeAppTheme() {
+    context.read<ThemeNotifier>().changeTheme();
+  }
+
+  @action
+  void changeAppLocalization(Locale? locale) {
+    appLocale = locale;
+    if (locale != null) context.setLocale(locale);
   }
 }

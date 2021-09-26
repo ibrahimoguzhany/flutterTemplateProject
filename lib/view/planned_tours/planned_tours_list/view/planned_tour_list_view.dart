@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
 import 'package:fluttermvvmtemplate/view/_product/_constants/image_path_svg.dart';
 import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
 import 'package:provider/provider.dart';
@@ -48,16 +50,8 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      actions: [
-        IconButton(
-          icon: Icon(Icons.logout),
-          onPressed: () async {
-            await Provider.of<AuthenticationProvider>(context, listen: false)
-                .signOut(context);
-          },
-        )
-      ],
-      title: Text("Planlı Turlar"),
+      centerTitle: true,
+      title: Text(LocaleKeys.home_bottom_app_bar_tabs_planned_tours.tr()),
     );
   }
 
@@ -76,7 +70,7 @@ class _PlannedTourListViewState extends State<PlannedTourListView> {
           Expanded(
             flex: 2,
             child: Text(
-              "Henüz Eklenmiş Bir Planlı Tur Kaydı Bulunmamaktadır.",
+              LocaleKeys.planned_tours_list_noData.tr(),
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),

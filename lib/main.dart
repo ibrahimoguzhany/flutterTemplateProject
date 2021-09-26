@@ -2,13 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/onboard/view/on_board_view.dart';
-import 'package:fluttermvvmtemplate/view/settings/view/settings_view.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/app/app_contansts.dart';
 import 'core/init/cache/locale_manager.dart';
-import 'core/init/lang/app_localization.dart';
 import 'core/init/lang/language_manager.dart';
 import 'core/init/navigation/navigation_route.dart';
 import 'core/init/navigation/navigation_service.dart';
@@ -16,6 +13,8 @@ import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
 import 'view/authenticate/login/view/login_view.dart';
 import 'view/home/home_esd/view/home_view.dart';
+import 'package:easy_localization/easy_localization.dart';
+import './view/settings/view/settings_view.dart';
 
 Future<void> main() async {
   await _init();
@@ -26,9 +25,9 @@ Future<void> main() async {
       child: EasyLocalization(
           child: MyApp(),
           supportedLocales: LanguageManager.instance.supportedLocales,
-          fallbackLocale: Locale('en', 'US'),
+          fallbackLocale: Locale('tr', "TR"),
           path: ApplicationConstants.LANG_ASSET_PATH,
-          startLocale: LanguageManager.instance.enLocale),
+          startLocale: LanguageManager.instance.trLocale),
     ),
   );
 }
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      home: SettingsView(),
+      home: Authenticate(),
       theme: Provider.of<ThemeNotifier>(context).currentTheme,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
