@@ -33,8 +33,10 @@ abstract class  LocaleKeys {
   static const home_login_noAccount = 'home.login.noAccount';
   static const home_login = 'home.login';
   static const home_setting_title = 'home.setting.title';
+  static const home_setting_userDetails = 'home.setting.userDetails';
   static const home_setting_about_title = 'home.setting.about.title';
   static const home_setting_about_contributions = 'home.setting.about.contributions';
+  static const home_setting_about_homepage = 'home.setting.about.homepage';
   static const home_setting_about = 'home.setting.about';
   static const home_setting_core_themeTitle = 'home.setting.core.themeTitle';
   static const home_setting_core_themeDesc = 'home.setting.core.themeDesc';

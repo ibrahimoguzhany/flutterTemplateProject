@@ -44,9 +44,11 @@
         },
         "setting": {
             "title": "Settings",
+            "userDetails": "User Details",
             "about": {
                 "title": "About Project",
-                "contributions": "Project Contributors"
+                "contributions": "Project Contributors",
+                "homepage": "Home Page"
             },
             "core": {
                 "themeTitle": "Change Theme",

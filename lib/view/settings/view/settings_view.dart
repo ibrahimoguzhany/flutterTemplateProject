@@ -1,18 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/core/constants/app/app_contansts.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
-import 'package:fluttermvvmtemplate/core/init/lang/language_manager.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_route.dart';
-import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
 import '../../../core/constants/enums/app_theme_enums.dart';
+import '../../../core/constants/navigation/navigation_constants.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/extensions/widget_extension.dart';
+import '../../../core/init/lang/language_manager.dart';
 import '../../../core/init/lang/locale_keys.g.dart';
+import '../../../core/init/navigation/navigation_service.dart';
 import '../../../core/init/notifier/theme_notifier.dart';
 import '../../../product/enum/lottie_path_enum.dart';
 import '../../../product/extension/lottie_path_extension.dart';
@@ -40,48 +38,77 @@ class SettingsView extends StatelessWidget {
             SizedBox(
               height: 6,
             ).toSliver,
+            buildCardHeaderProjectSettings(context, viewModel).toSliver,
+            SizedBox(
+              height: 6,
+            ).toSliver,
             buildCardHeader(context, viewModel,
                 title: LocaleKeys.home_setting_about_title.tr(),
                 children: [
                   ListTile(
-                    leading: Icon(Icons.invert_colors),
-                    title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
+                    onTap: viewModel.navigateToContribution,
+                    leading: Icon(Icons.favorite),
+                    title:
+                        Text(LocaleKeys.home_setting_about_contributions.tr()),
                     trailing: IconButton(
-                      icon: context.watch<ThemeNotifier>().currentThemeEnum ==
-                              AppThemes.LIGHT
-                          ? LottiePathEnum.MOON.toWidget
-                          : LottiePathEnum.SUNNY.toWidget,
-                      onPressed: viewModel.changeAppTheme,
-                    ),
-                    subtitle: Text(LocaleKeys.home_setting_core_themeDesc.tr()),
+                        icon: Icon(Icons.keyboard_arrow_right),
+                        onPressed: viewModel.navigateToContribution),
                   ),
                   ListTile(
-                    title: Text(LocaleKeys.home_setting_core_langTitle.tr()),
-                    trailing: Observer(builder: (_) {
-                      return DropdownButton<Locale>(
-                        value: viewModel.appLocale,
-                        onChanged: viewModel.changeAppLocalization,
-                        items: [
-                          DropdownMenuItem(
-                            child: Text("TR"),
-                            value: LanguageManager.instance.trLocale,
-                          ),
-                          DropdownMenuItem(
-                            child: Text("EN"),
-                            value: LanguageManager.instance.enLocale,
-                          ),
-                        ],
-                      );
-                    }),
-                    subtitle: Text(LocaleKeys.home_setting_core_langDesc.tr()),
-                  )
-                ]).toSliver,
+                    onTap: viewModel.navigateToFakeContribution,
+                    leading: Icon(Icons.home),
+                    title: Text(LocaleKeys.home_setting_about_homepage.tr()),
+                    trailing: IconButton(
+                        icon: Icon(Icons.keyboard_arrow_right),
+                        onPressed: viewModel.navigateToFakeContribution),
+                  ),
+                ]).toSliver
 
             // Card(child: ).toSliver,
           ],
         ),
       )),
     );
+  }
+
+  Widget buildCardHeaderProjectSettings(
+      BuildContext context, SettingsViewModel viewModel) {
+    return buildCardHeader(context, viewModel,
+        title: LocaleKeys.home_setting_appSettings.tr(),
+        children: [
+          ListTile(
+            leading: Icon(Icons.invert_colors),
+            title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
+            trailing: IconButton(
+              icon: context.watch<ThemeNotifier>().currentThemeEnum ==
+                      AppThemes.LIGHT
+                  ? LottiePathEnum.MOON.toWidget
+                  : LottiePathEnum.SUNNY.toWidget,
+              onPressed: viewModel.changeAppTheme,
+            ),
+            subtitle: Text(LocaleKeys.home_setting_core_themeDesc.tr()),
+          ),
+          ListTile(
+            title: Text(LocaleKeys.home_setting_core_langTitle.tr()),
+            trailing: Observer(builder: (_) {
+              return DropdownButton<Locale>(
+                value: viewModel.appLocale,
+                onChanged: viewModel.changeAppLocalization,
+                items: [
+                  DropdownMenuItem(
+                    child: Text("TR"),
+                    value: LanguageManager.instance.trLocale,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("EN"),
+                    value: LanguageManager.instance.enLocale,
+                  ),
+                ],
+              );
+            }),
+            subtitle: Text(LocaleKeys.home_setting_core_langDesc.tr()),
+          )
+        ]);
   }
 
   Widget buildCardHeader(BuildContext context, SettingsViewModel viewModel,
@@ -144,7 +171,7 @@ class SettingsView extends StatelessWidget {
             ),
             Column(
               children: [
-                Text("Kullanıcı Bilgileri"),
+                Text(LocaleKeys.home_setting_userDetails.tr()),
                 IconButton(
                   icon: Icon(Icons.verified_user),
                   onPressed: () {

@@ -44,9 +44,12 @@
         },
         "setting": {
             "title": "Ayarlar",
+            "userDetails": "Kullanıcı Bilgileri",
             "about": {
                 "title": "Proje Hakkında",
-                "contributions": "Projeye Katkıda Bulunanlar"
+
+                "contributions": "Projeye Katkıda Bulunanlar",
+                "homepage": "Anasayfa"
             },
             "core": {
                 "themeTitle": "Temayı Değiştir",
