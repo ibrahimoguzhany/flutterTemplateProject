@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttermvvmtemplate/view/authenticate/onboard/view/on_board_view.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';
@@ -33,6 +34,8 @@ class NavigationRoute {
 
       case NavigationConstants.HOME_VIEW:
         return normalNavigate(HomeView());
+      case NavigationConstants.ONBOARD:
+        return normalNavigate(OnBoardView());
 
       case NavigationConstants.LOGIN_VIEW:
         return normalNavigate(LoginView());

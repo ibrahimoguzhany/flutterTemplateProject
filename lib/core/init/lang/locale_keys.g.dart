@@ -34,6 +34,8 @@ abstract class  LocaleKeys {
   static const home_login = 'home.login';
   static const home_setting_title = 'home.setting.title';
   static const home_setting_userDetails = 'home.setting.userDetails';
+  static const home_setting_exit = 'home.setting.exit';
+  static const home_setting_appTour = 'home.setting.appTour';
   static const home_setting_about_title = 'home.setting.about.title';
   static const home_setting_about_contributions = 'home.setting.about.contributions';
   static const home_setting_about_homepage = 'home.setting.about.homepage';

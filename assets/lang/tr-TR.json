@@ -45,6 +45,8 @@
         "setting": {
             "title": "Ayarlar",
             "userDetails": "Kullanıcı Bilgileri",
+            "exit": "Çıkış",
+            "appTour": "Uygulama Turu",
             "about": {
                 "title": "Proje Hakkında",
 

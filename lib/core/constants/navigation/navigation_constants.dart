@@ -19,4 +19,5 @@ class NavigationConstants {
   static const SETTINGS_WEB_VIEW = '/settings_web_view';
   static const SETTINGS_WEB_PROJECT_VIEW = '/settings_web_project_view';
   static const SETTINGS_VIEW = "/settings_view";
+  static const ONBOARD = "/on_board";
 }

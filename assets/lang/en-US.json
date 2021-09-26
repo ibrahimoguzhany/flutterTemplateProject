@@ -45,6 +45,8 @@
         "setting": {
             "title": "Settings",
             "userDetails": "User Details",
+            "exit": "Exit",
+            "appTour": "Application Tour",
             "about": {
                 "title": "About Project",
                 "contributions": "Project Contributors",

@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
+import 'package:fluttermvvmtemplate/core/init/cache/locale_manager.dart';
 import '../../../core/init/notifier/theme_notifier.dart';
 import '../../../product/model/user_model.dart';
 import 'package:mobx/mobx.dart';
@@ -34,5 +36,14 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
   void changeAppLocalization(Locale? locale) {
     appLocale = locale;
     if (locale != null) context.setLocale(locale);
+  }
+
+  Future<void> logoutApp() async {
+    await localeManager.clearAllSaveFirst();
+    await Provider.of<AuthenticationProvider>(context).signOut(context);
+  }
+
+  void navigateToOnBoard() {
+    navigation.navigateToPage(NavigationConstants.ONBOARD);
   }
 }

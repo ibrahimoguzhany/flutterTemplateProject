@@ -39,30 +39,15 @@ class SettingsView extends StatelessWidget {
               height: 6,
             ).toSliver,
             buildCardHeaderProjectSettings(context, viewModel).toSliver,
+            buildCardNavigationTour(viewModel).toSliver,
             SizedBox(
-              height: 6,
+              height: 24,
             ).toSliver,
-            buildCardHeader(context, viewModel,
-                title: LocaleKeys.home_setting_about_title.tr(),
-                children: [
-                  ListTile(
-                    onTap: viewModel.navigateToContribution,
-                    leading: Icon(Icons.favorite),
-                    title:
-                        Text(LocaleKeys.home_setting_about_contributions.tr()),
-                    trailing: IconButton(
-                        icon: Icon(Icons.keyboard_arrow_right),
-                        onPressed: viewModel.navigateToContribution),
-                  ),
-                  ListTile(
-                    onTap: viewModel.navigateToFakeContribution,
-                    leading: Icon(Icons.home),
-                    title: Text(LocaleKeys.home_setting_about_homepage.tr()),
-                    trailing: IconButton(
-                        icon: Icon(Icons.keyboard_arrow_right),
-                        onPressed: viewModel.navigateToFakeContribution),
-                  ),
-                ]).toSliver
+            // buildAboutProject(context, viewModel).toSliver,
+            // SizedBox(
+            //   height: 6,
+            // ).toSliver,
+            buildTextButtonLogout(context, viewModel).toSliver,
 
             // Card(child: ).toSliver,
           ],
@@ -71,13 +56,61 @@ class SettingsView extends StatelessWidget {
     );
   }
 
+  TextButton buildTextButtonLogout(
+      BuildContext context, SettingsViewModel viewModel) {
+    return TextButton.icon(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all(StadiumBorder()),
+            padding: MaterialStateProperty.all(context.paddingNormalAll),
+            backgroundColor: MaterialStateProperty.all(
+                context.colors.onError.withOpacity(0.7))),
+        onPressed: viewModel.logoutApp,
+        icon: Icon(Icons.exit_to_app),
+        label: Text(LocaleKeys.home_setting_exit.tr()));
+  }
+
+  Card buildCardNavigationTour(SettingsViewModel viewModel) {
+    return Card(
+      child: TextButton(
+        onPressed: () {},
+        child: ListTile(
+          onTap: viewModel.navigateToOnBoard,
+          title: Text(LocaleKeys.home_setting_appTour.tr()),
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAboutProject(BuildContext context, SettingsViewModel viewModel) {
+    return buildCardHeader(context, viewModel,
+        title: LocaleKeys.home_setting_about_title.tr(),
+        children: [
+          ListTile(
+            onTap: viewModel.navigateToContribution,
+            leading: Icon(Icons.favorite),
+            title: Text(LocaleKeys.home_setting_about_contributions.tr()),
+            trailing: IconButton(
+                icon: Icon(Icons.keyboard_arrow_right),
+                onPressed: viewModel.navigateToContribution),
+          ),
+          ListTile(
+            onTap: viewModel.navigateToFakeContribution,
+            leading: Icon(Icons.home),
+            title: Text(LocaleKeys.home_setting_about_homepage.tr()),
+            trailing: IconButton(
+                icon: Icon(Icons.keyboard_arrow_right),
+                onPressed: viewModel.navigateToFakeContribution),
+          ),
+        ]);
+  }
+
   Widget buildCardHeaderProjectSettings(
       BuildContext context, SettingsViewModel viewModel) {
     return buildCardHeader(context, viewModel,
         title: LocaleKeys.home_setting_appSettings.tr(),
         children: [
           ListTile(
-            leading: Icon(Icons.invert_colors),
             title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
             trailing: IconButton(
               icon: context.watch<ThemeNotifier>().currentThemeEnum ==
