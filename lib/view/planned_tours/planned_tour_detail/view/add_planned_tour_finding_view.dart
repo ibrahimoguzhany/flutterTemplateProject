@@ -177,7 +177,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            finding.imageUrl = await uploadFile();
+            // finding.imageUrl = await uploadFile();
             if (viewModel.imageUrl != null) {
               final snackBar = SnackBar(
                 backgroundColor: Colors.green[600],

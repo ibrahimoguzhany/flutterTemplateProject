@@ -9,7 +9,7 @@ class FindingModel {
   String? fieldManagerStatements;
   String? file;
   String? key;
-  String? imageUrl;
+  List<String>? imageUrl;
 
   FindingModel(
       {this.findingType,

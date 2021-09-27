@@ -128,22 +128,23 @@ class FindingDetailView extends StatelessWidget {
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
               SizedBox(height: 5),
-              finding.imageUrl == null
-                  ? Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(
-                          "Eklenmiş dosya bulunmamaktadır.",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () async {
-                        await viewModel.launchImage(finding.imageUrl!);
-                      },
-                      child: Text(finding.imageUrl!),
-                    )
+              // TODO: BUrada yuklenen dosyaların path lerı gösterilmeli ve tıklandığında resim launch ya da webview ile acilabilmeli.
+              // finding.imageUrl == null
+              //     ? Container(
+              //         child: Padding(
+              //           padding: const EdgeInsets.only(left: 8),
+              //           child: Text(
+              //             "Eklenmiş dosya bulunmamaktadır.",
+              //             style: TextStyle(fontSize: 12),
+              //           ),
+              //         ),
+              //       )
+              //     : InkWell(
+              //         onTap: () async {
+              //           await viewModel.launchImage(finding.imageUrl!);
+              //         },
+              //         child: Text(finding.imageUrl!),
+              //       )
             ],
           ),
         ],

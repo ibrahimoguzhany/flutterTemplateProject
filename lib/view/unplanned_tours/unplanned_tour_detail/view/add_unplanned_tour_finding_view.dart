@@ -28,6 +28,8 @@ class _AddUnPlannedTourFindingViewState
   UploadTask? task;
   File? file;
 
+  List<File>? files = <File>[];
+
   List<String> findingTypes = ['Emniyetsiz Durum', "Emniyetsiz Davranış"];
   List<String> findingCategories = [
     'Kaygan Zemin',
@@ -157,7 +159,7 @@ class _AddUnPlannedTourFindingViewState
     return Column(
       children: [
         ButtonWidget(
-          text: 'Galeriden Dosya Seç / Resim Çek',
+          text: 'Dosya Seç',
           icon: Icons.attach_file,
           onClicked: selectFile,
         ),
@@ -178,7 +180,7 @@ class _AddUnPlannedTourFindingViewState
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            finding.imageUrl = await uploadFile();
+            finding.imageUrl = await uploadFiles(files!);
             if (viewModel.imageUrl != null) {
               final snackBar = SnackBar(
                 backgroundColor: Colors.green[600],
@@ -196,12 +198,17 @@ class _AddUnPlannedTourFindingViewState
   }
 
   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    // TODO: BURADA SECILEN DOSYALARIN PATH LERI LIST ICINDE TUTULMALI VE FILES A EKLENMELI
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result == null) return;
-    final path = result.files.single.path!;
 
-    setState(() => file = File(path));
+    for (var i = 0; i < result.files.length; i++) {
+      final path = result.files[i].path!;
+      files!.add(File(path));
+    }
+
+    // setState(() => file = File(path));
   }
 
   Future<String> uploadFile() async {
@@ -221,6 +228,22 @@ class _AddUnPlannedTourFindingViewState
     print('Download-Link: $urlDownload');
 
     return urlDownload;
+  }
+
+  Future<String> uploadFile2(File _image) async {
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('files/${_image.path}');
+    UploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.whenComplete(() => null);
+
+    return await storageReference.getDownloadURL();
+  }
+
+  Future<List<String>> uploadFiles(List<File> _images) async {
+    var imageUrls =
+        await Future.wait(_images.map((_image) => uploadFile2(_image)));
+    print(imageUrls);
+    return imageUrls;
   }
 
   void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
