@@ -40,9 +40,9 @@ class _ProfileViewState extends State<ProfileView> {
       onPageBuilder: (BuildContext context, ProfileViewModel viewModel) =>
           Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black54),
-          textTheme: TextTheme(headline6: context.textTheme.headline6),
+          backgroundColor: context.theme.appBarTheme.backgroundColor,
+          iconTheme: context.theme.appBarTheme.iconTheme,
+          textTheme: context.theme.appBarTheme.textTheme,
           title: Text("Profil Bilgilerim"),
           actions: [
             IconButton(

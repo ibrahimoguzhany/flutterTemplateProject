@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttermvvmtemplate/view/authenticate/onboard/view/on_board_view.dart';
+import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view2.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';
@@ -60,6 +61,9 @@ class NavigationRoute {
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW:
         return normalNavigate(AddUnPlannedTourView());
+
+      case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
+        return normalNavigate(AddUnPlannedTourView2());
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
         return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);

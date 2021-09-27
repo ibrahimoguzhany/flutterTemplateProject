@@ -1,6 +1,7 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
@@ -103,56 +104,55 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         ),
         body: Form(
           key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.all(24),
-            children: [
-              buildLittleTextWidget("Lokasyon"),
-              buildLocationDropDownFormField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha"),
-              buildFieldDropDownFormField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Tura Eşlik Edenler"),
-              SizedBox(height: 5),
-              buildTourAccompaniesMultiDropdownField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Ekip Üyeleri"),
-              SizedBox(height: 5),
-              buildTourTeamMembersMultiDropdownField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Tur Tarihi"),
-              buildTourDatePicker,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha Tertip Skoru"),
-              buildFieldOrganizationScoreField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-              SizedBox(height: 5),
-              buildPositiveFindingTextFormField,
-              SizedBox(height: 20),
-              FloatingActionButton.extended(
-                label: Text("Kaydet"),
-                onPressed: () async {
-                  final isValid = _formKey.currentState!.validate();
-                  if (isValid) {
-                    _formKey.currentState!.save();
-                    await viewModel.addUnPlannedTour(tour, context);
-                    Navigator.pop(context);
-                    final snackBar = SnackBar(
-                      content: Text("Plansız Tur başarıyla eklendi."),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  } else {
-                    final snackBar = SnackBar(
-                      content: Text("Lütfen gerekli alanları doldurunuz."),
-                      backgroundColor: Colors.red,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-              )
-            ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildLittleTextWidget("Lokasyon"),
+                  buildLocationDropDownFormField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Saha"),
+                  buildFieldDropDownFormField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Tura Eşlik Edenler"),
+                  SizedBox(height: 5),
+                  buildTourAccompaniesMultiDropdownField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Ekip Üyeleri"),
+                  SizedBox(height: 5),
+                  buildTourTeamMembersMultiDropdownField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Tur Tarihi"),
+                  buildTourDatePicker,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Saha Tertip Skoru"),
+                  buildFieldOrganizationScoreField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
+                  SizedBox(height: 5),
+                  buildPositiveFindingTextFormField,
+                  SizedBox(height: 20),
+                  FloatingActionButton.extended(
+                    label: Text("Kaydet"),
+                    onPressed: () async {
+                      final isValid = _formKey.currentState!.validate();
+                      if (isValid) {
+                        _formKey.currentState!.save();
+                        await viewModel.addUnPlannedTour(tour, context);
+                      } else {
+                        final snackBar = SnackBar(
+                          content: Text("Lütfen gerekli alanları doldurunuz."),
+                          backgroundColor: Colors.red,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -182,23 +182,18 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
 
   TextFormField get buildPositiveFindingTextFormField => TextFormField(
         focusNode: FocusNode(canRequestFocus: false),
-        validator: (val) {
-          if (val == null) {
-            return "Lütfen alınması gereken aksiyonlar alanını doldurunuz.";
-          }
-        },
         controller: _controllerPositiveFindings,
         keyboardType: TextInputType.multiline,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: 5,
         decoration: InputDecoration(
-          fillColor: Colors.white,
+          border: OutlineInputBorder(),
+          // fillColor: Colors.white,
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black26, width: 2.0),
+            borderSide: const BorderSide(width: 1.0),
             borderRadius: BorderRadius.circular(5),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black26, width: 2.0),
+            borderSide: const BorderSide(width: 1.0),
             borderRadius: BorderRadius.circular(5),
           ),
         ),
@@ -217,6 +212,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           minValue: 0,
           step: 1,
           onValue: (value) {
+            FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
               tour.fieldOrganizationScore = value.toString();
             });
@@ -234,25 +230,21 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             },
             items: _itemsTourTeamMembers,
             title: Text("Tur Takım Üyeleri"),
-            // autovalidateMode: AutovalidateMode.onUserInteraction,
             selectedColor: Colors.blue,
             decoration: BoxDecoration(
-              // color: Colors.black26.withOpacity(0.1),
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
-              border: Border.all(color: Colors.black26, width: 2),
+              border: Border.all(
+                width: 1,
+              ),
             ),
             buttonIcon: Icon(
-              Icons.person,
-              // color: Colors.blue,
-              color: Colors.black26,
+              Icons.person_outline_outlined,
             ),
             buttonText: Text(
               "Tur Takım Üyeleri",
               style: TextStyle(
-                // color: Colors.blue[800],
-                color: Colors.black54,
                 fontSize: 16,
                 fontWeight: FontWeight.values[4],
                 fontFamily: "Poppins",
@@ -279,26 +271,21 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             },
             items: _itemsTourAccompanies,
             title: Text("Tura Eşlik Edenler"),
-            // autovalidateMode: AutovalidateMode.onUserInteraction,
             selectedColor: Colors.blue,
             decoration: BoxDecoration(
-              // color: Colors.black26.withOpacity(0.1),4
-
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
-
-              border: Border.all(color: Colors.black26, width: 2),
+              border: Border.all(
+                width: 1,
+              ),
             ),
             buttonIcon: Icon(
-              Icons.work_rounded,
-              color: Colors.black26,
+              Icons.work_outline_outlined,
             ),
             buttonText: Text(
               "Tura Eşlik Edenler",
               style: TextStyle(
-                // color: Colors.blue[800],
-                color: Colors.black54,
                 fontSize: 16,
                 fontWeight: FontWeight.values[4],
               ),
@@ -329,19 +316,15 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           value: field,
           icon: const Icon(
             Icons.arrow_downward,
-            color: Colors.black38,
+            // color: Colors.black38,
           ),
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
+            FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
               tour.field = newValue!;
             });
-            // print(tour.field);
           },
           onSaved: (String? newValue) {
             FocusScopeNode currentFocus = FocusScope.of(context);
@@ -351,7 +334,6 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             setState(() {
               tour.field = newValue!;
             });
-            // print(tour.field);
           },
           items: fieldList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -373,22 +355,16 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           hint: Text('Lokasyon Seçiniz'),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           value: location,
-          // autovalidateMode: AutovalidateMode.onUserInteraction,
           icon: const Icon(
             Icons.arrow_downward,
-            color: Colors.black38,
           ),
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
             setState(() {
               tour.location = newValue!;
             });
+            FocusScope.of(context).requestFocus(new FocusNode());
           },
           items: locationList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(

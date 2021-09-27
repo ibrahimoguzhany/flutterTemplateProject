@@ -21,5 +21,11 @@ abstract class _AddUnPlannedTourViewModelBase with Store, BaseViewModel {
   @action
   addUnPlannedTour(UnPlannedTourModel tour, BuildContext context) async {
     await service.addUnPlannedTour(tour, context);
+    Navigator.pop(context);
+    final snackBar = SnackBar(
+      content: Text("Plansız Tur başarıyla eklendi."),
+      backgroundColor: Colors.green,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

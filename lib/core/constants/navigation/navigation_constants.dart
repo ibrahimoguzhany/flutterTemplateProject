@@ -12,6 +12,7 @@ class NavigationConstants {
   static const PROFILE_VIEW = "/profile_view";
 
   static const ADD_UNPLANNED_TOUR_VIEW = "/add_unplanned_tour_view";
+  static const ADD_UNPLANNED_TOUR_VIEW2 = "/add_unplanned_tour_view2";
   static const ADD_UNPLANNED_TOUR_FINDING = "/add_unplanned_tour_finding";
   static const UNPLANNED_TOUR_LIST_VIEW = "/unplanned_tour_list_view";
   static const UNPLANNED_TOUR_DETAIL_VIEW = "/unplanned_tour_detail_view";
