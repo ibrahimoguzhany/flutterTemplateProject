@@ -132,10 +132,10 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
                 );
               }),
             ),
-            Text(
-              LocaleKeys.unplanned_tours_detail_details.tr(),
-              style: TextStyle(fontSize: 18),
-            ),
+            // Text(
+            //   LocaleKeys.unplanned_tours_detail_details.tr(),
+            //   style: TextStyle(fontSize: 18),
+            // ),
             Observer(builder: (_) {
               return Expanded(
                 flex: 12,

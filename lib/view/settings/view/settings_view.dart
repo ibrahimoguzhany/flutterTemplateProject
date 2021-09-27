@@ -191,43 +191,42 @@ class SettingsView extends StatelessWidget {
     return Card(
       child: Padding(
         padding: context.paddingLowAll,
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              child: Text(viewModel.userModel.shortName),
-            ),
-            Spacer(),
-            Text(viewModel.userModel.fullName),
-            Spacer(
-              flex: 5,
-            ),
-            Column(
-              children: [
-                Text(LocaleKeys.home_setting_userDetails.tr()),
-                IconButton(
-                  icon: Icon(Icons.verified_user),
-                  onPressed: () {
-                    NavigationService.instance
-                        .navigateToPage(NavigationConstants.PROFILE_VIEW);
-                  },
-                )
-              ],
-            )
-          ],
+        child: InkWell(
+          onTap: viewModel.navigateToProfile,
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                child: Text(viewModel.userModel.shortName),
+              ),
+              Spacer(),
+              Text(viewModel.userModel.fullName),
+              Spacer(
+                flex: 5,
+              ),
+              Column(
+                children: [
+                  Text(LocaleKeys.home_setting_userDetails.tr()),
+                  IconButton(
+                      icon: Icon(Icons.verified_user),
+                      onPressed: viewModel.navigateToProfile)
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  NestedScrollView buildNestedScrollView() {
-    return NestedScrollView(
-      body: Text("Data"),
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return [buildSliverAppBar(context)];
-      },
-    );
-  }
+  // NestedScrollView buildNestedScrollView() {
+  //   return NestedScrollView(
+  //     body: Text("Data"),
+  //     headerSliverBuilder: (context, innerBoxIsScrolled) {
+  //       return [buildSliverAppBar(context)];
+  //     },
+  //   );
+  // }
 
   SliverAppBar buildSliverAppBar(BuildContext context) {
     return SliverAppBar(

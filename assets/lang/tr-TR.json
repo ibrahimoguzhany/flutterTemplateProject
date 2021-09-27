@@ -11,39 +11,39 @@
             "noFinding": "Henüz eklenmiş bir bulgu bulunmamaktadır."
         },
         "detail": {
-            "details": "Planned Tours Details",
+            "details": "Planlı Tur Detayı",
             "appBarTitle": "Planlı Tur Detayı"
         }
     },
     "unplanned_tours": {
         "list": {
-            "noData": "There are not any added records yet."
+            "noData": "Henüz eklenmiş bir kayıt bulunmamaktaıdr.."
         },
         "edit": {
-            "app_bar_title": "Unplanned Tours Edit Page",
+            "app_bar_title": "Plansız Tur Düzenleme Sayfası",
             "location": "Location"
         },
         "finding": {
             "noFinding": "Henüz eklenmiş bir bulgu bulunmamaktadır."
         },
         "detail": {
-            "details": "Unplanned Tour Details",
+            "details": "Plansız Tur Detayı",
             "appBarTitle": "Plansız Tur Detayı"
         }
     },
     "welcome": "Welcome to My App",
     "onBoard": {
         "page1": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "Planlı Turlar",
+            "desc": "Eğlenirken yıllık olarak seçilen planlı turlarınızı tamamlayın!"
         },
         "page2": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "Plansız Turlar",
+            "desc": "Nerede olursanız olun isteğe bağlı turlarınızı oluşturun. Ne zaman istersen. Gözlemlerinizi ekleyin, bulguları turlara ekleyerek dosya ekleyin."
         },
         "page3": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "Güvenliğiniz için",
+            "desc": "Bu uygulama, Arfitect tarafından güvenliğiniz için sevgiyle yapılmıştır!"
         }
     },
     "home": {

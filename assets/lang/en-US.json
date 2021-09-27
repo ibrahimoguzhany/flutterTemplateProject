@@ -34,16 +34,16 @@
     "welcome": "Welcome to My App",
     "onBoard": {
         "page1": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "Planned Tours",
+            "desc": "Complete your yearly selected planned tours while having fun!"
         },
         "page2": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "Unplanned Tours",
+            "desc": "Create your optional tours where ever you are. Whenever you want. Add your observations, attach files by adding findings into tours. "
         },
         "page3": {
-            "title": "Make It Good",
-            "desc": "You are not alone. You have unique abilities to go another world"
+            "title": "For Your Safety",
+            "desc": "This app is made by love for your safety by Arfitect!"
         }
     },
     "home": {

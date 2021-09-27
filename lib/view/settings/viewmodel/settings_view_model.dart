@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
 import 'package:fluttermvvmtemplate/core/init/cache/locale_manager.dart';
+import 'package:fluttermvvmtemplate/core/init/navigation/navigation_service.dart';
 import '../../../core/init/notifier/theme_notifier.dart';
 import '../../../product/model/user_model.dart';
 import 'package:mobx/mobx.dart';
@@ -46,5 +47,9 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
 
   void navigateToOnBoard() {
     navigation.navigateToPage(NavigationConstants.ONBOARD);
+  }
+
+  void navigateToProfile() {
+    NavigationService.instance.navigateToPage(NavigationConstants.PROFILE_VIEW);
   }
 }

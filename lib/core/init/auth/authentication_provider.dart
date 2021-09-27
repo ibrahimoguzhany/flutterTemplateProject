@@ -18,7 +18,7 @@ class AuthenticationProvider {
     try {
       await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return "Signed up!";
+      return "Kayıt olundu!";
     } on FirebaseAuthException catch (e) {
       return e.message!;
     }
