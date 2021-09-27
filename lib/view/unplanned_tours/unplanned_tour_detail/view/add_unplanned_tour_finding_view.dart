@@ -44,6 +44,8 @@ class _AddUnPlannedTourFindingViewState
     finding = FindingModel();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   final _controllerActionMustBeTaken = TextEditingController();
   final _controllerActionMustBeTakenInField = TextEditingController();
   final _controllerFieldManagerStatements = TextEditingController();
@@ -55,8 +57,6 @@ class _AddUnPlannedTourFindingViewState
         file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
     UnPlannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as UnPlannedTourModel;
-
-    final _formKey = GlobalKey<FormState>();
 
     return BaseView<AddUnPlannedTourFindingViewModel>(
       viewModel: AddUnPlannedTourFindingViewModel(),
@@ -74,80 +74,85 @@ class _AddUnPlannedTourFindingViewState
           ),
         ),
         body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.all(24),
-            children: [
-              buildLittleTextWidget("Bulgu Türü"),
-              SizedBox(height: 5),
-              buildFindingTypeDropdown,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Kategori"),
-              SizedBox(height: 5),
-              buildFindingCategoryDropdown,
-              SizedBox(height: 10),
-              buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
-              SizedBox(height: 5),
-              buildActionsMustBeTaken,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Sahada Alınması Gereken Aksiyonlar"),
-              SizedBox(height: 5),
-              buildActionTakenInField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
-              SizedBox(height: 5),
-              buildFieldManagerStatements,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Gözlemler"),
-              SizedBox(height: 5),
-              buildObservations,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Dosya"),
-              Container(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 0),
-                decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      right: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      top: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildLittleTextWidget("Bulgu Türü"),
+                    SizedBox(height: 5),
+                    buildFindingTypeDropdown,
+                    SizedBox(height: 20),
+                    buildLittleTextWidget("Kategori"),
+                    SizedBox(height: 5),
+                    buildFindingCategoryDropdown,
+                    SizedBox(height: 10),
+                    buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
+                    SizedBox(height: 5),
+                    buildActionsMustBeTaken,
+                    SizedBox(height: 20),
+                    buildLittleTextWidget("Sahada Alınması Gereken Aksiyonlar"),
+                    SizedBox(height: 5),
+                    buildActionTakenInField,
+                    SizedBox(height: 20),
+                    buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
+                    SizedBox(height: 5),
+                    buildFieldManagerStatements,
+                    SizedBox(height: 20),
+                    buildLittleTextWidget("Gözlemler"),
+                    SizedBox(height: 5),
+                    buildObservations,
+                    SizedBox(height: 20),
+                    buildLittleTextWidget("Dosya"),
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: 20, right: 20, left: 20, bottom: 0),
+                      decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 2,
+                            ),
+                            right: BorderSide(
+                              color: Colors.black12,
+                              width: 2,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 2,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 2,
+                            ),
+                          ),
+                          borderRadius: BorderRadius.circular(3)),
+                      margin: EdgeInsets.all(10),
+                      child: buildButtonWidgets(viewModel, fileName, context),
                     ),
-                    borderRadius: BorderRadius.circular(3)),
-                margin: EdgeInsets.all(10),
-                child: buildButtonWidgets(viewModel, fileName, context),
+                    FloatingActionButton.extended(
+                      onPressed: () async {
+                        final isValid = _formKey.currentState!.validate();
+                        if (isValid) {
+                          _formKey.currentState!.save();
+                          await viewModel.addFinding(
+                              finding, context, tour.key);
+                          Navigator.pop(context);
+                          final snackBar = SnackBar(
+                            content: Text("Bulgu başarıyla eklendi."),
+                            backgroundColor: Colors.green,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      label: Text("Kaydet"),
+                    ),
+                  ],
+                ),
               ),
-              FloatingActionButton.extended(
-                onPressed: () async {
-                  final isValid = _formKey.currentState!.validate();
-                  if (isValid) {
-                    _formKey.currentState!.save();
-                    await viewModel.addFinding(finding, context, tour.key);
-                    Navigator.pop(context);
-                    final snackBar = SnackBar(
-                      content: Text("Bulgu başarıyla eklendi."),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-                label: Text("Kaydet"),
-              ),
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }
@@ -256,7 +261,7 @@ class _AddUnPlannedTourFindingViewState
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: DropdownButtonFormField<String>(
           validator: (val) {
-            if (val!.isEmpty) {
+            if (val == null) {
               return "Kategori alanı boş bırakılamaz.";
             }
           },
@@ -288,11 +293,12 @@ class _AddUnPlannedTourFindingViewState
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: DropdownButtonFormField<String>(
           validator: (val) {
-            if (val!.isEmpty) {
+            if (val == null) {
               return "Bulgu Türü alanı boş bırakılamaz.";
             }
           },
           hint: Text('Bulgu Türü'),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           value: finding.findingType,
           icon: const Icon(
             Icons.arrow_downward,
