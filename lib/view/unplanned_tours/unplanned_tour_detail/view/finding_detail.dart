@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
@@ -78,12 +80,13 @@ class FindingDetailView extends StatelessWidget {
             )
           ],
         ),
-        body: buildExpandedFindingDetails(finding),
+        body: buildExpandedFindingDetails(finding, viewModel),
       ),
     );
   }
 
-  Padding buildExpandedFindingDetails(FindingModel finding) {
+  Padding buildExpandedFindingDetails(
+      FindingModel finding, FindingDetailViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -113,12 +116,12 @@ class FindingDetailView extends StatelessWidget {
               buildLittleTextWidget("Saha Alınan Aksiyonlar"),
               buildBiggerDataTextWidget(finding.actionsTakenInField),
               SizedBox(height: 10),
-              buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
-              buildBiggerDataTextWidget(finding.fieldManagerStatements),
-              SizedBox(height: 10),
               buildLittleTextWidget("Gözlemler"),
               buildBiggerDataTextWidget(
                   finding.observations != null ? finding.observations : ""),
+              SizedBox(height: 10),
+              buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
+              buildBiggerDataTextWidget(finding.fieldManagerStatements),
               SizedBox(height: 10),
               buildLittleTextWidget("Bulgu Türü"),
               buildBiggerDataTextWidget(finding.findingType),
@@ -135,12 +138,11 @@ class FindingDetailView extends StatelessWidget {
                         ),
                       ),
                     )
-                  : Center(
-                      child: Image.network(
-                        finding.imageUrl ??= "",
-                        width: 500,
-                        height: 500,
-                      ),
+                  : InkWell(
+                      onTap: () async {
+                        await viewModel.launchImage(finding.imageUrl!);
+                      },
+                      child: Text(finding.imageUrl!),
                     )
             ],
           ),

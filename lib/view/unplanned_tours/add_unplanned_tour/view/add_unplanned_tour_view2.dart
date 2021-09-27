@@ -4,7 +4,6 @@ import 'package:flutter_number_picker/flutter_number_picker.dart';
 // import 'package:(mult)i_select_flutter/dialog/(multi_select_dialog_field.dart';
 // import 'package:(mult)i_select_flutter/util/(multi_select_item.dart';
 import 'package:fluttermvvmtemplate/core/extensions/context_extension.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/planned_tour_detail/model/finding_type_dd_model.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 

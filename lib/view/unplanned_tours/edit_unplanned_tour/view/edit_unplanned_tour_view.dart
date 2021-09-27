@@ -106,45 +106,50 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
         ),
         body: Form(
           key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.all(24),
-            children: [
-              buildLittleTextWidget(
-                  LocaleKeys.planned_tours_edit_location.tr()),
-              buildLocationDropDownFormField(widget.tour.location),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha"),
-              buildFieldDropDownFormField(widget.tour.field),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Tura Eşlik Edenler"),
-              SizedBox(height: 5),
-              buildTourAccompanies(widget.tour.tourAccompanies, viewModel),
-              SizedBox(height: 5),
-              buildTourAccompaniesMultiDropdownField(viewModel),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Ekip Üyeleri"),
-              SizedBox(height: 5),
-              buildTeamMembers(widget.tour.tourTeamMembers, viewModel),
-              SizedBox(height: 5),
-              buildTourTeamMembersMultiDropdownField(viewModel),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Tur Tarihi"),
-              buildTourDatePicker(widget.tour.tourDate),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha Tertip Skoru"),
-              buildFieldOrganizationScoreField(
-                widget.tour.fieldOrganizationScore.isEmpty
-                    ? "0"
-                    : widget.tour.fieldOrganizationScore,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildLittleTextWidget(
+                      LocaleKeys.planned_tours_edit_location.tr()),
+                  buildLocationDropDownFormField(widget.tour.location),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Saha"),
+                  buildFieldDropDownFormField(widget.tour.field),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Tura Eşlik Edenler"),
+                  SizedBox(height: 5),
+                  buildTourAccompanies(widget.tour.tourAccompanies, viewModel),
+                  SizedBox(height: 5),
+                  buildTourAccompaniesMultiDropdownField(viewModel),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Ekip Üyeleri"),
+                  SizedBox(height: 5),
+                  buildTeamMembers(widget.tour.tourTeamMembers, viewModel),
+                  SizedBox(height: 5),
+                  buildTourTeamMembersMultiDropdownField(viewModel),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Tur Tarihi"),
+                  buildTourDatePicker(widget.tour.tourDate),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Saha Tertip Skoru"),
+                  buildFieldOrganizationScoreField(
+                    widget.tour.fieldOrganizationScore.isEmpty
+                        ? "0"
+                        : widget.tour.fieldOrganizationScore,
+                  ),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
+                  SizedBox(height: 5),
+                  buildPositiveFindingTextFormField(
+                      widget.tour.observedPositiveFindings),
+                  SizedBox(height: 20),
+                  buildSaveFabButton(viewModel, context)
+                ],
               ),
-              SizedBox(height: 20),
-              buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-              SizedBox(height: 5),
-              buildPositiveFindingTextFormField(
-                  widget.tour.observedPositiveFindings),
-              SizedBox(height: 20),
-              buildSaveFabButton(viewModel, context)
-            ],
+            ),
           ),
         ),
       ),
