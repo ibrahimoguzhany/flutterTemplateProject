@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/init/auth/authentication_provider.dart';
@@ -52,7 +51,6 @@ class _FindingDetailViewState extends State<FindingDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    // print(finding.imageUrl);
     final selectedFinding = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<AuthenticationProvider>(context)

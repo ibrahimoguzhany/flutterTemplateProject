@@ -16,14 +16,9 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
-  var service = UnPlannedTourDetailService.instance!;
-
   @action
   Future<void> addFinding(
       FindingModel model, BuildContext context, String key) async {
-    await service.addFinding(model, context, key);
+    await UnPlannedTourDetailService.instance!.addFinding(model, context, key);
   }
-
-  @observable
-  String? imageUrl;
 }

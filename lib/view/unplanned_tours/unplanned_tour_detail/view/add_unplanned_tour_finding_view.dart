@@ -239,10 +239,10 @@ class _AddUnPlannedTourFindingViewState
     return imageUrls;
   }
 
-  void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
-      await canLaunch(vm.imageUrl!)
-          ? await launch(vm.imageUrl!)
-          : throw '${vm.imageUrl!} başlatılamadı.';
+  // void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
+  //     await canLaunch(vm.imageUrl!)
+  //         ? await launch(vm.imageUrl!)
+  //         : throw '${vm.imageUrl!} başlatılamadı.';
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
         stream: task.snapshotEvents,

@@ -10,22 +10,6 @@ part of 'add_unplanned_tour_finding_view_model.dart';
 
 mixin _$AddUnPlannedTourFindingViewModel
     on _AddUnPlannedTourFindingViewModelBase, Store {
-  final _$imageUrlAtom =
-      Atom(name: '_AddUnPlannedTourFindingViewModelBase.imageUrl');
-
-  @override
-  String? get imageUrl {
-    _$imageUrlAtom.reportRead();
-    return super.imageUrl;
-  }
-
-  @override
-  set imageUrl(String? value) {
-    _$imageUrlAtom.reportWrite(value, super.imageUrl, () {
-      super.imageUrl = value;
-    });
-  }
-
   final _$addFindingAsyncAction =
       AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
 
@@ -39,7 +23,7 @@ mixin _$AddUnPlannedTourFindingViewModel
   @override
   String toString() {
     return '''
-imageUrl: ${imageUrl}
+
     ''';
   }
 }
