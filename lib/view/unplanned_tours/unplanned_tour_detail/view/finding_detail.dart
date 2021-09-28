@@ -10,7 +10,7 @@ import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../home/home_esd/model/finding_model.dart';
 import '../viewmodel/finding_detail_view_model.dart';
 
-class FindingDetailView extends StatelessWidget {
+class FindingDetailView extends StatefulWidget {
   final FindingModel finding;
   final String tourKey;
   final int findingNumber;
@@ -22,6 +22,35 @@ class FindingDetailView extends StatelessWidget {
       : super(key: key);
 
   @override
+  _FindingDetailViewState createState() => _FindingDetailViewState();
+}
+
+class _FindingDetailViewState extends State<FindingDetailView> {
+  List<Widget> addedFileWidgets = <Widget>[];
+  @override
+  void initState() {
+    super.initState();
+    addedFileWidgets = imageUrlWidgets();
+  }
+
+  List<Widget> imageUrlWidgets() {
+    List<Widget> textWidgets = <Widget>[];
+    if (widget.finding.imageUrl != null) {
+      widget.finding.imageUrl!.forEach((String key, dynamic value) {
+        textWidgets.add(TextButton.icon(
+            onPressed: () {
+              launch(value);
+            },
+            icon: Icon(Icons.document_scanner),
+            label: Text("Dosya $key")));
+      });
+
+      return textWidgets;
+    }
+    return textWidgets;
+  }
+
+  @override
   Widget build(BuildContext context) {
     // print(finding.imageUrl);
     final selectedFinding = FirebaseFirestore.instance
@@ -31,9 +60,9 @@ class FindingDetailView extends StatelessWidget {
             .currentUser!
             .uid)
         .collection('unplannedtours')
-        .doc(tourKey)
+        .doc(widget.tourKey)
         .collection("findings")
-        .doc(finding.key);
+        .doc(widget.finding.key);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -61,7 +90,7 @@ class FindingDetailView extends StatelessWidget {
                             Navigator.pop(context);
                             final snackBar = SnackBar(
                               content: Text(
-                                  "Bulgu $findingNumber Başarıyla Silindi."),
+                                  "Bulgu ${widget.findingNumber} Başarıyla Silindi."),
                               backgroundColor: Colors.blueGrey.shade700,
                             );
                             ScaffoldMessenger.of(context)
@@ -80,7 +109,7 @@ class FindingDetailView extends StatelessWidget {
             )
           ],
         ),
-        body: buildExpandedFindingDetails(finding, viewModel),
+        body: buildExpandedFindingDetails(widget.finding, viewModel),
       ),
     );
   }
@@ -98,7 +127,7 @@ class FindingDetailView extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Bulgu $findingNumber",
+                  "Bulgu ${widget.findingNumber}",
                   style: TextStyle(fontSize: 18),
                 ),
               ),
@@ -128,6 +157,12 @@ class FindingDetailView extends StatelessWidget {
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
               SizedBox(height: 5),
+              finding.imageUrl == null
+                  ? Text("Henüz eklenmiş bir dosya bulunmamaktadır")
+                  : Column(
+                      children: addedFileWidgets,
+                    )
+
               // TODO: BUrada yuklenen dosyaların path lerı gösterilmeli ve tıklandığında resim launch ya da webview ile acilabilmeli.
               // finding.imageUrl == null
               //     ? Container(

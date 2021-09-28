@@ -9,7 +9,7 @@ class FindingModel {
   String? fieldManagerStatements;
   String? file;
   String? key;
-  List<String>? imageUrl;
+  Map<String, dynamic>? imageUrl;
 
   FindingModel(
       {this.findingType,
@@ -43,6 +43,14 @@ class FindingModel {
     observations = json['observations'];
     key = json['key'];
     imageUrl = json["imageUrl"];
+  }
+
+  Map<String, dynamic> toMap(List<String> items) {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    for (var i = 0; i < items.length; i++) {
+      data[i.toString()] = items[i];
+    }
+    return data;
   }
 
   Map<String, dynamic> toJson() {

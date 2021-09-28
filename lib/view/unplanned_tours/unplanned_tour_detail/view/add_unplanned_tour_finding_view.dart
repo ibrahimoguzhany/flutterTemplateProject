@@ -53,8 +53,8 @@ class _AddUnPlannedTourFindingViewState
 
   @override
   Widget build(BuildContext context) {
-    final fileName =
-        file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
+    // final fileName =
+    //     file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
     UnPlannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as UnPlannedTourModel;
 
@@ -108,28 +108,9 @@ class _AddUnPlannedTourFindingViewState
               Container(
                 padding:
                     EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 0),
-                decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      right: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      top: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                    ),
-                    borderRadius: BorderRadius.circular(3)),
+                decoration: buildFileBixDecoration(),
                 margin: EdgeInsets.all(10),
-                child: buildButtonWidgets(viewModel, fileName, context),
+                child: buildButtonWidgets(viewModel, context),
               ),
               FloatingActionButton.extended(
                 onPressed: () async {
@@ -154,8 +135,31 @@ class _AddUnPlannedTourFindingViewState
     );
   }
 
-  Column buildButtonWidgets(AddUnPlannedTourFindingViewModel viewModel,
-      String fileName, BuildContext context) {
+  BoxDecoration buildFileBixDecoration() {
+    return BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: Colors.black12,
+            width: 2,
+          ),
+          right: BorderSide(
+            color: Colors.black12,
+            width: 2,
+          ),
+          bottom: BorderSide(
+            color: Colors.black12,
+            width: 2,
+          ),
+          top: BorderSide(
+            color: Colors.black12,
+            width: 2,
+          ),
+        ),
+        borderRadius: BorderRadius.circular(3));
+  }
+
+  Column buildButtonWidgets(
+      AddUnPlannedTourFindingViewModel viewModel, BuildContext context) {
     return Column(
       children: [
         ButtonWidget(
@@ -164,24 +168,17 @@ class _AddUnPlannedTourFindingViewState
           onClicked: selectFile,
         ),
         SizedBox(height: 8),
-        GestureDetector(
-          onTap: () {
-            if (viewModel.imageUrl != null) {
-              _launchURL(viewModel);
-            }
-          },
-          child: Text(
-            fileName,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ),
+        // Text(
+        //   fileName,
+        //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        // ),
         SizedBox(height: 24),
         ButtonWidget(
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            finding.imageUrl = await uploadFiles(files!);
-            if (viewModel.imageUrl != null) {
+            finding.imageUrl = finding.toMap(await uploadFiles(files!));
+            if (finding.imageUrl!.isNotEmpty) {
               final snackBar = SnackBar(
                 backgroundColor: Colors.green[600],
                 content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
@@ -191,14 +188,30 @@ class _AddUnPlannedTourFindingViewState
           },
         ),
         SizedBox(height: 20),
-        task != null ? buildUploadStatus(task!) : Container(),
+        // task != null ? buildUploadStatus(task!) : Container(),
+        files!.isNotEmpty
+            ? SingleChildScrollView(
+                child: Column(
+                  children: addedFilesWidgets(),
+                ),
+              )
+            : Container(),
         SizedBox(height: 10),
       ],
     );
   }
 
+  List<Widget> addedFilesWidgets() {
+    List<Widget> widgets = <Widget>[];
+    if (files!.isNotEmpty) {
+      for (var i = 0; i < files!.length; i++) {
+        widgets.add(Text(basename(files![i].path)));
+      }
+    }
+    return widgets;
+  }
+
   Future selectFile() async {
-    // TODO: BURADA SECILEN DOSYALARIN PATH LERI LIST ICINDE TUTULMALI VE FILES A EKLENMELI
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result == null) return;
@@ -207,27 +220,7 @@ class _AddUnPlannedTourFindingViewState
       final path = result.files[i].path!;
       files!.add(File(path));
     }
-
-    // setState(() => file = File(path));
-  }
-
-  Future<String> uploadFile() async {
-    if (file == null) return "";
-
-    final fileName = basename(file!.path);
-    final destination = 'files/$fileName';
-
-    task = UnPlannedTourDetailService.instance!.uploadFile(destination, file!);
     setState(() {});
-
-    if (task == null) return "";
-
-    final snapshot = await task!.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    print('Download-Link: $urlDownload');
-
-    return urlDownload;
   }
 
   Future<String> uploadFile2(File _image) async {
@@ -402,11 +395,6 @@ class _AddUnPlannedTourFindingViewState
       );
 
   TextFormField get buildFieldManagerStatements => TextFormField(
-        validator: (val) {
-          if (val!.isEmpty) {
-            return "Lütfen Saha Yöneticisi Açıklaması alanını doldurunuz.";
-          }
-        },
         readOnly: true,
         enabled: false,
         controller: _controllerFieldManagerStatements,
