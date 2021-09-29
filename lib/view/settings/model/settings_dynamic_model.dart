@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
+import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
 
 class SettingsDynamicModel {
   final String? url;

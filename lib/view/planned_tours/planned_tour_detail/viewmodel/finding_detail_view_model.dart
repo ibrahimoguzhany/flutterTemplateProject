@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/base/model/base_viewmodel.dart';
+import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
 import 'package:mobx/mobx.dart';
 part 'finding_detail_view_model.g.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/product/enum/lottie_path_enum.dart';
+import 'package:esd_mobil/product/enum/lottie_path_enum.dart';
 import 'package:lottie/lottie.dart';
 
 extension LottiePathEnumExtension on LottiePathEnum {

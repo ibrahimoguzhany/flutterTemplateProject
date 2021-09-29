@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/planned_tours/model/planned_tour_model.dart';
+import 'package:esd_mobil/view/planned_tours/model/planned_tour_model.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 

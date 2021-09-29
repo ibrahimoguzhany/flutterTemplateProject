@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>656814541531-m4n56p2ptc3tnd8bs8j5er8oq9uq4fjs.apps.googleusercontent.com</string>
+	<string>656814541531-5sihc6siboos8ogoftqoq5nigk6c8k54.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.656814541531-m4n56p2ptc3tnd8bs8j5er8oq9uq4fjs</string>
+	<string>com.googleusercontent.apps.656814541531-5sihc6siboos8ogoftqoq5nigk6c8k54</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>656814541531-7re8rsvnjc3jo4taj6b5lj1t2lqm212r.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.fluttermvvmtemplate2021</string>
+	<string>com.example.esdmobil</string>
 	<key>PROJECT_ID</key>
 	<string>forthfl-74350</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:656814541531:ios:ec63c48aa05c370c40dafe</string>
+	<string>1:656814541531:ios:f5d2652b8f96c79a40dafe</string>
 	<key>DATABASE_URL</key>
 	<string>https://forthfl-74350-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>

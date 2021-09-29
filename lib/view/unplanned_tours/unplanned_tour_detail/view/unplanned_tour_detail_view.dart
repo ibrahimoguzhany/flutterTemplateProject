@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
-import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
-import 'package:fluttermvvmtemplate/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
-import 'package:fluttermvvmtemplate/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
+import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';

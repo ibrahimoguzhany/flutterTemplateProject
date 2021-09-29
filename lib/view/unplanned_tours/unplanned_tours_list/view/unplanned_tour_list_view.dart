@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
-import 'package:fluttermvvmtemplate/view/_product/_constants/image_path_svg.dart';
+import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
+import 'package:esd_mobil/view/_product/_constants/image_path_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';

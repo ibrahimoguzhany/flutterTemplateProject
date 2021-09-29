@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -166,6 +167,14 @@ class _AddUnPlannedTourFindingViewState
           text: 'Dosya Seç',
           icon: Icons.attach_file,
           onClicked: selectFile,
+        ),
+        SizedBox(height: 8),
+        ButtonWidget(
+          text: 'Resim Çek',
+          icon: Icons.attach_file,
+          onClicked: () async {
+            await viewModel.pickImage(ImageSource.camera);
+          },
         ),
         SizedBox(height: 8),
         // Text(

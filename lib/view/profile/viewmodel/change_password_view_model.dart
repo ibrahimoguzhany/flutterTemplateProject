@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/view/profile/model/app_user._model.dart';
-import 'package:fluttermvvmtemplate/view/profile/service/profile_service.dart';
+import 'package:esd_mobil/view/profile/model/app_user._model.dart';
+import 'package:esd_mobil/view/profile/service/profile_service.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/base/model/base_viewmodel.dart';

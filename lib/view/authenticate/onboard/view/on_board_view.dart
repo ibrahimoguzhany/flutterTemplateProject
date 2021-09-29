@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttermvvmtemplate/view/_widgets/avatar/on_board_circle.dart';
+import 'package:esd_mobil/view/_widgets/avatar/on_board_circle.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';

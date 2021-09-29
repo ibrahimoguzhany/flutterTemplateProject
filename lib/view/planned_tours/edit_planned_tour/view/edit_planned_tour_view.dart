@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
-import 'package:fluttermvvmtemplate/core/init/lang/locale_keys.g.dart';
+import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
 import '../../model/planned_tour_model.dart';
 import '../../model/tour_accompanies_dd_model.dart';
 import '../../model/tour_team_members_model.dart';

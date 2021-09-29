@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttermvvmtemplate/core/components/column/form_column.dart';
+import 'package:esd_mobil/core/components/column/form_column.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/extensions/context_extension.dart';

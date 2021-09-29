@@ -1,7 +1,7 @@
-import 'package:fluttermvvmtemplate/view/_product/enum/network_route_enum.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/login/model/login_response_model.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/login/model/login_model.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/login/service/ILoginService.dart';
+import 'package:esd_mobil/view/_product/enum/network_route_enum.dart';
+import 'package:esd_mobil/view/authenticate/login/model/login_response_model.dart';
+import 'package:esd_mobil/view/authenticate/login/model/login_model.dart';
+import 'package:esd_mobil/view/authenticate/login/service/ILoginService.dart';
 import 'package:vexana/vexana.dart';
 
 class LoginService extends ILoginService {

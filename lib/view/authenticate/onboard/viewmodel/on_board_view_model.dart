@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/constants/enums/preferences_keys_enum.dart';
-import 'package:fluttermvvmtemplate/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';

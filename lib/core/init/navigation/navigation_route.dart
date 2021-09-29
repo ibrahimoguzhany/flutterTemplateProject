@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttermvvmtemplate/view/authenticate/onboard/view/on_board_view.dart';
-import 'package:fluttermvvmtemplate/view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view2.dart';
+import 'package:esd_mobil/view/authenticate/onboard/view/on_board_view.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view2.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';

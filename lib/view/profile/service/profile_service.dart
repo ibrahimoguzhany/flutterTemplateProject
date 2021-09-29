@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttermvvmtemplate/view/profile/model/app_user._model.dart';
+import 'package:esd_mobil/view/profile/model/app_user._model.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 

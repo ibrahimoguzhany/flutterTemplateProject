@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermvvmtemplate/core/init/auth/authentication_provider.dart';
+import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 

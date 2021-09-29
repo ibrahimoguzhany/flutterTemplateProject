@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:kartal/kartal.dart';
+import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/app/app_contansts.dart';
