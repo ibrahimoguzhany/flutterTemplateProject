@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
 import 'package:esd_mobil/view/_product/_constants/image_path_svg.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
 import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
 import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
@@ -31,31 +31,47 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       onPageBuilder:
           (BuildContext context, UnPlannedTourListViewModel viewModel) =>
               Scaffold(
-        appBar: buildAppBar(context),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            NavigationService.instance
-                .navigateToPage(NavigationConstants.ADD_UNPLANNED_TOUR_VIEW);
-          },
-          child: Icon(Icons.add),
-        ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: viewModel.tourSnapshots(context),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+                  appBar: buildAppBar(context),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () async {
+                      await UnPlannedTourService.instance!.getUnplannedTours();
+                      NavigationService.instance.navigateToPage(
+                          NavigationConstants.ADD_UNPLANNED_TOUR_VIEW);
+                    },
+                    child: Icon(Icons.add),
+                  ),
+                  body: FutureBuilder(
+                    future: viewModel.getUnplannedTours(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError)
+                        return Text("Error = ${snapshot.error}");
 
-            if (snapshot.hasData) {
-              final docs = snapshot.data!.docs;
-
-              return buildListView(docs);
-            }
-
-            return Center(child: CircularProgressIndicator());
-          },
-        ),
-      ),
+                      if (snapshot.hasData) {
+                        print(snapshot.data);
+                        final tours = snapshot.data;
+                        return buildListView(tours);
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  )),
     );
   }
+  // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+  //         stream: viewModel.tourSnapshots(context),
+  //         builder: (context, snapshot) {
+  //           if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+  //           if (snapshot.hasData) {
+  //             final docs = snapshot.data!.docs;
+
+  //             return buildListView(docs);
+  //           }
+
+  //           return Center(child: CircularProgressIndicator());
+  //         },
+  //       ),
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
@@ -65,7 +81,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
   }
 
   SvgPicture buildSvgPicture(String path) => SvgPicture.asset(path);
-  Widget buildListView(List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
+  Widget buildListView(dynamic docs) {
     if (docs.isEmpty) {
       return Column(
         children: [
@@ -94,9 +110,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       ),
       itemCount: docs.length,
       itemBuilder: (context, index) {
-        final data = docs[index].data();
-        final tourId = docs[index].reference.id;
-        data["key"] = tourId;
+        final data = docs[index];
 
         // print(data);
         return buildListTile(data, index);
@@ -104,8 +118,8 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
     );
   }
 
-  ListTile buildListTile(Map<String, dynamic> data, int index) {
-    var _data = data['observedPositiveFindings'].toString();
+  ListTile buildListTile(UnplannedTourModel data, int index) {
+    // var _data = data['observedPositiveFindings'].toString();
 
     return ListTile(
       enableFeedback: true,
@@ -115,7 +129,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
           context,
           MaterialPageRoute(
             builder: (context) => UnPlannedTourDetailView(
-              tour: UnPlannedTourModel.fromJson(data),
+              tour: data,
             ),
           ),
         );
@@ -124,11 +138,11 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       hoverColor: Colors.black12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       leading: Text(
-        data['location'],
+        data.locationName!,
         style: TextStyle(fontSize: 16),
       ),
       subtitle: Text(
-        data['key'],
+        data.id.toString(),
         textAlign: TextAlign.left,
         style: TextStyle(fontSize: 14),
       ),
@@ -137,11 +151,11 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       //   style: TextStyle(fontSize: 12),
       // ),
       title: Text(
-        data['field'],
+        data.fieldName!,
         style: TextStyle(fontSize: 14),
       ),
       trailing: Text(
-        data['tourDate'],
+        data.tourDate!,
         textAlign: TextAlign.right,
         style: TextStyle(fontSize: 14),
       ),

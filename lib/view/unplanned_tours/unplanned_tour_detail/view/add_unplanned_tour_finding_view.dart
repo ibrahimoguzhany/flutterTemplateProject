@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,7 +15,6 @@ import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
 import '../../../home/home_esd/model/finding_model.dart';
-import '../service/unplanned_tour_detail_service.dart';
 import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
@@ -54,8 +55,6 @@ class _AddUnPlannedTourFindingViewState
 
   @override
   Widget build(BuildContext context) {
-    // final fileName =
-    //     file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
     UnPlannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as UnPlannedTourModel;
 
@@ -118,7 +117,7 @@ class _AddUnPlannedTourFindingViewState
                   final isValid = _formKey.currentState!.validate();
                   if (isValid) {
                     _formKey.currentState!.save();
-                    await viewModel.addFinding(finding, context, tour.key);
+                    await viewModel.addFinding(finding, context, tour.key!);
                     Navigator.pop(context);
                     final snackBar = SnackBar(
                       content: Text("Bulgu başarıyla eklendi."),
@@ -171,9 +170,13 @@ class _AddUnPlannedTourFindingViewState
         SizedBox(height: 8),
         ButtonWidget(
           text: 'Resim Çek',
-          icon: Icons.attach_file,
+          icon: Icons.photo_camera,
           onClicked: () async {
-            await viewModel.pickImage(ImageSource.camera);
+            File takenPhoto = (await viewModel.pickImage(ImageSource.camera))!;
+
+            setState(() {
+              files!.add(takenPhoto);
+            });
           },
         ),
         SizedBox(height: 8),
@@ -187,7 +190,8 @@ class _AddUnPlannedTourFindingViewState
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
             finding.imageUrl = finding.toMap(await uploadFiles(files!));
-            if (finding.imageUrl!.isNotEmpty) {
+            if (files!.isNotEmpty && finding.imageUrl!.isNotEmpty) {
+              viewModel.changeIsUploaded();
               final snackBar = SnackBar(
                 backgroundColor: Colors.green[600],
                 content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
@@ -201,7 +205,7 @@ class _AddUnPlannedTourFindingViewState
         files!.isNotEmpty
             ? SingleChildScrollView(
                 child: Column(
-                  children: addedFilesWidgets(),
+                  children: addedFilesWidgets(viewModel),
                 ),
               )
             : Container(),
@@ -210,15 +214,59 @@ class _AddUnPlannedTourFindingViewState
     );
   }
 
-  List<Widget> addedFilesWidgets() {
-    List<Widget> widgets = <Widget>[];
+  List<InputChip> addedFilesWidgets(
+      AddUnPlannedTourFindingViewModel viewModel) {
+    List<InputChip> widgets = <InputChip>[];
     if (files!.isNotEmpty) {
       for (var i = 0; i < files!.length; i++) {
-        widgets.add(Text(basename(files![i].path)));
+        widgets.add(InputChip(
+            onPressed: () async {
+              await launch(files![i].uri.toString(), forceWebView: false);
+            },
+            onDeleted: () {
+              setState(() {
+                widgets.removeWhere((element) =>
+                    element.label == Text(basename(files![i].path)));
+                widgets.join(",");
+                files!.removeWhere((element) => element.path == files![i].path);
+                files!.join(",");
+              });
+              print(widgets);
+            },
+            label: Text(
+              basename(files![i].path),
+              textAlign: TextAlign.center,
+            )));
       }
+      print(widgets);
     }
     return widgets;
   }
+
+  // List<Widget>? addedFilesListView(AddUnPlannedTourFindingViewModel viewModel) {
+  //   // List<Observer> widgets = <Observer>[];
+  //   if (files!.isNotEmpty) {
+  //     ListView.builder(
+  //         itemCount: files!.length,
+  //         itemBuilder: (context, index) {
+  //           return InputWidgets(
+  //             isUploaded: viewModel.isUploaded,
+  //             onDelete: () {
+  //               setState(() {
+  //                 files!.removeWhere(
+  //                     (element) => element.path == files![index].path);
+  //                 files!.join(",");
+  //               });
+  //             },
+  //             text: Text(
+  //               basename(files![index].path),
+  //               textAlign: TextAlign.center,
+  //             ),
+  //           );
+  //         });
+  //   }
+  //   return <Container>[];
+  // }
 
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
@@ -232,7 +280,7 @@ class _AddUnPlannedTourFindingViewState
     setState(() {});
   }
 
-  Future<String> uploadFile2(File _image) async {
+  Future<String> uploadFile(File _image) async {
     Reference storageReference =
         FirebaseStorage.instance.ref().child('files/${_image.path}');
     UploadTask uploadTask = storageReference.putFile(_image);
@@ -243,7 +291,7 @@ class _AddUnPlannedTourFindingViewState
 
   Future<List<String>> uploadFiles(List<File> _images) async {
     var imageUrls =
-        await Future.wait(_images.map((_image) => uploadFile2(_image)));
+        await Future.wait(_images.map((_image) => uploadFile(_image)));
     print(imageUrls);
     return imageUrls;
   }
@@ -464,3 +512,30 @@ class _AddUnPlannedTourFindingViewState
         },
       );
 }
+
+// class InputWidgets extends StatefulWidget {
+//   final Text text;
+//   final VoidCallback onDelete;
+//   final bool isUploaded;
+
+//   const InputWidgets(
+//       {Key? key,
+//       required this.text,
+//       required this.onDelete,
+//       required this.isUploaded})
+//       : super(key: key);
+
+//   @override
+//   _InputWidgetsState createState() => _InputWidgetsState();
+// }
+
+// class _InputWidgetsState extends State<InputWidgets> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return InputChip(
+//       label: widget.text,
+//       onDeleted: widget.onDelete,
+//       backgroundColor: widget.isUploaded ? Colors.greenAccent : Colors.black26,
+//     );
+//   }
+// }

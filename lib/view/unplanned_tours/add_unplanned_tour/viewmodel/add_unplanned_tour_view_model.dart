@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../service/add_unplanned_tour_service.dart';
+import '../../service/unplanned_tour_service.dart';
 import '../model/unplanned_tour_model.dart';
 
 part 'add_unplanned_tour_view_model.g.dart';

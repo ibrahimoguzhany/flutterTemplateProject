@@ -10,6 +10,22 @@ part of 'add_unplanned_tour_finding_view_model.dart';
 
 mixin _$AddUnPlannedTourFindingViewModel
     on _AddUnPlannedTourFindingViewModelBase, Store {
+  final _$isUploadedAtom =
+      Atom(name: '_AddUnPlannedTourFindingViewModelBase.isUploaded');
+
+  @override
+  bool get isUploaded {
+    _$isUploadedAtom.reportRead();
+    return super.isUploaded;
+  }
+
+  @override
+  set isUploaded(bool value) {
+    _$isUploadedAtom.reportWrite(value, super.isUploaded, () {
+      super.isUploaded = value;
+    });
+  }
+
   final _$addFindingAsyncAction =
       AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
 
@@ -20,10 +36,34 @@ mixin _$AddUnPlannedTourFindingViewModel
         .run(() => super.addFinding(model, context, key));
   }
 
+  final _$pickImageAsyncAction =
+      AsyncAction('_AddUnPlannedTourFindingViewModelBase.pickImage');
+
+  @override
+  Future<File?> pickImage(ImageSource imageSource) {
+    return _$pickImageAsyncAction.run(() => super.pickImage(imageSource));
+  }
+
+  final _$_AddUnPlannedTourFindingViewModelBaseActionController =
+      ActionController(name: '_AddUnPlannedTourFindingViewModelBase');
+
+  @override
+  void changeIsUploaded() {
+    final _$actionInfo =
+        _$_AddUnPlannedTourFindingViewModelBaseActionController.startAction(
+            name: '_AddUnPlannedTourFindingViewModelBase.changeIsUploaded');
+    try {
+      return super.changeIsUploaded();
+    } finally {
+      _$_AddUnPlannedTourFindingViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-
+isUploaded: ${isUploaded}
     ''';
   }
 }

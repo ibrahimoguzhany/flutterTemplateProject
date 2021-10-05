@@ -22,11 +22,11 @@ class _ProfileViewState extends State<ProfileView> {
   late String currentUserId;
   @override
   void initState() {
-    super.initState();
     currentUserId = Provider.of<AuthenticationProvider>(context, listen: false)
         .firebaseAuth
         .currentUser!
         .uid;
+    super.initState();
   }
 
   @override
@@ -77,16 +77,16 @@ class _ProfileViewState extends State<ProfileView> {
                       SizedBox(
                         height: 50,
                       ),
-                      Center(
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            Provider.of<AuthenticationProvider>(context,
-                                    listen: false)
-                                .signOut(context);
-                          },
-                          label: Text("Çıkış Yap"),
-                        ),
-                      ),
+                      // Center(
+                      //   child: FloatingActionButton.extended(
+                      //     onPressed: () {
+                      //       Provider.of<AuthenticationProvider>(context,
+                      //               listen: false)
+                      //           .signOut(context);
+                      //     },
+                      //     label: Text("Çıkış Yap"),
+                      //   ),
+                      // ),
                     ],
                   ),
                 );

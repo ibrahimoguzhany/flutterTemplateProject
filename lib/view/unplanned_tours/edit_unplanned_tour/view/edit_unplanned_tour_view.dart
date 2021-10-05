@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
@@ -15,7 +16,7 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class EditUnPlannedTourView extends StatefulWidget {
-  final UnPlannedTourModel tour;
+  final UnplannedTourModel tour;
   EditUnPlannedTourView({Key? key, required this.tour}) : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class EditUnPlannedTourView extends StatefulWidget {
 }
 
 class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
-  late UnPlannedTourModel newTour;
+  late UnplannedTourModel newTour;
 
   List<String> locationList = ['Bursa', 'İzmir', 'Ankara', 'İstanbul'];
   List<String> fieldList = [
@@ -66,20 +67,20 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
   @override
   void initState() {
     super.initState();
-    _controllerPositiveFindings =
-        TextEditingController(text: widget.tour.observedPositiveFindings);
+    _controllerPositiveFindings = TextEditingController(
+        text: widget.tour.observatedSecureCasesPositiveFindings);
     _datePickerController = TextEditingController(text: widget.tour.tourDate);
 
-    newTour = UnPlannedTourModel(
-      location: widget.tour.location,
-      field: widget.tour.field,
-      tourTeamMembers: widget.tour.tourTeamMembers,
-      tourAccompanies: widget.tour.tourAccompanies,
-      tourDate: widget.tour.tourDate,
-      fieldOrganizationScore: widget.tour.fieldOrganizationScore,
-      observedPositiveFindings: widget.tour.observedPositiveFindings,
-      key: widget.tour.key,
-    );
+    newTour = UnplannedTourModel(
+        locationName: widget.tour.locationName!,
+        fieldName: widget.tour.fieldName!,
+        tourTeamMembers: widget.tour.tourTeamMembers,
+        tourAccompaniers: widget.tour.tourAccompaniers!,
+        tourDate: widget.tour.tourDate!,
+        fieldOrganizationOrderScore: widget.tour.fieldOrganizationOrderScore!,
+        observatedSecureCasesPositiveFindings:
+            widget.tour.observatedSecureCasesPositiveFindings!,
+        id: widget.tour.id);
   }
 
   @override
@@ -114,14 +115,14 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                 children: [
                   buildLittleTextWidget(
                       LocaleKeys.planned_tours_edit_location.tr()),
-                  buildLocationDropDownFormField(widget.tour.location),
+                  buildLocationDropDownFormField(widget.tour.locationName!),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha"),
-                  buildFieldDropDownFormField(widget.tour.field),
+                  buildFieldDropDownFormField(widget.tour.fieldName!),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tura Eşlik Edenler"),
                   SizedBox(height: 5),
-                  buildTourAccompanies(widget.tour.tourAccompanies, viewModel),
+                  buildTourAccompanies(widget.tour.tourAccompaniers, viewModel),
                   SizedBox(height: 5),
                   buildTourAccompaniesMultiDropdownField(viewModel),
                   SizedBox(height: 20),
@@ -136,15 +137,16 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha Tertip Skoru"),
                   buildFieldOrganizationScoreField(
-                    widget.tour.fieldOrganizationScore.isEmpty
+                    widget.tour.fieldOrganizationOrderScore!.isNaN
                         ? "0"
-                        : widget.tour.fieldOrganizationScore,
+                        : widget.tour.fieldOrganizationOrderScore!,
                   ),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
                   SizedBox(height: 5),
                   buildPositiveFindingTextFormField(
-                      widget.tour.observedPositiveFindings),
+                    widget.tour.observatedSecureCasesPositiveFindings,
+                  ),
                   SizedBox(height: 20),
                   buildSaveFabButton(viewModel, context)
                 ],
@@ -164,7 +166,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
         final isValid = _formKey.currentState!.validate();
         if (isValid) {
           _formKey.currentState!.save();
-          await viewModel.updateTour(newTour, context);
+          // await viewModel.updateTour(newTour, context);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -234,24 +236,26 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
         ),
       ),
       onSaved: (val) {
-        newTour.observedPositiveFindings = _controllerPositiveFindings.text;
+        newTour.observatedSecureCasesPositiveFindings =
+            _controllerPositiveFindings.text;
       },
       onChanged: (val) {
-        newTour.observedPositiveFindings = _controllerPositiveFindings.text;
+        newTour.observatedSecureCasesPositiveFindings =
+            _controllerPositiveFindings.text;
       },
     );
   }
 
-  Center buildFieldOrganizationScoreField(String? val) {
+  Center buildFieldOrganizationScoreField(dynamic val) {
     return Center(
       child: CustomNumberPicker(
         initialValue: int.parse(val ?? "0"),
         maxValue: 10,
         minValue: 0,
         step: 1,
-        onValue: (value) {
+        onValue: (int value) {
           setState(() {
-            newTour.fieldOrganizationScore = value.toString();
+            newTour.fieldOrganizationOrderScore = value;
           });
         },
       ),
@@ -263,7 +267,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
     return MultiSelectDialogField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
-        if (newTour.tourTeamMembers.isEmpty && val!.isEmpty) {
+        if (newTour.tourTeamMembers!.isEmpty && val!.isEmpty) {
           return "Bu alan boş bırakılamaz.";
         }
       },
@@ -300,7 +304,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           result.add(item!.toJson());
         });
         setState(() {
-          newTour.tourTeamMembers = result;
+          newTour.tourTeamMembers = result.join(",");
           viewModel.changeIsTourTeamMembersSelected();
         });
       },
@@ -312,7 +316,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
     return MultiSelectDialogField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
-        if (newTour.tourAccompanies.isEmpty && val!.isEmpty) {
+        if (newTour.tourAccompaniers!.isEmpty && val!.isEmpty) {
           return "Bu alan boş bırakılamaz.";
         }
       },
@@ -345,7 +349,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           result.add(item!.toJson());
         });
         setState(() {
-          newTour.tourAccompanies = result;
+          newTour.tourAccompaniers = result.join(',');
           viewModel.changeIsTourAccompaniesSelected();
         });
         // print(results);
@@ -378,7 +382,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             currentFocus.unfocus();
           }
           setState(() {
-            newTour.field = newValue!;
+            newTour.fieldName = newValue!;
           });
           // print(tour.field);
         },
@@ -388,7 +392,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             currentFocus.unfocus();
           }
           setState(() {
-            newTour.field = newValue!;
+            newTour.fieldName = newValue!;
           });
           // print(tour.field);
         },
@@ -429,7 +433,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             currentFocus.unfocus();
           }
           setState(() {
-            newTour.location = newValue!;
+            newTour.locationName = newValue!;
           });
         },
         items: locationList.map<DropdownMenuItem<String>>((String value) {

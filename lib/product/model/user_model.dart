@@ -8,6 +8,6 @@ class UserModel {
   String get fullName => "$userName $userSurname";
 
   factory UserModel.fake() {
-    return UserModel("Oğuzhan", "Yılmaz");
+    return UserModel("Test", "User");
   }
 }

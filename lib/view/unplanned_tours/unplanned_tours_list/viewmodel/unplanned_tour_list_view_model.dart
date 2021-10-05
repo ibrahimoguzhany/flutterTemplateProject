@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
@@ -16,11 +18,17 @@ abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   Future<void> init() async {
     // tourSnaps = tourSnapshots(context);
+    tours = (await getUnplannedTours())!;
+    // print(tours);
+    // print(tours[0].fieldId);
   }
 
   List<FindingModel> findingList = <FindingModel>[];
 
   List<FindingModel> get currentFindingList => findingList;
+
+  @observable
+  List<UnplannedTourModel> tours = <UnplannedTourModel>[];
 
   @action
   Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots(
@@ -35,5 +43,13 @@ abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
             .collection("unplannedtours")
             .snapshots();
     return tourSnapshots;
+  }
+
+  @action
+  Future<List<UnplannedTourModel>?> getUnplannedTours() async {
+    List<UnplannedTourModel>? data =
+        await UnPlannedTourService.instance!.getUnplannedTours();
+    print(data);
+    return data;
   }
 }

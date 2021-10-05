@@ -27,15 +27,23 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   }
 
   @action
-  Future pickImage(ImageSource imageSource) async {
+  Future<File?> pickImage(ImageSource imageSource) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return null;
 
       final imageTemporary = File(image.path);
-      print(imageTemporary);
+      return imageTemporary;
     } on PlatformException catch (e) {
       print("Resim secme islemi basarisiz oldu $e");
     }
+  }
+
+  @observable
+  bool isUploaded = true;
+
+  @action
+  void changeIsUploaded() {
+    isUploaded = !isUploaded;
   }
 }

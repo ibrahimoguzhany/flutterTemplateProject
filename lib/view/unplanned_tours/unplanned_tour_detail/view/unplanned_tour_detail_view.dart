@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
+import '../../../../core/init/lang/locale_keys.g.dart';
+import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
+import '../../edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
+import '../service/unplanned_tour_detail_service.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -18,7 +19,7 @@ import '../viewmodel/unplanned_tour_detail_view_model.dart';
 import 'finding_detail.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
-  final UnPlannedTourModel? tour;
+  final UnplannedTourModel? tour;
   UnPlannedTourDetailView({Key? key, this.tour}) : super(key: key);
 
   @override
@@ -29,11 +30,11 @@ class UnPlannedTourDetailView extends StatefulWidget {
 class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   @override
   Widget build(BuildContext context) {
-    final findingSnapshots = UnPlannedTourDetailService.instance
-        ?.getFindingsSnapshots(context, widget.tour!.key);
+    // final findingSnapshots = UnPlannedTourDetailService.instance
+    //     ?.getFindingsSnapshots(context, widget.tour!.key!);
 
-    final selectedTour = UnPlannedTourDetailService.instance
-        ?.getSelectedTour(context, widget.tour!.key);
+    // final selectedTour = UnPlannedTourDetailService.instance
+    //     ?.getSelectedTour(context, widget.tour!.key!);
 
     return BaseView<UnPlannedTourDetailViewModel>(
       viewModel: UnPlannedTourDetailViewModel(),
@@ -78,24 +79,24 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
                             TextButton(
                                 child: Text("Evet"),
                                 onPressed: () async {
-                                  await selectedTour
-                                      .collection("findings")
-                                      .get()
-                                      .then((snapshot) {
-                                    for (DocumentSnapshot ds in snapshot.docs) {
-                                      ds.reference.delete();
-                                    }
-                                  });
-                                  await selectedTour.delete();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  final snackBar = SnackBar(
-                                    content:
-                                        Text("Plansız Tur Başarıyla Silindi."),
-                                    backgroundColor: Colors.blueGrey.shade700,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                  // await selectedTour
+                                  //     .collection("findings")
+                                  //     .get()
+                                  //     .then((snapshot) {
+                                  //   for (DocumentSnapshot ds in snapshot.docs) {
+                                  //     ds.reference.delete();
+                                  //   }
+                                  // });
+                                  // await selectedTour.delete();
+                                  // Navigator.pop(context);
+                                  // Navigator.pop(context);
+                                  // final snackBar = SnackBar(
+                                  //   content:
+                                  //       Text("Plansız Tur Başarıyla Silindi."),
+                                  //   backgroundColor: Colors.blueGrey.shade700,
+                                  // );
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(snackBar);
                                 }),
                             TextButton(
                                 child: Text("Hayır"),
@@ -113,25 +114,27 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Expanded(
-              child: Observer(builder: (_) {
-                return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: findingSnapshots,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError)
-                      return Text('Error = ${snapshot.error}');
+                child: buildHorizontalChips(widget.tour?.findings, viewModel)
 
-                    if (snapshot.hasData) {
-                      final docs = snapshot.data!.docs;
+                // Observer(builder: (_) {
+                //   return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                //     stream: findingSnapshots,
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasError)
+                //         return Text('Error = ${snapshot.error}');
 
-                      return buildHorizontalChips(
-                          docs, viewModel, widget.tour!.key);
-                    }
+                //       if (snapshot.hasData) {
+                //         final docs = snapshot.data!.docs;
 
-                    return Center(child: CircularProgressIndicator());
-                  },
-                );
-              }),
-            ),
+                //         return buildHorizontalChips(
+                //             docs, viewModel, widget.tour!.key!);
+                //       }
+
+                //       return Center(child: CircularProgressIndicator());
+                //     },
+                //   );
+                // }),
+                ),
             // Text(
             //   LocaleKeys.unplanned_tours_detail_details.tr(),
             //   style: TextStyle(fontSize: 18),
@@ -139,7 +142,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
             Observer(builder: (_) {
               return Expanded(
                 flex: 12,
-                child: buildExpandedTourDetails(widget.tour!),
+                child: buildExpandedTourDetails(widget.tour),
               );
             }),
           ],
@@ -149,10 +152,8 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   }
 
   Widget buildHorizontalChips(
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-      UnPlannedTourDetailViewModel viewModel,
-      String tourKey) {
-    if (docs.isEmpty) {
+      List<Findings>? findings, UnPlannedTourDetailViewModel viewModel) {
+    if (findings!.isEmpty) {
       return Center(
           child: Text(
         LocaleKeys.planned_tours_finding_noFinding.tr(),
@@ -163,29 +164,28 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      itemCount: docs.length,
+      itemCount: findings.length,
       padding: EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (BuildContext context, int index) {
-        final data = docs[index].data();
-        final findingId = docs[index].reference.id;
-        data['key'] = findingId;
-        if (data.isEmpty)
+        // final findingId = docs[index].reference.id;
+        // data['key'] = findingId;
+        if (findings[index] == null)
           return Text(LocaleKeys.planned_tours_finding_noFinding.tr());
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
               onTap: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FindingDetailView(
-                        finding: FindingModel.fromJson(
-                          data,
-                        ),
-                        tourKey: tourKey,
-                        findingNumber: index),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => FindingDetailView(
+                //         finding: FindingModel.fromJson(
+                //           findings,
+                //         ),
+                //         tourKey: tourKey,
+                //         findingNumber: index),
+                //   ),
+                // );
               },
               child: Chip(
                 labelPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -207,7 +207,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
     );
   }
 
-  Padding buildExpandedTourDetails(UnPlannedTourModel tour) {
+  Padding buildExpandedTourDetails(UnplannedTourModel? tour) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -218,27 +218,32 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildLittleTextWidget("Tur ID"),
-              buildBiggerDataTextWidget(tour.key),
+              buildBiggerDataTextWidget(tour!.id.toString()),
               buildLittleTextWidget("Lokasyon"),
-              buildBiggerDataTextWidget(tour.location),
+              buildBiggerDataTextWidget(tour.locationName),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha"),
-              buildBiggerDataTextWidget(tour.field),
+              buildBiggerDataTextWidget(tour.fieldName),
               SizedBox(height: 10),
               buildLittleTextWidget("Ekip Üyeleri"),
-              buildBiggerDataTextWidget(tour.tourTeamMembers),
+              buildBiggerDataTextWidget(
+                  tour.tourTeamMembers!.isEmpty ? "-" : tour.tourTeamMembers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tura Eşlik Edenler"),
-              buildBiggerDataTextWidget(tour.tourAccompanies),
+              buildBiggerDataTextWidget(
+                  tour.tourAccompaniers!.isEmpty ? "-" : tour.tourTeamMembers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tur Tarihi"),
               buildBiggerDataTextWidget(tour.tourDate),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Organinasyon Skoru"),
-              buildBiggerDataTextWidget(tour.fieldOrganizationScore),
+              buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null
+                  ? "-"
+                  : tour.fieldOrganizationOrderScore.toString()),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-              buildBiggerDataTextWidget(tour.observedPositiveFindings),
+              buildBiggerDataTextWidget(
+                  tour.observatedSecureCasesPositiveFindings),
               SizedBox(height: 10),
             ],
           ),

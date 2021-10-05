@@ -76,10 +76,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
     tour = UnPlannedTourModel(
         location: "",
         field: "",
-        tourTeamMembers: [],
-        tourAccompanies: [],
+        tourTeamMembers: "",
+        tourAccompanies: "",
         tourDate: formattedDate,
-        fieldOrganizationScore: "0",
+        fieldOrganizationScore: 0,
         observedPositiveFindings: "",
         key: "");
   }
@@ -211,10 +211,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           maxValue: 100,
           minValue: 0,
           step: 1,
-          onValue: (value) {
+          onValue: (int value) {
             FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
-              tour.fieldOrganizationScore = value.toString();
+              tour.fieldOrganizationScore = value;
             });
           },
         ),
@@ -256,7 +256,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                 result.add(item!.toJson());
               });
               setState(() {
-                tour.tourTeamMembers = result;
+                tour.tourTeamMembers = result.join(",");
               });
             },
           );
@@ -296,7 +296,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                 result.add(item!.toJson());
               });
               setState(() {
-                tour.tourAccompanies = result;
+                tour.tourAccompanies = result.join(",");
               });
               // print(results);
               // print(tourAccompanies);

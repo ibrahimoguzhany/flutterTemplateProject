@@ -62,8 +62,8 @@ class NavigationRoute {
       case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW:
         return normalNavigate(AddUnPlannedTourView());
 
-      case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
-        return normalNavigate(AddUnPlannedTourView2());
+      // case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
+      //   return normalNavigate(AddUnPlannedTourView2());
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
         return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);

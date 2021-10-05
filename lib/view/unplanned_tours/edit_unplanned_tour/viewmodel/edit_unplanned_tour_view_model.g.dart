@@ -47,7 +47,7 @@ mixin _$EditUnPlannedTourViewModel on _EditUnPlannedTourViewModelBase, Store {
       AsyncAction('_EditUnPlannedTourViewModelBase.updateTour');
 
   @override
-  Future updateTour(UnPlannedTourModel tour, BuildContext context) {
+  Future updateTour(UnplannedTourModel tour, BuildContext context) {
     return _$updateTourAsyncAction.run(() => super.updateTour(tour, context));
   }
 

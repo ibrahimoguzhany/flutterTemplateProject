@@ -1,9 +1,10 @@
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../service/add_unplanned_tour_service.dart';
+import '../../service/unplanned_tour_service.dart';
 
 part 'edit_unplanned_tour_view_model.g.dart';
 
@@ -33,7 +34,7 @@ abstract class _EditUnPlannedTourViewModelBase with Store, BaseViewModel {
   }
 
   @action
-  updateTour(UnPlannedTourModel tour, BuildContext context) async {
-    await service.updateTour(tour, context);
+  updateTour(UnplannedTourModel tour, BuildContext context) async {
+    // await service.updateTour(tour, context);
   }
 }

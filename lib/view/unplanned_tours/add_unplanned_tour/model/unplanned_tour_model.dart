@@ -11,12 +11,12 @@ String tourToJson(List<UnPlannedTourModel> data) =>
 class UnPlannedTourModel {
   String location = "";
   String field = "";
-  List<dynamic> tourTeamMembers = [];
-  List<dynamic> tourAccompanies = [];
+  String? tourTeamMembers;
+  String tourAccompanies = "";
   String tourDate = "";
-  String fieldOrganizationScore = "";
+  int fieldOrganizationScore = 0;
   String observedPositiveFindings = "";
-  String key = "";
+  String? key = "";
   UnPlannedTourModel(
       {required this.location,
       required this.field,
@@ -25,7 +25,7 @@ class UnPlannedTourModel {
       required this.tourDate,
       required this.fieldOrganizationScore,
       required this.observedPositiveFindings,
-      required this.key});
+      this.key});
 
   UnPlannedTourModel.fromJson(Map<String, dynamic> json) {
     location = json['location'];

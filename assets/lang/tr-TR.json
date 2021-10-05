@@ -17,7 +17,7 @@
     },
     "unplanned_tours": {
         "list": {
-            "noData": "Henüz eklenmiş bir kayıt bulunmamaktaıdr.."
+            "noData": "Henüz eklenmiş bir Plansız Tur Kaydı bulunmamaktadır."
         },
         "edit": {
             "app_bar_title": "Plansız Tur Düzenleme Sayfası",
