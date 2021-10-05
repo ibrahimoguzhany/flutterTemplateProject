@@ -70,18 +70,6 @@ mixin _$UnPlannedTourDetailViewModel
       ActionController(name: '_UnPlannedTourDetailViewModelBase');
 
   @override
-  dynamic getFindings(String tourId) {
-    final _$actionInfo = _$_UnPlannedTourDetailViewModelBaseActionController
-        .startAction(name: '_UnPlannedTourDetailViewModelBase.getFindings');
-    try {
-      return super.getFindings(tourId);
-    } finally {
-      _$_UnPlannedTourDetailViewModelBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void changeVisibilityTrue() {
     final _$actionInfo =
         _$_UnPlannedTourDetailViewModelBaseActionController.startAction(

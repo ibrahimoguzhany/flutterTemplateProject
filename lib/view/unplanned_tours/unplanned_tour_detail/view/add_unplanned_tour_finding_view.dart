@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,11 +11,14 @@ import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../model/category.dart';
+import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
-  const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
+  final UnplannedTourModel tour;
+  const AddUnPlannedTourFindingView({Key? key, required this.tour})
+      : super(key: key);
 
   @override
   _AddUnPlannedTourFindingViewState createState() =>
@@ -32,20 +32,34 @@ class _AddUnPlannedTourFindingViewState
 
   List<File>? files = <File>[];
 
-  List<String> findingTypes = ['Emniyetsiz Durum', "Emniyetsiz Davranış"];
-  List<String> findingCategories = [
-    'Kaygan Zemin',
-    "Yüksek Sıcaklık",
-    "Baretsiz Çalışma",
-    "Uykusuz Çalışma"
-  ];
+  List<CategoryModel>? findingTypes = <CategoryModel>[];
+  List<String>? findingTypeNames = <String>[];
+  List<String>? findingCategories = <String>[];
+  // List<String> findingCategories = [
+  //   'Kaygan Zemin',
+  //   "Yüksek Sıcaklık",
+  //   "Baretsiz Çalışma",
+  //   "Uykusuz Çalışma"
+  // ];
 
-  late FindingModel finding;
+  FindingModel finding = FindingModel(
+    actionsShouldBeTaken: "",
+    actionsTakenRightInTheField: "",
+    categoryIds: <int>[],
+    categoryNames: "Kaygan Zemin",
+    fieldResponsibleExplanation: "",
+    findingType: 0,
+    findingTypeStr: "Emniyetsiz Davranış",
+    id: 0,
+    observations: "",
+  );
   @override
   void initState() {
     super.initState();
 
-    finding = FindingModel();
+    // print(findingTypeNames![0]);
+
+    // List<String> findingTypes = UnPlannedTourService.instance!.getCategories();
   }
 
   final _controllerActionMustBeTaken = TextEditingController();
@@ -55,16 +69,25 @@ class _AddUnPlannedTourFindingViewState
 
   @override
   Widget build(BuildContext context) {
-    UnPlannedTourModel tour =
-        ModalRoute.of(context)!.settings.arguments as UnPlannedTourModel;
+    // UnplannedTourModel tour =
+    //     ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
 
     final _formKey = GlobalKey<FormState>();
 
     return BaseView<AddUnPlannedTourFindingViewModel>(
       viewModel: AddUnPlannedTourFindingViewModel(),
-      onModelReady: (AddUnPlannedTourFindingViewModel model) {
+      onModelReady: (AddUnPlannedTourFindingViewModel model) async {
         model.setContext(context);
         model.init();
+
+        findingTypes = (await model.getCategories());
+        findingTypes!.forEach((element) {
+          findingTypeNames!.add(element.findingTypeStr!);
+          findingCategories!.add(element.name!);
+        });
+        print(findingTypeNames);
+        print(findingCategories);
+        setState(() {});
       },
       onPageBuilder:
           (BuildContext context, AddUnPlannedTourFindingViewModel viewModel) =>
@@ -108,7 +131,7 @@ class _AddUnPlannedTourFindingViewState
               Container(
                 padding:
                     EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 0),
-                decoration: buildFileBixDecoration(),
+                decoration: buildFileBoxDecoration(),
                 margin: EdgeInsets.all(10),
                 child: buildButtonWidgets(viewModel, context),
               ),
@@ -116,14 +139,16 @@ class _AddUnPlannedTourFindingViewState
                 onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (isValid) {
-                    _formKey.currentState!.save();
-                    await viewModel.addFinding(finding, context, tour.key!);
-                    Navigator.pop(context);
-                    final snackBar = SnackBar(
-                      content: Text("Bulgu başarıyla eklendi."),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    widget.tour.findings!.add(
+                        finding); //TODO : Secilen bir tura bulgu girilebilmesi icin apide metot lazim.
+                    // _formKey.currentState!.save();
+                    // await viewModel.addFinding(finding, context, tour.key!);
+                    // Navigator.pop(context);
+                    // final snackBar = SnackBar(
+                    //   content: Text("Bulgu başarıyla eklendi."),
+                    //   backgroundColor: Colors.green,
+                    // );
+                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
                 label: Text("Kaydet"),
@@ -135,7 +160,7 @@ class _AddUnPlannedTourFindingViewState
     );
   }
 
-  BoxDecoration buildFileBixDecoration() {
+  BoxDecoration buildFileBoxDecoration() {
     return BoxDecoration(
         border: Border(
           left: BorderSide(
@@ -189,15 +214,15 @@ class _AddUnPlannedTourFindingViewState
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            finding.imageUrl = finding.toMap(await uploadFiles(files!));
-            if (files!.isNotEmpty && finding.imageUrl!.isNotEmpty) {
-              viewModel.changeIsUploaded();
-              final snackBar = SnackBar(
-                backgroundColor: Colors.green[600],
-                content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
+            // finding.image = finding.toMap(await uploadFiles(files!));
+            // if (files!.isNotEmpty && finding.imageUrl!.isNotEmpty) {
+            //   viewModel.changeIsUploaded();
+            //   final snackBar = SnackBar(
+            //     backgroundColor: Colors.green[600],
+            //     content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
+            //   );
+            //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            // }
           },
         ),
         SizedBox(height: 20),
@@ -334,8 +359,8 @@ class _AddUnPlannedTourFindingViewState
             }
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          hint: Text('Bulgu Türü'),
-          value: finding.category,
+          hint: Text('Kategori'),
+          value: finding.categoryNames,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -344,11 +369,11 @@ class _AddUnPlannedTourFindingViewState
           elevation: 20,
           onChanged: (String? newValue) {
             setState(() {
-              finding.category = newValue!;
+              finding.categoryNames = newValue!;
             });
           },
           items:
-              findingCategories.map<DropdownMenuItem<String>>((String value) {
+              findingCategories?.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -366,7 +391,7 @@ class _AddUnPlannedTourFindingViewState
             }
           },
           hint: Text('Bulgu Türü'),
-          value: finding.findingType,
+          value: finding.findingTypeStr,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -375,10 +400,14 @@ class _AddUnPlannedTourFindingViewState
           elevation: 20,
           onChanged: (String? newValue) {
             setState(() {
-              finding.findingType = newValue!;
+              finding.findingTypeStr = newValue!;
             });
           },
-          items: findingTypes.map<DropdownMenuItem<String>>((String value) {
+          onSaved: (String? newVal) {
+            finding.findingTypeStr = newVal!;
+          },
+          items:
+              findingTypeNames?.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -389,7 +418,7 @@ class _AddUnPlannedTourFindingViewState
 
   TextFormField get buildActionsMustBeTaken => TextFormField(
         validator: (val) {
-          if (val!.isEmpty) {
+          if (val != null && val.isEmpty) {
             return "Lütfen alınması gereken aksiyonlar alanını doldurunuz.";
           }
         },
@@ -410,11 +439,11 @@ class _AddUnPlannedTourFindingViewState
         ),
         onSaved: (val) {
           setState(() {
-            finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
+            finding.actionsShouldBeTaken = _controllerActionMustBeTaken.text;
           });
         },
         onChanged: (val) {
-          finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
+          finding.actionsShouldBeTaken = _controllerActionMustBeTaken.text;
         },
       );
 
@@ -441,12 +470,12 @@ class _AddUnPlannedTourFindingViewState
         ),
         onSaved: (val) {
           setState(() {
-            finding.actionsTakenInField =
+            finding.actionsTakenRightInTheField =
                 _controllerActionMustBeTakenInField.text;
           });
         },
         onChanged: (val) {
-          finding.actionsTakenInField =
+          finding.actionsTakenRightInTheField =
               _controllerActionMustBeTakenInField.text;
         },
       );
@@ -471,12 +500,12 @@ class _AddUnPlannedTourFindingViewState
         ),
         onSaved: (val) {
           setState(() {
-            finding.fieldManagerStatements =
+            finding.fieldResponsibleExplanation =
                 _controllerFieldManagerStatements.text;
           });
         },
         onChanged: (val) {
-          finding.fieldManagerStatements =
+          finding.fieldResponsibleExplanation =
               _controllerFieldManagerStatements.text;
         },
       );

@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
-import '../../../../core/init/auth/authentication_provider.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
-import '../../../home/home_esd/model/finding_model.dart';
 import '../viewmodel/finding_detail_view_model.dart';
 
 class FindingDetailView extends StatelessWidget {
@@ -22,16 +21,16 @@ class FindingDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(finding.imageUrl);
-    final selectedFinding = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection('plannedtours')
-        .doc(tourKey)
-        .collection("findings")
-        .doc(finding.key);
+    // final selectedFinding = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(Provider.of<AuthenticationProvider>(context)
+    //         .firebaseAuth
+    //         .currentUser!
+    //         .uid)
+    //     .collection('plannedtours')
+    //     .doc(tourKey)
+    //     .collection("findings")
+    //     .doc(finding.key);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -54,16 +53,16 @@ class FindingDetailView extends StatelessWidget {
                       TextButton(
                           child: Text("Evet"),
                           onPressed: () async {
-                            await selectedFinding.delete();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            final snackBar = SnackBar(
-                              content: Text(
-                                  "Bulgu $findingNumber Başarıyla Silindi."),
-                              backgroundColor: Colors.blueGrey.shade700,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            // await selectedFinding.delete();
+                            // Navigator.pop(context);
+                            // Navigator.pop(context);
+                            // final snackBar = SnackBar(
+                            //   content: Text(
+                            //       "Bulgu $findingNumber Başarıyla Silindi."),
+                            //   backgroundColor: Colors.blueGrey.shade700,
+                            // );
+                            // ScaffoldMessenger.of(context)
+                            //     .showSnackBar(snackBar);
                           }),
                       TextButton(
                           child: Text("Hayır"),
@@ -103,25 +102,25 @@ class FindingDetailView extends StatelessWidget {
                 height: 10,
               ),
               buildLittleTextWidget("Kategori"),
-              buildBiggerDataTextWidget(finding.category),
+              buildBiggerDataTextWidget(finding.categoryNames),
               SizedBox(height: 10),
               buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
-              buildBiggerDataTextWidget(finding.actionsMustBeTaken != null
-                  ? finding.actionsMustBeTaken!
+              buildBiggerDataTextWidget(finding.actionsShouldBeTaken != null
+                  ? finding.actionsShouldBeTaken!
                   : ""),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Alınan Aksiyonlar"),
-              buildBiggerDataTextWidget(finding.actionsTakenInField),
+              buildBiggerDataTextWidget(finding.actionsTakenRightInTheField),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
-              buildBiggerDataTextWidget(finding.fieldManagerStatements),
+              buildBiggerDataTextWidget(finding.fieldResponsibleExplanation),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlemler"),
               buildBiggerDataTextWidget(
                   finding.observations != null ? finding.observations : ""),
               SizedBox(height: 10),
               buildLittleTextWidget("Bulgu Türü"),
-              buildBiggerDataTextWidget(finding.findingType),
+              buildBiggerDataTextWidget(finding.findingTypeStr),
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
               SizedBox(height: 5),

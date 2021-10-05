@@ -15,13 +15,13 @@ class FindingService {
   CollectionReference findingsCollection =
       FirebaseFirestore.instance.collection('findings');
 
-  Future<List<FindingModel>> getFindings() {
-    return findingsCollection.get().then((QuerySnapshot querySnapshot) {
-      List<FindingModel> findingList = <FindingModel>[];
-      querySnapshot.docs.forEach((doc) {
-        findingList.add(FindingModel.fromDocumentSnapshot(doc));
-      });
-      return findingList;
-    });
-  }
+  // Future<List<FindingModel>> getFindings() {
+  //   return findingsCollection.get().then((QuerySnapshot querySnapshot) {
+  //     List<FindingModel> findingList = <FindingModel>[];
+  //     querySnapshot.docs.forEach((doc) {
+  //       findingList.add(FindingModel.fromDocumentSnapshot(doc));
+  //     });
+  //     return findingList;
+  //   });
+  // }
 }

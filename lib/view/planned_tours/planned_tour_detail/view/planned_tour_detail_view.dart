@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -26,11 +27,11 @@ class PlannedTourDetailView extends StatefulWidget {
 class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
   @override
   Widget build(BuildContext context) {
-    final findingSnapshots = PlannedTourDetailService.instance
-        ?.getFindingsSnapshots(context, widget.tour!.key);
+    // final findingSnapshots = PlannedTourDetailService.instance
+    //     ?.getFindingsSnapshots(context, widget.tour!.key);
 
-    final selectedTour = PlannedTourDetailService.instance
-        ?.getSelectedTour(context, widget.tour!.key);
+    // final selectedTour = PlannedTourDetailService.instance
+    //     ?.getSelectedTour(context, widget.tour!.key);
 
     return BaseView<PlannedTourDetailViewModel>(
       viewModel: PlannedTourDetailViewModel(),
@@ -75,24 +76,24 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
                             TextButton(
                                 child: Text("Evet"),
                                 onPressed: () async {
-                                  await selectedTour
-                                      .collection("findings")
-                                      .get()
-                                      .then((snapshot) {
-                                    for (DocumentSnapshot ds in snapshot.docs) {
-                                      ds.reference.delete();
-                                    }
-                                  });
-                                  await selectedTour.delete();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  final snackBar = SnackBar(
-                                    content:
-                                        Text("Planlı Tur Başarıyla Silindi."),
-                                    backgroundColor: Colors.blueGrey.shade700,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                  // await selectedTour
+                                  //     .collection("findings")
+                                  //     .get()
+                                  //     .then((snapshot) {
+                                  //   for (DocumentSnapshot ds in snapshot.docs) {
+                                  //     ds.reference.delete();
+                                  //   }
+                                  // });
+                                  // await selectedTour.delete();
+                                  // Navigator.pop(context);
+                                  // Navigator.pop(context);
+                                  // final snackBar = SnackBar(
+                                  //   content:
+                                  //       Text("Planlı Tur Başarıyla Silindi."),
+                                  //   backgroundColor: Colors.blueGrey.shade700,
+                                  // );
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(snackBar);
                                 }),
                             TextButton(
                                 child: Text("Hayır"),
@@ -111,22 +112,23 @@ class _PlannedTourDetailViewState extends State<PlannedTourDetailView> {
           children: <Widget>[
             Expanded(
               child: Observer(builder: (_) {
-                return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: findingSnapshots,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError)
-                      return Text('Error = ${snapshot.error}');
+                return Container();
+                // return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                //   stream: findingSnapshots,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasError)
+                //       return Text('Error = ${snapshot.error}');
 
-                    if (snapshot.hasData) {
-                      final docs = snapshot.data!.docs;
+                //     if (snapshot.hasData) {
+                //       final docs = snapshot.data!.docs;
 
-                      return buildHorizontalChips(
-                          docs, viewModel, widget.tour!.key);
-                    }
+                //       return buildHorizontalChips(
+                //           docs, viewModel, widget.tour!.key);
+                //     }
 
-                    return Center(child: CircularProgressIndicator());
-                  },
-                );
+                //     return Center(child: CircularProgressIndicator());
+                //   },
+                // );
               }),
             ),
             Text(

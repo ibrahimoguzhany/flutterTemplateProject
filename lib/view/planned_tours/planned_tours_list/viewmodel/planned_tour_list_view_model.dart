@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';

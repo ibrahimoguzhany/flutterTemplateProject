@@ -10,7 +10,6 @@ import 'package:esd_mobil/view/_product/_constants/image_path_svg.dart';
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
-import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
 import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import '../viewmodel/unplanned_tour_list_view_model.dart';
 
@@ -58,20 +57,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                   )),
     );
   }
-  // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-  //         stream: viewModel.tourSnapshots(context),
-  //         builder: (context, snapshot) {
-  //           if (snapshot.hasError) return Text('Error = ${snapshot.error}');
-
-  //           if (snapshot.hasData) {
-  //             final docs = snapshot.data!.docs;
-
-  //             return buildListView(docs);
-  //           }
-
-  //           return Center(child: CircularProgressIndicator());
-  //         },
-  //       ),
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
@@ -110,17 +95,12 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       ),
       itemCount: docs.length,
       itemBuilder: (context, index) {
-        final data = docs[index];
-
-        // print(data);
-        return buildListTile(data, index);
+        return buildListTile(docs[index], index);
       },
     );
   }
 
   ListTile buildListTile(UnplannedTourModel data, int index) {
-    // var _data = data['observedPositiveFindings'].toString();
-
     return ListTile(
       enableFeedback: true,
       contentPadding: EdgeInsets.all(8.0),
@@ -146,10 +126,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
         textAlign: TextAlign.left,
         style: TextStyle(fontSize: 14),
       ),
-      // subtitle: AutoLocaleText(
-      //   value: _data.length > 30 ? _data.substring(0, 50) + "..." : _data,
-      //   style: TextStyle(fontSize: 12),
-      // ),
       title: Text(
         data.fieldName!,
         style: TextStyle(fontSize: 14),

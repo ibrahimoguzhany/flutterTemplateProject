@@ -1,4 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:esd_mobil/core/extensions/context_extension.dart';
@@ -7,7 +8,6 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../model/unplanned_tour_model.dart';
 import '../model/tour_accompanies_dd_model.dart';
 import '../model/tour_team_members_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
@@ -29,7 +29,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   String? fieldOrganizationScore;
   String? observedPositiveFindings;
 
-  late UnPlannedTourModel tour;
+  late UnplannedTourModel tour;
   List<String> locationList = ['Bursa', 'İzmir', 'Ankara', 'İstanbul'];
   List<String> fieldList = [
     'Bursa Rafineri',
@@ -72,16 +72,8 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         TextEditingController(text: DateTime.now().toString());
 
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    tour = UnPlannedTourModel(
-        location: "",
-        field: "",
-        tourTeamMembers: "",
-        tourAccompanies: "",
-        tourDate: formattedDate,
-        fieldOrganizationScore: 0,
-        observedPositiveFindings: "",
-        key: "");
+    // String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    tour = UnplannedTourModel();
   }
 
   var _controllerPositiveFindings = TextEditingController();
@@ -140,7 +132,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
                         _formKey.currentState!.save();
-                        await viewModel.addUnPlannedTour(tour, context);
+                        // await viewModel.addUnPlannedTour(tour, context);
                       } else {
                         final snackBar = SnackBar(
                           content: Text("Lütfen gerekli alanları doldurunuz."),
@@ -198,10 +190,12 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           ),
         ),
         onSaved: (val) {
-          tour.observedPositiveFindings = _controllerPositiveFindings.text;
+          tour.observatedSecureCasesPositiveFindings =
+              _controllerPositiveFindings.text;
         },
         onChanged: (val) {
-          tour.observedPositiveFindings = _controllerPositiveFindings.text;
+          tour.observatedSecureCasesPositiveFindings =
+              _controllerPositiveFindings.text;
         },
       );
 
@@ -214,7 +208,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           onValue: (int value) {
             FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
-              tour.fieldOrganizationScore = value;
+              tour.fieldOrganizationOrderScore = value;
             });
           },
         ),
@@ -296,7 +290,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                 result.add(item!.toJson());
               });
               setState(() {
-                tour.tourAccompanies = result.join(",");
+                tour.tourAccompaniers = result.join(",");
               });
               // print(results);
               // print(tourAccompanies);
@@ -323,7 +317,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           onChanged: (String? newValue) {
             FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
-              tour.field = newValue!;
+              tour.fieldName = newValue!;
             });
           },
           onSaved: (String? newValue) {
@@ -332,7 +326,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
               currentFocus.unfocus();
             }
             setState(() {
-              tour.field = newValue!;
+              tour.fieldName = newValue!;
             });
           },
           items: fieldList.map<DropdownMenuItem<String>>((String value) {
@@ -362,7 +356,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           elevation: 20,
           onChanged: (String? newValue) {
             setState(() {
-              tour.location = newValue!;
+              tour.locationName = newValue!;
             });
             FocusScope.of(context).requestFocus(new FocusNode());
           },

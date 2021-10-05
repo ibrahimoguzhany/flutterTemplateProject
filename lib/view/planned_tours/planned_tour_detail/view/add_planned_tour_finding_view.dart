@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -132,14 +133,14 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
                 onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (isValid) {
-                    _formKey.currentState!.save();
-                    await viewModel.addFinding(finding, context, tour.key);
-                    Navigator.pop(context);
-                    final snackBar = SnackBar(
-                      content: Text("Bulgu başarıyla eklendi."),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    // _formKey.currentState!.save();
+                    // await viewModel.addFinding(finding, context, tour.key);
+                    // Navigator.pop(context);
+                    // final snackBar = SnackBar(
+                    //   content: Text("Bulgu başarıyla eklendi."),
+                    //   backgroundColor: Colors.green,
+                    // );
+                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
                 label: Text("Kaydet"),
@@ -261,7 +262,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: Text('Bulgu Türü'),
-          value: finding.category,
+          value: finding.categoryNames,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -270,7 +271,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           elevation: 20,
           onChanged: (String? newValue) {
             setState(() {
-              finding.category = newValue!;
+              finding.categoryNames = newValue!;
             });
           },
           items:
@@ -292,7 +293,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
             }
           },
           hint: Text('Bulgu Türü'),
-          value: finding.findingType,
+          value: finding.findingTypeStr,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -301,7 +302,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
           elevation: 20,
           onChanged: (String? newValue) {
             setState(() {
-              finding.findingType = newValue!;
+              finding.findingTypeStr = newValue!;
             });
           },
           items: findingTypes.map<DropdownMenuItem<String>>((String value) {
@@ -336,11 +337,11 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
         ),
         onSaved: (val) {
           setState(() {
-            finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
+            finding.actionsShouldBeTaken = _controllerActionMustBeTaken.text;
           });
         },
         onChanged: (val) {
-          finding.actionsMustBeTaken = _controllerActionMustBeTaken.text;
+          finding.actionsShouldBeTaken = _controllerActionMustBeTaken.text;
         },
       );
 
@@ -367,12 +368,12 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
         ),
         onSaved: (val) {
           setState(() {
-            finding.actionsTakenInField =
+            finding.actionsTakenRightInTheField =
                 _controllerActionMustBeTakenInField.text;
           });
         },
         onChanged: (val) {
-          finding.actionsTakenInField =
+          finding.actionsTakenRightInTheField =
               _controllerActionMustBeTakenInField.text;
         },
       );
@@ -400,12 +401,12 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
         ),
         onSaved: (val) {
           setState(() {
-            finding.fieldManagerStatements =
+            finding.fieldResponsibleExplanation =
                 _controllerFieldManagerStatements.text;
           });
         },
         onChanged: (val) {
-          finding.fieldManagerStatements =
+          finding.fieldResponsibleExplanation =
               _controllerFieldManagerStatements.text;
         },
       );

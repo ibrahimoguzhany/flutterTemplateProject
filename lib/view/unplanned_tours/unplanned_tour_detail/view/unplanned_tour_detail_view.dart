@@ -1,21 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
-import '../../model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../../../core/init/lang/locale_keys.g.dart';
-import '../../add_unplanned_tour/model/unplanned_tour_model.dart';
-import '../../edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
-import '../service/unplanned_tour_detail_service.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/lang/locale_keys.g.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
+import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/unplanned_tour_detail_view_model.dart';
+import 'add_unplanned_tour_finding_view.dart';
 import 'finding_detail.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
@@ -47,9 +46,14 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
               Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            NavigationService.instance.navigateToPage(
-                NavigationConstants.ADD_UNPLANNED_TOUR_FINDING,
-                data: widget.tour);
+            // NavigationService.instance.navigateToPage(
+            //     NavigationConstants.ADD_UNPLANNED_TOUR_FINDING,
+            //     data: widget.tour);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AddUnPlannedTourFindingView(tour: widget.tour!)));
           },
           child: Icon(Icons.add),
         ),
@@ -152,7 +156,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   }
 
   Widget buildHorizontalChips(
-      List<Findings>? findings, UnPlannedTourDetailViewModel viewModel) {
+      List<FindingModel>? findings, UnPlannedTourDetailViewModel viewModel) {
     if (findings!.isEmpty) {
       return Center(
           child: Text(
@@ -175,17 +179,13 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
               onTap: () async {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => FindingDetailView(
-                //         finding: FindingModel.fromJson(
-                //           findings,
-                //         ),
-                //         tourKey: tourKey,
-                //         findingNumber: index),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FindingDetailView(
+                        finding: findings[index], findingNumber: index),
+                  ),
+                );
               },
               child: Chip(
                 labelPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -231,7 +231,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
               SizedBox(height: 10),
               buildLittleTextWidget("Tura Eşlik Edenler"),
               buildBiggerDataTextWidget(
-                  tour.tourAccompaniers!.isEmpty ? "-" : tour.tourTeamMembers),
+                  tour.tourAccompaniers!.isEmpty ? "-" : tour.tourAccompaniers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tur Tarihi"),
               buildBiggerDataTextWidget(tour.tourDate),

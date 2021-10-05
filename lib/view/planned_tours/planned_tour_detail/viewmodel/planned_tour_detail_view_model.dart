@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
@@ -18,26 +19,26 @@ abstract class _PlannedTourDetailViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   Future<void> init() async {}
 
-  @action
-  dynamic getFindings(String tourId) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection("tours")
-        .doc(tourId)
-        .collection("findings")
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      List<FindingModel> findingList = <FindingModel>[];
-      querySnapshot.docs.forEach((doc) {
-        findingList.add(FindingModel.fromDocumentSnapshot(doc));
-      });
-      return findingList;
-    });
-  }
+  // @action
+  // dynamic getFindings(String tourId) {
+  //   FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Provider.of<AuthenticationProvider>(context, listen: false)
+  //           .firebaseAuth
+  //           .currentUser!
+  //           .uid)
+  //       .collection("tours")
+  //       .doc(tourId)
+  //       .collection("findings")
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     List<FindingModel> findingList = <FindingModel>[];
+  //     querySnapshot.docs.forEach((doc) {
+  //       findingList.add(FindingModel.fromDocumentSnapshot(doc));
+  //     });
+  //     return findingList;
+  //   });
+  // }
 
   @observable
   List<FindingModel> findingList = <FindingModel>[];

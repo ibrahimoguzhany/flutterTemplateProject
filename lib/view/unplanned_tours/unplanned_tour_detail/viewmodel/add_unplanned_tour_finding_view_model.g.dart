@@ -26,16 +26,6 @@ mixin _$AddUnPlannedTourFindingViewModel
     });
   }
 
-  final _$addFindingAsyncAction =
-      AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
-
-  @override
-  Future<void> addFinding(
-      FindingModel model, BuildContext context, String key) {
-    return _$addFindingAsyncAction
-        .run(() => super.addFinding(model, context, key));
-  }
-
   final _$pickImageAsyncAction =
       AsyncAction('_AddUnPlannedTourFindingViewModelBase.pickImage');
 

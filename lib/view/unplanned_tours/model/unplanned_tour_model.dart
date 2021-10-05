@@ -11,7 +11,7 @@ class UnplannedTourModel {
   String? locationName;
   String? tourTeamMembers;
   List<int>? tourTeamMembersIds;
-  List<Findings>? findings;
+  List<FindingModel>? findings;
 
   UnplannedTourModel(
       {this.id,
@@ -43,9 +43,9 @@ class UnplannedTourModel {
     tourTeamMembers = json['tourTeamMembers'];
     tourTeamMembersIds = json['tourTeamMembersIds'].cast<int>();
     if (json['findings'] != null) {
-      findings = <Findings>[];
+      findings = <FindingModel>[];
       json['findings'].forEach((v) {
-        findings!.add(new Findings.fromJson(v));
+        findings!.add(new FindingModel.fromJson(v));
       });
     }
   }
@@ -72,7 +72,7 @@ class UnplannedTourModel {
   }
 }
 
-class Findings {
+class FindingModel {
   int? findingType;
   String? findingTypeStr;
   List<int>? categoryIds;
@@ -83,7 +83,7 @@ class Findings {
   String? fieldResponsibleExplanation;
   int? id;
 
-  Findings(
+  FindingModel(
       {this.findingType,
       this.findingTypeStr,
       this.categoryIds,
@@ -94,7 +94,7 @@ class Findings {
       this.fieldResponsibleExplanation,
       this.id});
 
-  Findings.fromJson(Map<String, dynamic> json) {
+  FindingModel.fromJson(Map<String, dynamic> json) {
     findingType = json['findingType'];
     findingTypeStr = json['findingTypeStr'];
     categoryIds = json['categoryIds'].cast<int>();
@@ -119,4 +119,16 @@ class Findings {
     data['id'] = this.id;
     return data;
   }
+
+  bool operator ==(o) =>
+      o is FindingModel &&
+      o.actionsShouldBeTaken == actionsShouldBeTaken &&
+      o.actionsTakenRightInTheField == actionsTakenRightInTheField &&
+      o.categoryIds == categoryIds &&
+      o.categoryNames == categoryNames &&
+      o.fieldResponsibleExplanation == fieldResponsibleExplanation &&
+      o.findingType == findingType &&
+      o.findingTypeStr == findingTypeStr &&
+      o.id == id &&
+      o.observations == observations;
 }

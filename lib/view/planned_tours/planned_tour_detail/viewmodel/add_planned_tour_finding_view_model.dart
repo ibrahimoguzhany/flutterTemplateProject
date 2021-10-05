@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../home/home_esd/model/finding_model.dart';
 import '../service/planned_tour_detail_service.dart';
 
 part 'add_planned_tour_finding_view_model.g.dart';
@@ -18,11 +17,11 @@ abstract class _AddPlannedTourFindingViewModelBase with Store, BaseViewModel {
 
   var service = PlannedTourDetailService.instance!;
 
-  @action
-  Future<void> addFinding(
-      FindingModel model, BuildContext context, String key) async {
-    await service.addFinding(model, context, key);
-  }
+  // @action
+  // Future<void> addFinding(
+  //     FindingModel model, BuildContext context, String key) async {
+  //   await service.addFinding(model, context, key);
+  // }
 
   @observable
   String? imageUrl;

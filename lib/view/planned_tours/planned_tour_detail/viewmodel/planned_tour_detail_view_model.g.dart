@@ -69,17 +69,6 @@ mixin _$PlannedTourDetailViewModel on _PlannedTourDetailViewModelBase, Store {
       ActionController(name: '_PlannedTourDetailViewModelBase');
 
   @override
-  dynamic getFindings(String tourId) {
-    final _$actionInfo = _$_PlannedTourDetailViewModelBaseActionController
-        .startAction(name: '_PlannedTourDetailViewModelBase.getFindings');
-    try {
-      return super.getFindings(tourId);
-    } finally {
-      _$_PlannedTourDetailViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void changeVisibilityTrue() {
     final _$actionInfo =
         _$_PlannedTourDetailViewModelBaseActionController.startAction(

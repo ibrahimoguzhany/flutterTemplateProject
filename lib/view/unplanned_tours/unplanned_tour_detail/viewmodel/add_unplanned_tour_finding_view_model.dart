@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:esd_mobil/view/unplanned_tours/model/category.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,11 +23,11 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
-  @action
-  Future<void> addFinding(
-      FindingModel model, BuildContext context, String key) async {
-    await UnPlannedTourDetailService.instance!.addFinding(model, context, key);
-  }
+  // @action
+  // Future<void> addFinding(
+  //     FindingModel model, BuildContext context, String key) async {
+  //   await UnPlannedTourDetailService.instance!.addFinding(model, context, key);
+  // }
 
   @action
   Future<File?> pickImage(ImageSource imageSource) async {
@@ -45,5 +48,12 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   @action
   void changeIsUploaded() {
     isUploaded = !isUploaded;
+  }
+
+  @action
+  Future<List<CategoryModel>?> getCategories() async {
+    var tours = await UnPlannedTourService.instance!.getCategories();
+
+    return tours;
   }
 }
