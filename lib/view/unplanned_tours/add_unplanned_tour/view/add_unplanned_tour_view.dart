@@ -1,7 +1,9 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/field.dart';
 import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/location.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -29,14 +31,17 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   String? observedPositiveFindings;
 
   late UnplannedTourModel tour;
-  List<Location> locationList = [Location(0, "Bursa"), Location(1, "Izmir")];
-  List<String> fieldList = [
-    'Bursa Rafineri',
-    'İzmir Rafineri',
-    'Ankara Rafineri',
-    'İstanbul Rafineri'
-  ];
-  String? dropdownValue;
+  // List<LocationModel> locationList = [
+  //   LocationModel( ),
+  //   LocationModel(1, "Izmir")
+  // ];
+  // List<String> fieldList = [
+  //   'Bursa Rafineri',
+  //   'İzmir Rafineri',
+  //   'Ankara Rafineri',
+  //   'İstanbul Rafineri'
+  // ];
+  // String? dropdownValue;
   late TextEditingController _datePickerController;
 
   static List<TourAccompaniesDDModel> _tourAccompaniesList = [
@@ -83,9 +88,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   Widget build(BuildContext context) {
     return BaseView<AddUnPlannedTourViewModel>(
       viewModel: AddUnPlannedTourViewModel(),
-      onModelReady: (AddUnPlannedTourViewModel model) {
+      onModelReady: (AddUnPlannedTourViewModel model) async {
         model.setContext(context);
-        model.init();
+        await model.init();
+        setState(() {});
       },
       onPageBuilder:
           (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
@@ -102,10 +108,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildLittleTextWidget("Lokasyon"),
-                  buildLocationDropDownFormField,
+                  buildLocationDropDownFormField(viewModel),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha"),
-                  buildFieldDropDownFormField,
+                  buildFieldDropDownFormField(viewModel),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tura Eşlik Edenler"),
                   SizedBox(height: 5),
@@ -296,9 +302,11 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             },
           );
 
-  Padding get buildFieldDropDownFormField => Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<String>(
+  Padding buildFieldDropDownFormField(AddUnPlannedTourViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Observer(builder: (_) {
+        return DropdownButtonFormField<int>(
           validator: (val) {
             if (val == null) {
               return "Bu alan boş bırakılamaz";
@@ -306,41 +314,46 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           },
           hint: Text('Saha Seçiniz. '),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          value: field,
+          value: tour.fieldId,
           icon: const Icon(
             Icons.arrow_downward,
             // color: Colors.black38,
           ),
           iconSize: 24,
           elevation: 20,
-          onChanged: (String? newValue) {
+          onChanged: (int? newValue) {
             FocusScope.of(context).requestFocus(new FocusNode());
             setState(() {
-              tour.fieldName = newValue!;
+              tour.fieldId = newValue!;
             });
           },
-          onSaved: (String? newValue) {
+          onSaved: (int? newValue) {
             FocusScopeNode currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
             }
             setState(() {
-              tour.fieldName = newValue!;
+              tour.fieldId = newValue!;
             });
           },
-          items: fieldList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
+          items:
+              viewModel.fields.map<DropdownMenuItem<int>>((FieldModel value) {
+            return DropdownMenuItem<int>(
+              value: value.id,
+              child: Text(value.fieldName!),
             );
           }).toList(),
-        ),
-      );
+        );
+      }),
+    );
+  }
 
 // XX
-  Padding get buildLocationDropDownFormField => Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<int>(
+  Padding buildLocationDropDownFormField(AddUnPlannedTourViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Observer(builder: (_) {
+        return DropdownButtonFormField<int>(
           validator: (val) {
             if (val == null) {
               return "Bu alan boş bırakılamaz";
@@ -360,14 +373,18 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             });
             FocusScope.of(context).requestFocus(new FocusNode());
           },
-          items: locationList.map<DropdownMenuItem<int>>((Location value) {
+          items: viewModel.locations
+              .map<DropdownMenuItem<int>>((LocationModel value) {
             return DropdownMenuItem<int>(
               value: value.id,
-              child: Text(value.locationName),
+              child:
+                  Text(value.locationName != null ? value.locationName! : ""),
             );
           }).toList(),
-        ),
-      );
+        );
+      }),
+    );
+  }
 
   Widget buildLittleTextWidget(String title) {
     return AutoLocaleText(

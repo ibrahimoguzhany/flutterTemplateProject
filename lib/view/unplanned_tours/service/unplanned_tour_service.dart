@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/field.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/location.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/category.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,9 @@ class UnPlannedTourService {
   final toursUrl = "http://10.0.2.2:8009/api/services/app/Tours/GetAllTours";
   final categoryUrl =
       "http://10.0.2.2:8009/api/services/app/Categories/GetAllCategories";
+  final locationUrl =
+      "http://10.0.2.2:8009/api/services/app/Locations/GetAllLocations";
+  final fieldsUrl = "http://10.0.2.2:8009/api/services/app/Fields/GetAllFields";
 
   final firestoreInstance = FirebaseFirestore.instance;
   CollectionReference toursCollection =
@@ -116,6 +121,36 @@ class UnPlannedTourService {
 
         if (responseBody is List) {
           return responseBody.map((e) => CategoryModel.fromJson(e)).toList();
+        }
+        return Future.error(responseBody);
+    }
+  }
+
+  Future<List<LocationModel>?> getLocations() async {
+    final response = await http.post(Uri.parse(locationUrl),
+        headers: {"Content-Type": "application/json"});
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await json.decode(response.body)["result"];
+        print(responseBody);
+
+        if (responseBody is List) {
+          return responseBody.map((e) => LocationModel.fromJson(e)).toList();
+        }
+        return Future.error(responseBody);
+    }
+  }
+
+  Future<List<FieldModel>?> getFields() async {
+    final response = await http.post(Uri.parse(fieldsUrl),
+        headers: {"Content-Type": "application/json"});
+
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await json.decode(response.body)["result"];
+
+        if (responseBody is List) {
+          return responseBody.map((e) => FieldModel.fromJson(e)).toList();
         }
         return Future.error(responseBody);
     }
