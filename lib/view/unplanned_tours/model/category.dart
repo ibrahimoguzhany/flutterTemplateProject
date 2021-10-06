@@ -33,4 +33,13 @@ class CategoryModel {
     data['status'] = this.status;
     return data;
   }
+
+  bool operator ==(o) =>
+      o is CategoryModel &&
+      o.id == id &&
+      o.name == name &&
+      o.findingType == findingType &&
+      o.findingTypeStr == findingTypeStr &&
+      o.explanation == explanation &&
+      o.status == status;
 }

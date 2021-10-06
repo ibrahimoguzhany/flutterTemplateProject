@@ -15,6 +15,7 @@ dependencies:
   dio: ^4.0.0
   easy_localization: ^3.0.0
   equatable: ^2.0.3
+  fast_immutable_collections: ^7.0.3
   file_picker: ^4.1.1
   firebase_auth: ^3.1.0
   firebase_storage: ^10.0.3

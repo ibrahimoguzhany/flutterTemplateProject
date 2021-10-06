@@ -1,8 +1,8 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/location.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
@@ -11,7 +11,6 @@ import '../../../../core/components/text/auto_locale.text.dart';
 import '../model/tour_accompanies_dd_model.dart';
 import '../model/tour_team_members_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
-import 'package:intl/intl.dart';
 
 class AddUnPlannedTourView extends StatefulWidget {
   const AddUnPlannedTourView({Key? key}) : super(key: key);
@@ -30,7 +29,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   String? observedPositiveFindings;
 
   late UnplannedTourModel tour;
-  List<String> locationList = ['Bursa', 'İzmir', 'Ankara', 'İstanbul'];
+  List<Location> locationList = [Location(0, "Bursa"), Location(1, "Izmir")];
   List<String> fieldList = [
     'Bursa Rafineri',
     'İzmir Rafineri',
@@ -129,17 +128,17 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                   FloatingActionButton.extended(
                     label: Text("Kaydet"),
                     onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-                      if (isValid) {
-                        _formKey.currentState!.save();
-                        // await viewModel.addUnPlannedTour(tour, context);
-                      } else {
-                        final snackBar = SnackBar(
-                          content: Text("Lütfen gerekli alanları doldurunuz."),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
+                      // final isValid = _formKey.currentState!.validate();
+                      // if (isValid) {
+                      //   _formKey.currentState!.save();
+                      //   // await viewModel.addUnPlannedTour(tour, context);
+                      // } else {
+                      //   final snackBar = SnackBar(
+                      //     content: Text("Lütfen gerekli alanları doldurunuz."),
+                      //     backgroundColor: Colors.red,
+                      //   );
+                      //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      // }
                     },
                   )
                 ],
@@ -338,9 +337,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         ),
       );
 
+// XX
   Padding get buildLocationDropDownFormField => Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<String>(
+        child: DropdownButtonFormField<int>(
           validator: (val) {
             if (val == null) {
               return "Bu alan boş bırakılamaz";
@@ -348,22 +348,22 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           },
           hint: Text('Lokasyon Seçiniz'),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          value: location,
+          value: tour.locationId,
           icon: const Icon(
             Icons.arrow_downward,
           ),
           iconSize: 24,
           elevation: 20,
-          onChanged: (String? newValue) {
+          onChanged: (int? newValue) {
             setState(() {
-              tour.locationName = newValue!;
+              tour.locationId = newValue!;
             });
             FocusScope.of(context).requestFocus(new FocusNode());
           },
-          items: locationList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
+          items: locationList.map<DropdownMenuItem<int>>((Location value) {
+            return DropdownMenuItem<int>(
+              value: value.id,
+              child: Text(value.locationName),
             );
           }).toList(),
         ),

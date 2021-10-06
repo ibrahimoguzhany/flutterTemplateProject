@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/view/planned_tours/model/planned_tour_model.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,7 +10,7 @@ import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../../unplanned_tours/model/unplanned_tour_model.dart';
 import '../service/planned_tour_detail_service.dart';
 import '../viewmodel/add_planned_tour_finding_view_model.dart';
 
@@ -28,7 +26,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
   UploadTask? task;
   File? file;
 
-  List<String> findingTypes = ['Emniyetsiz Durum', "Emniyetsiz Davranış"];
+  List<String> findingTypeNames = ['Emniyetsiz Durum', "Emniyetsiz Davranış"];
   List<String> findingCategories = [
     'Kaygan Zemin',
     "Yüksek Sıcaklık",
@@ -53,8 +51,8 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
   Widget build(BuildContext context) {
     final fileName =
         file != null ? basename(file!.path) : 'Seçili dosya bulunmamaktadır.';
-    PlannedTourModel tour =
-        ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
+    // PlannedTourModel tour =
+    //     ModalRoute.of(context)!.settings.arguments as PlannedTourModel;
 
     final _formKey = GlobalKey<FormState>();
 
@@ -305,7 +303,7 @@ class _AddPlannedTourFindingViewState extends State<AddPlannedTourFindingView> {
               finding.findingTypeStr = newValue!;
             });
           },
-          items: findingTypes.map<DropdownMenuItem<String>>((String value) {
+          items: findingTypeNames.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),

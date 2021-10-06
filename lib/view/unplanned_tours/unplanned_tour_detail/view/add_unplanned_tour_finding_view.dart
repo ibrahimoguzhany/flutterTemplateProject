@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
@@ -14,6 +13,8 @@ import '../../../_widgets/button/button_widget.dart';
 import '../../model/category.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
+
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
   final UnplannedTourModel tour;
@@ -27,6 +28,7 @@ class AddUnPlannedTourFindingView extends StatefulWidget {
 
 class _AddUnPlannedTourFindingViewState
     extends State<AddUnPlannedTourFindingView> {
+  late FindingModel finding;
   UploadTask? task;
   File? file;
 
@@ -42,20 +44,10 @@ class _AddUnPlannedTourFindingViewState
   //   "Uykusuz Çalışma"
   // ];
 
-  FindingModel finding = FindingModel(
-    actionsShouldBeTaken: "",
-    actionsTakenRightInTheField: "",
-    categoryIds: <int>[],
-    categoryNames: "Kaygan Zemin",
-    fieldResponsibleExplanation: "",
-    findingType: 0,
-    findingTypeStr: "Emniyetsiz Davranış",
-    id: 0,
-    observations: "",
-  );
   @override
   void initState() {
     super.initState();
+    finding = FindingModel();
 
     // print(findingTypeNames![0]);
 
@@ -81,13 +73,15 @@ class _AddUnPlannedTourFindingViewState
         model.init();
 
         findingTypes = (await model.getCategories());
-        findingTypes!.forEach((element) {
-          findingTypeNames!.add(element.findingTypeStr!);
-          findingCategories!.add(element.name!);
+        print(findingTypes);
+        setState(() {
+          findingTypes!.forEach((element) {
+            findingTypeNames!.add(element.findingTypeStr!);
+            findingTypeNames!.removeDuplicates();
+          });
+          print(findingTypeNames);
+          print(findingCategories);
         });
-        print(findingTypeNames);
-        print(findingCategories);
-        setState(() {});
       },
       onPageBuilder:
           (BuildContext context, AddUnPlannedTourFindingViewModel viewModel) =>
@@ -370,13 +364,20 @@ class _AddUnPlannedTourFindingViewState
           onChanged: (String? newValue) {
             setState(() {
               finding.categoryNames = newValue!;
+              findingTypes!.forEach((element) {
+                if (element.name == newValue) {
+                  findingTypeNames!.add(element.findingTypeStr!);
+                }
+              });
+              // findingTypeNames = <String>[];
+              // finding.findingTypeStr = "";
             });
           },
           items:
-              findingCategories?.map<DropdownMenuItem<String>>((String value) {
+              findingCategories?.map<DropdownMenuItem<String>>((String? value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(value!),
             );
           }).toList(),
         ),
@@ -390,12 +391,13 @@ class _AddUnPlannedTourFindingViewState
               return "Bulgu Türü alanı boş bırakılamaz.";
             }
           },
-          hint: Text('Bulgu Türü'),
+          hint: Text('Bulgu Tipi'),
           value: finding.findingTypeStr,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
           ),
+          isExpanded: true,
           iconSize: 24,
           elevation: 20,
           onChanged: (String? newValue) {
@@ -403,14 +405,11 @@ class _AddUnPlannedTourFindingViewState
               finding.findingTypeStr = newValue!;
             });
           },
-          onSaved: (String? newVal) {
-            finding.findingTypeStr = newVal!;
-          },
           items:
-              findingTypeNames?.map<DropdownMenuItem<String>>((String value) {
+              findingTypeNames?.map<DropdownMenuItem<String>>((String? value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(value!),
             );
           }).toList(),
         ),
