@@ -32,21 +32,6 @@ mixin _$UnPlannedTourListViewModel on _UnPlannedTourListViewModelBase, Store {
     return _$getUnplannedToursAsyncAction.run(() => super.getUnplannedTours());
   }
 
-  final _$_UnPlannedTourListViewModelBaseActionController =
-      ActionController(name: '_UnPlannedTourListViewModelBase');
-
-  @override
-  Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots(
-      BuildContext context) {
-    final _$actionInfo = _$_UnPlannedTourListViewModelBaseActionController
-        .startAction(name: '_UnPlannedTourListViewModelBase.tourSnapshots');
-    try {
-      return super.tourSnapshots(context);
-    } finally {
-      _$_UnPlannedTourListViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''

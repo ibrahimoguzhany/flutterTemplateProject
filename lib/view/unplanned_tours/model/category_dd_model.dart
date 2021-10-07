@@ -1,4 +1,4 @@
-class CategoryModel {
+class CategoryDDModel {
   int? id;
   String? name;
   int? findingType;
@@ -6,7 +6,7 @@ class CategoryModel {
   String? explanation;
   bool? status;
 
-  CategoryModel(
+  CategoryDDModel(
       {this.id,
       this.name,
       this.findingType,
@@ -14,7 +14,7 @@ class CategoryModel {
       this.explanation,
       this.status});
 
-  CategoryModel.fromJson(Map<String, dynamic> json) {
+  CategoryDDModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     findingType = json['findingType'];
@@ -35,7 +35,7 @@ class CategoryModel {
   }
 
   bool operator ==(o) =>
-      o is CategoryModel &&
+      o is CategoryDDModel &&
       o.id == id &&
       o.name == name &&
       o.findingType == findingType &&

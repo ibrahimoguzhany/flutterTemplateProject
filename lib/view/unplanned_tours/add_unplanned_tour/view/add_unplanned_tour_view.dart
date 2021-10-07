@@ -1,17 +1,15 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/field.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/location.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
+import '../../model/field_dd_model.dart';
+import '../../model/location_dd_model.dart';
+import '../../model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../model/tour_accompanies_dd_model.dart';
-import '../model/tour_team_members_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
 
 class AddUnPlannedTourView extends StatefulWidget {
@@ -44,30 +42,29 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   // String? dropdownValue;
   late TextEditingController _datePickerController;
 
-  static List<TourAccompaniesDDModel> _tourAccompaniesList = [
-    TourAccompaniesDDModel(1, "Oğuzhan Yılmaz"),
-    TourAccompaniesDDModel(2, "Ercan Tırman"),
-    TourAccompaniesDDModel(3, "Gülden Kelez"),
-    TourAccompaniesDDModel(4, "Buse Kara"),
-  ];
+  // static List<TourAccompaniesDDModel> _tourAccompaniesList = [
+  //   TourAccompaniesDDModel(1, "Oğuzhan Yılmaz"),
+  //   TourAccompaniesDDModel(2, "Ercan Tırman"),
+  //   TourAccompaniesDDModel(3, "Gülden Kelez"),
+  //   TourAccompaniesDDModel(4, "Buse Kara"),
+  // ];
 
-  static List<TourTeamMembersDDModel> _tourTeamMembers = [
-    TourTeamMembersDDModel(1, "Oğuzhan Yılmaz"),
-    TourTeamMembersDDModel(2, "Ercan Tırman"),
-    TourTeamMembersDDModel(3, "Gülden Kelez"),
-    TourTeamMembersDDModel(4, "Buse Kara"),
-  ];
-  final _itemsTourAccompanies = _tourAccompaniesList
-      .map(
-        (accompany) =>
-            MultiSelectItem<TourAccompaniesDDModel>(accompany, accompany.name),
-      )
-      .toList();
+  // static List<TourTeamMembersDDModel> _tourTeamMembers = [
+  //   TourTeamMembersDDModel(1, "Oğuzhan Yılmaz"),
+  //   TourTeamMembersDDModel(2, "Ercan Tırman"),
+  //   TourTeamMembersDDModel(3, "Gülden Kelez"),
+  //   TourTeamMembersDDModel(4, "Buse Kara"),
+  // ];
+  // var _itemsTourAccompanies;
 
-  final _itemsTourTeamMembers = _tourTeamMembers
-      .map((teamMember) =>
-          MultiSelectItem<TourTeamMembersDDModel>(teamMember, teamMember.name))
-      .toList();
+  // _tourAccompaniesList
+  //     .map(
+  //       (accompany) =>
+  //           MultiSelectItem<TourAccompaniesDDModel>(accompany, accompany.name),
+  //     )
+  //     .toList();
+
+  // var _itemsTourTeamMembers;
 
   @override
   void initState() {
@@ -91,7 +88,16 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       onModelReady: (AddUnPlannedTourViewModel model) async {
         model.setContext(context);
         await model.init();
-        setState(() {});
+        // _itemsTourAccompanies = model.users
+        //     .map((accompany) =>
+        //         MultiSelectItem<UserDDModel>(accompany, accompany.fullName!))
+        //     .toList();
+
+        // _itemsTourTeamMembers = model.users
+        //     .map((teamMember) =>
+        //         MultiSelectItem<UserDDModel>(teamMember, teamMember.fullName!))
+        //     .toList();
+        // setState(() {});
       },
       onPageBuilder:
           (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
@@ -115,11 +121,11 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tura Eşlik Edenler"),
                   SizedBox(height: 5),
-                  buildTourAccompaniesMultiDropdownField,
+                  buildTourAccompaniesMultiDropdownField(viewModel),
                   SizedBox(height: 20),
-                  buildLittleTextWidget("Ekip Üyeleri"),
+                  buildLittleTextWidget("Tur Takım Üyeleri"),
                   SizedBox(height: 5),
-                  buildTourTeamMembersMultiDropdownField,
+                  buildTourTeamMembersMultiDropdownField(viewModel),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Tarihi"),
                   buildTourDatePicker,
@@ -134,17 +140,17 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                   FloatingActionButton.extended(
                     label: Text("Kaydet"),
                     onPressed: () async {
-                      // final isValid = _formKey.currentState!.validate();
-                      // if (isValid) {
-                      //   _formKey.currentState!.save();
-                      //   // await viewModel.addUnPlannedTour(tour, context);
-                      // } else {
-                      //   final snackBar = SnackBar(
-                      //     content: Text("Lütfen gerekli alanları doldurunuz."),
-                      //     backgroundColor: Colors.red,
-                      //   );
-                      //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      // }
+                      final isValid = _formKey.currentState!.validate();
+                      if (isValid) {
+                        _formKey.currentState!.save();
+                        await viewModel.addUnPlannedTour(tour, context);
+                      } else {
+                        final snackBar = SnackBar(
+                          content: Text("Lütfen gerekli alanları doldurunuz."),
+                          backgroundColor: Colors.red,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     },
                   )
                 ],
@@ -211,96 +217,100 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           minValue: 0,
           step: 1,
           onValue: (int value) {
-            FocusScope.of(context).requestFocus(new FocusNode());
-            setState(() {
-              tour.fieldOrganizationOrderScore = value;
-            });
+            tour.fieldOrganizationOrderScore = value;
           },
         ),
       );
 
-  MultiSelectDialogField<TourTeamMembersDDModel>
-      get buildTourTeamMembersMultiDropdownField => MultiSelectDialogField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (val) {
-              if (val == null) {
-                return "Bu alan boş bırakılamaz.";
-              }
-            },
-            items: _itemsTourTeamMembers,
-            title: Text("Tur Takım Üyeleri"),
-            selectedColor: Colors.blue,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              border: Border.all(
-                width: 1,
-              ),
-            ),
-            buttonIcon: Icon(
-              Icons.person_outline_outlined,
-            ),
-            buttonText: Text(
-              "Tur Takım Üyeleri",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.values[4],
-                fontFamily: "Poppins",
-              ),
-            ),
-            onConfirm: (List<TourTeamMembersDDModel?>? results) {
-              List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
-              results!.forEach((item) {
-                result.add(item!.toJson());
-              });
-              setState(() {
-                tour.tourTeamMembers = result.join(",");
-              });
-            },
-          );
+  Widget buildTourTeamMembersMultiDropdownField(
+      AddUnPlannedTourViewModel viewModel) {
+    return Observer(builder: (_) {
+      return MultiSelectDialogField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (val) {
+          if (val == null) {
+            return "Bu alan boş bırakılamaz.";
+          }
+        },
+        items: viewModel.userList,
+        title: Text("Tur Takım Üyeleri"),
+        selectedColor: Colors.blue,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
+          border: Border.all(
+            width: 1,
+          ),
+        ),
+        buttonIcon: Icon(
+          Icons.person_outline_outlined,
+        ),
+        buttonText: Text(
+          "Tur Takım Üyeleri",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.values[4],
+            fontFamily: "Poppins",
+          ),
+        ),
+        onConfirm: (List<UserDDModel?>? results) {
+          List<int>? result = <int>[];
+          results!.forEach((item) {
+            result.add(item!.id!);
+          });
+          tour.tourTeamMembersIds =
+              result; // Tur Takım üyesinin veritabanında TourAccompanıers sütununda ismiyle yazılmasını bu alan sağlıyor.
+        },
+      );
+    });
+  }
 
-  MultiSelectDialogField<TourAccompaniesDDModel>
-      get buildTourAccompaniesMultiDropdownField => MultiSelectDialogField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (val) {
-              if (val == null) {
-                return "Bu alan boş bırakılamaz.";
-              }
-            },
-            items: _itemsTourAccompanies,
-            title: Text("Tura Eşlik Edenler"),
-            selectedColor: Colors.blue,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              border: Border.all(
-                width: 1,
-              ),
-            ),
-            buttonIcon: Icon(
-              Icons.work_outline_outlined,
-            ),
-            buttonText: Text(
-              "Tura Eşlik Edenler",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.values[4],
-              ),
-            ),
-            onConfirm: (List<TourAccompaniesDDModel?>? results) {
-              List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
-              results!.forEach((item) {
-                result.add(item!.toJson());
-              });
-              setState(() {
-                tour.tourAccompaniers = result.join(",");
-              });
-              // print(results);
-              // print(tourAccompanies);
-            },
-          );
+  Widget buildTourAccompaniesMultiDropdownField(
+      AddUnPlannedTourViewModel viewModel) {
+    return Observer(builder: (_) {
+      return MultiSelectDialogField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (val) {
+          if (val == null) {
+            return "Bu alan boş bırakılamaz.";
+          }
+        },
+        items: viewModel.userList,
+        title: Text("Tura Eşlik Edenler"),
+        selectedColor: Colors.blue,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
+          border: Border.all(
+            width: 1,
+          ),
+        ),
+        buttonIcon: Icon(
+          Icons.work_outline_outlined,
+        ),
+        buttonText: Text(
+          "Tura Eşlik Edenler",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.values[4],
+          ),
+        ),
+        onConfirm: (List<UserDDModel?>? results) {
+          List<String> result = <String>[];
+          results!.forEach((item) {
+            result.add(item!.fullName!);
+          });
+          setState(() {
+            tour.tourAccompaniers = result.join(",");
+          });
+          // print(results);
+          // print(tourAccompanies);
+        },
+      );
+    });
+  }
 
   Padding buildFieldDropDownFormField(AddUnPlannedTourViewModel viewModel) {
     return Padding(
@@ -337,7 +347,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             });
           },
           items:
-              viewModel.fields.map<DropdownMenuItem<int>>((FieldModel value) {
+              viewModel.fields.map<DropdownMenuItem<int>>((FieldDDModel value) {
             return DropdownMenuItem<int>(
               value: value.id,
               child: Text(value.fieldName!),
@@ -374,7 +384,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
           items: viewModel.locations
-              .map<DropdownMenuItem<int>>((LocationModel value) {
+              .map<DropdownMenuItem<int>>((LocationDDModel value) {
             return DropdownMenuItem<int>(
               value: value.id,
               child:

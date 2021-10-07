@@ -1,3 +1,5 @@
+import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
+
 class UnplannedTourModel {
   int? fieldOrganizationOrderScore;
   int? id;

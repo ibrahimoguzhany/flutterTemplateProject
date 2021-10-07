@@ -1,10 +1,10 @@
-class LocationModel {
+class LocationDDModel {
   int? id;
   String? locationName;
 
-  LocationModel({required this.id, required this.locationName});
+  LocationDDModel({required this.id, required this.locationName});
 
-  LocationModel.fromJson(Map<String, dynamic> json) {
+  LocationDDModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     locationName = json['name'];
   }

@@ -10,7 +10,7 @@ import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
-import '../../model/category.dart';
+import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
 
@@ -34,7 +34,7 @@ class _AddUnPlannedTourFindingViewState
 
   List<File>? files = <File>[];
 
-  List<CategoryModel>? findingTypes = <CategoryModel>[];
+  List<CategoryDDModel>? findingTypes = <CategoryDDModel>[];
   List<String>? findingTypeNames = <String>[];
   List<String>? findingCategories = <String>[];
   // List<String> findingCategories = [

@@ -1,17 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/field.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/location.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/category.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../core/init/auth/authentication_provider.dart';
-import '../add_unplanned_tour/model/unplanned_tour_model.dart';
+import '../model/category_dd_model.dart';
+import '../model/field_dd_model.dart';
+import '../model/location_dd_model.dart';
+import '../model/unplanned_tour_model.dart';
+import '../model/user_dd_model.dart';
 
 class UnPlannedTourService {
   static UnPlannedTourService? _instance;
@@ -28,52 +25,27 @@ class UnPlannedTourService {
   final locationUrl =
       "http://10.0.2.2:8009/api/services/app/Locations/GetAllLocations";
   final fieldsUrl = "http://10.0.2.2:8009/api/services/app/Fields/GetAllFields";
+  final usersUrl = "http://10.0.2.2:8009/api/services/app/User/GetUsers";
+  final createUnplannedTourUrl =
+      "http://10.0.2.2:8009/api/services/app/Tours/CreateUnplannedTour";
 
-  final firestoreInstance = FirebaseFirestore.instance;
-  CollectionReference toursCollection =
-      FirebaseFirestore.instance.collection('unplannedtours');
-
-  // Future<void> updateTour(UnplannedTourModel tour, BuildContext context) {
-  //   return firestoreInstance
-  //       .collection("users")
-  //       .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-  //           .firebaseAuth
-  //           .currentUser!
-  //           .uid)
-  //       .collection("unplannedtours")
-  //       .doc(tour.key)
-  //       .update({
-  //         'field': tour.field,
-  //         'fieldOrganizationScore': tour.fieldOrganizationScore,
-  //         'location': tour.location,
-  //         'observedPositiveFindings': tour.observedPositiveFindings,
-  //         'tourTeamMembers': tour.tourTeamMembers,
-  //         'tourAccompanies': tour.tourAccompanies,
-  //         'tourDate': tour.tourDate,
-  //       })
-  //       .then((value) => print("Tour Edited"))
-  //       .catchError((error) => print("Failed to edit Tour: $error"));
-  // }
-
-  Future<void> addUnPlannedTour(UnPlannedTourModel tour, BuildContext context) {
-    return firestoreInstance
-        .collection("users")
-        .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection("unplannedtours")
-        .add({
-          'field': tour.field,
-          'fieldOrganizationScore': tour.fieldOrganizationScore,
-          'location': tour.location,
-          'observedPositiveFindings': tour.observedPositiveFindings,
-          'tourTeamMembers': tour.tourTeamMembers,
-          'tourAccompanies': tour.tourAccompanies,
-          'tourDate': tour.tourDate,
-        })
-        .then((value) => print("Tour Added"))
-        .catchError((error) => print("Failed to add Tour: $error"));
+  Future<bool> addUnPlannedTour(
+      UnplannedTourModel tour, BuildContext context) async {
+    final response = await http.post(Uri.parse(createUnplannedTourUrl),
+        headers: {"Content-Type": "application/json"}, body: json.encode(tour));
+    print(response.body);
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await json.decode(response.body)["result"];
+        // print(responseBody);
+        if (responseBody != null) {
+          return true;
+        } else {
+          return responseBody;
+        }
+      default:
+        return false;
+    }
   }
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
@@ -112,7 +84,7 @@ class UnPlannedTourService {
     }
   }
 
-  Future<List<CategoryModel>?> getCategories() async {
+  Future<List<CategoryDDModel>?> getCategories() async {
     final response = await http.post(Uri.parse(categoryUrl),
         headers: {"Content-Type": "application/json"});
     switch (response.statusCode) {
@@ -120,28 +92,28 @@ class UnPlannedTourService {
         final responseBody = await json.decode(response.body)["result"];
 
         if (responseBody is List) {
-          return responseBody.map((e) => CategoryModel.fromJson(e)).toList();
+          return responseBody.map((e) => CategoryDDModel.fromJson(e)).toList();
         }
         return Future.error(responseBody);
     }
   }
 
-  Future<List<LocationModel>?> getLocations() async {
+  Future<List<LocationDDModel>?> getLocations() async {
     final response = await http.post(Uri.parse(locationUrl),
         headers: {"Content-Type": "application/json"});
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await json.decode(response.body)["result"];
-        print(responseBody);
+        // print(responseBody);
 
         if (responseBody is List) {
-          return responseBody.map((e) => LocationModel.fromJson(e)).toList();
+          return responseBody.map((e) => LocationDDModel.fromJson(e)).toList();
         }
         return Future.error(responseBody);
     }
   }
 
-  Future<List<FieldModel>?> getFields() async {
+  Future<List<FieldDDModel>?> getFields() async {
     final response = await http.post(Uri.parse(fieldsUrl),
         headers: {"Content-Type": "application/json"});
 
@@ -150,7 +122,22 @@ class UnPlannedTourService {
         final responseBody = await json.decode(response.body)["result"];
 
         if (responseBody is List) {
-          return responseBody.map((e) => FieldModel.fromJson(e)).toList();
+          return responseBody.map((e) => FieldDDModel.fromJson(e)).toList();
+        }
+        return Future.error(responseBody);
+    }
+  }
+
+  Future<List<UserDDModel>?> getUsers() async {
+    final response = await http.post(Uri.parse(usersUrl),
+        headers: {"Content-Type": "application/json"});
+
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody =
+            await json.decode(response.body)["result"]["items"];
+        if (responseBody is List) {
+          return responseBody.map((e) => UserDDModel.fromJson(e)).toList();
         }
         return Future.error(responseBody);
     }

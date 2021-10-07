@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:esd_mobil/view/unplanned_tours/model/category.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +48,7 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   }
 
   @action
-  Future<List<CategoryModel>?> getCategories() async {
+  Future<List<CategoryDDModel>?> getCategories() async {
     var tours = await UnPlannedTourService.instance!.getCategories();
 
     return tours;

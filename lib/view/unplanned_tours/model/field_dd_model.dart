@@ -1,10 +1,10 @@
-class FieldModel {
+class FieldDDModel {
   int? id;
   String? fieldName;
 
-  FieldModel({required this.id, required this.fieldName});
+  FieldDDModel({required this.id, required this.fieldName});
 
-  FieldModel.fromJson(Map<String, dynamic> json) {
+  FieldDDModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fieldName = json['name'];
   }

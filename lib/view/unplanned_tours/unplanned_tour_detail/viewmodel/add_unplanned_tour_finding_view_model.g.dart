@@ -34,6 +34,14 @@ mixin _$AddUnPlannedTourFindingViewModel
     return _$pickImageAsyncAction.run(() => super.pickImage(imageSource));
   }
 
+  final _$getCategoriesAsyncAction =
+      AsyncAction('_AddUnPlannedTourFindingViewModelBase.getCategories');
+
+  @override
+  Future<List<CategoryDDModel>?> getCategories() {
+    return _$getCategoriesAsyncAction.run(() => super.getCategories());
+  }
+
   final _$_AddUnPlannedTourFindingViewModelBaseActionController =
       ActionController(name: '_AddUnPlannedTourFindingViewModelBase');
 

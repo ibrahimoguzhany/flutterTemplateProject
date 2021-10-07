@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
@@ -262,7 +263,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
     );
   }
 
-  dynamic buildTourTeamMembersMultiDropdownField(
+  MultiSelectDialogField<dynamic> buildTourTeamMembersMultiDropdownField(
       EditUnPlannedTourViewModel viewModel) {
     return MultiSelectDialogField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -304,7 +305,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           result.add(item!.toJson());
         });
         setState(() {
-          newTour.tourTeamMembers = result.join(",");
+          // newTour.tourTeamMembers = result.join(",");
           viewModel.changeIsTourTeamMembersSelected();
         });
       },

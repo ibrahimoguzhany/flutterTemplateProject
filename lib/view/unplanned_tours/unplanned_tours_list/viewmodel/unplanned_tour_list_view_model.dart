@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../model/unplanned_tour_model.dart';
+import '../../service/unplanned_tour_service.dart';
 
 part 'unplanned_tour_list_view_model.g.dart';
 
@@ -23,33 +19,33 @@ abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
     // print(tours[0].fieldId);
   }
 
-  List<FindingModel> findingList = <FindingModel>[];
+  // List<FindingModel> findingList = <FindingModel>[];
 
-  List<FindingModel> get currentFindingList => findingList;
+  // List<FindingModel> get currentFindingList => findingList;
 
   @observable
   List<UnplannedTourModel> tours = <UnplannedTourModel>[];
 
-  @action
-  Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots(
-      BuildContext context) {
-    Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots =
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-                .firebaseAuth
-                .currentUser!
-                .uid)
-            .collection("unplannedtours")
-            .snapshots();
-    return tourSnapshots;
-  }
+  // @action
+  // Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots(
+  //     BuildContext context) {
+  //   Stream<QuerySnapshot<Map<String, dynamic>>>? tourSnapshots =
+  //       FirebaseFirestore.instance
+  //           .collection("users")
+  //           .doc(Provider.of<AuthenticationProvider>(context, listen: false)
+  //               .firebaseAuth
+  //               .currentUser!
+  //               .uid)
+  //           .collection("unplannedtours")
+  //           .snapshots();
+  //   return tourSnapshots;
+  // }
 
   @action
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     List<UnplannedTourModel>? data =
         await UnPlannedTourService.instance!.getUnplannedTours();
-    print(data);
+    // print(data);
     return data;
   }
 }
