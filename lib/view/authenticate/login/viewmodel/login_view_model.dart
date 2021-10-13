@@ -1,3 +1,9 @@
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
+import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/cache/locale_manager.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -13,12 +19,36 @@ class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 abstract class _LoginViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   void init() {
+    super.init();
     loginService = LoginService(VexanaManager.instance!.networkManager);
     emailController = TextEditingController();
     passwordController = TextEditingController();
     // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
     //   await _onAuthStateChanged(user!);
     // });
+  }
+
+  static final Config config = new Config(
+      tenant: "58d32a83-95a1-4062-8a76-25689bc3e158",
+      clientId: "66d55d0c-2b44-4fcd-9943-5d9c58e420ff",
+      scope: "api://66d55d0c-2b44-4fcd-9943-5d9c58e420ff/Users.Read",
+      redirectUri:
+          "msauth://com.example.esd_aad2/bmngs59kS8VEgFGOdo1BwLTcfHE%3D");
+
+  final AadOAuth oauth = new AadOAuth(config);
+
+  Future<String?> signIn() async {
+    await oauth.login();
+    var accessToken = await oauth.getAccessToken();
+    if (accessToken!.isNotEmpty) {
+      await LocaleManager.instance
+          .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
+      return accessToken;
+    }
+  }
+
+  signOut() async {
+    await oauth.logout();
   }
 
   late TextEditingController emailController;

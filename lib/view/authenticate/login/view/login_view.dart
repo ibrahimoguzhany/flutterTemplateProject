@@ -1,3 +1,5 @@
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
@@ -265,11 +267,24 @@ class LoginView extends StatelessWidget {
         onPressed: viewModel.isLoading
             ? null
             : () async {
-                await context.read<AuthenticationProvider>().signIn(
-                    viewModel.emailController.text.trim(),
-                    viewModel.passwordController.text.trim(),
-                    context);
+                var token = await viewModel.signIn();
+                viewModel.isLoadingChange();
+                if (token != null) {
+                  await NavigationService.instance
+                      .navigateToPage(NavigationConstants.HOME_VIEW);
+                  viewModel.isLoadingChange();
+                }
+                // await context.read<AuthenticationProvider>().signIn(
+                //     viewModel.emailController.text.trim(),
+                //     viewModel.passwordController.text.trim(),
+                //     context);
               },
+        // var token = await viewModel.signIn();
+        // print(token);
+        // if (token != null) {
+        //   await NavigationService.instance
+        //       .navigateToPage(NavigationConstants.HOME_VIEW);
+
         child: Center(
             child: Text(
           "Giriş Yap",

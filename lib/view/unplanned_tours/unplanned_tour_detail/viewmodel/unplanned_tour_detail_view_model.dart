@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
+import '../../model/unplanned_tour_model.dart';
 
 part 'unplanned_tour_detail_view_model.g.dart';
 
@@ -17,28 +16,15 @@ class UnPlannedTourDetailViewModel = _UnPlannedTourDetailViewModelBase
 
 abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
-  Future<void> init() async {}
+  void init() async {}
 
-  // @action
-  // dynamic getFindings(String tourId) {
-  //   FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-  //           .firebaseAuth
-  //           .currentUser!
-  //           .uid)
-  //       .collection("unplannedtours")
-  //       .doc(tourId)
-  //       .collection("findings")
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     List<FindingModel> findingList = <FindingModel>[];
-  //     querySnapshot.docs.forEach((doc) {
-  //       findingList.add(FindingModel.fromDocumentSnapshot(doc));
-  //     });
-  //     return findingList;
-  //   });
-  // }
+  Future<void> navigateToAddUnplannedTourFinding(
+      UnplannedTourModel tour) async {
+    await NavigationService.instance.navigateToPage(
+      NavigationConstants.ADD_UNPLANNED_TOUR_FINDING,
+      data: tour,
+    );
+  }
 
   @observable
   List<FindingModel> findingList = <FindingModel>[];
@@ -60,5 +46,38 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
   @action
   void changeVisibilityFalse() {
     isVisible = false;
+  }
+
+  Future<dynamic> showDialogDeleteTour(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text("Plansız Tur Sil"),
+              content: Text("Plansız Turu silmek istediğinize emin misiniz?"),
+              actions: [
+                TextButton(child: Text("Evet"), onPressed: () async {}),
+                TextButton(
+                    child: Text("Hayır"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ],
+            ));
+  }
+
+  Future<dynamic> navigateToEditUnplannedTour(UnplannedTourModel tour) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditUnPlannedTourView(tour: tour),
+      ),
+    );
+  }
+
+  Future<dynamic> navigateToFindingDetail(
+      BuildContext context, FindingModel finding) {
+    return NavigationService.instance.navigateToPage(
+        NavigationConstants.UNPLANNED_TOUR_FINDING_DETAIL_VIEW,
+        data: finding);
   }
 }

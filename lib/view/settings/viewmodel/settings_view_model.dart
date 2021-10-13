@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
-import 'package:esd_mobil/core/init/cache/locale_manager.dart';
 import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import '../../../core/init/notifier/theme_notifier.dart';
 import '../../../product/model/user_model.dart';
@@ -41,8 +40,11 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
 
   Future<void> logoutApp() async {
     await localeManager.clearAllSaveFirst();
-    await Provider.of<AuthenticationProvider>(context, listen: false)
-        .signOut(context);
+    await NavigationService.instance
+        .navigateToPageClear(NavigationConstants.LOGIN_VIEW);
+
+    // await Provider.of<AuthenticationProvider>(context, listen: false)
+    //     .signOut(context);
   }
 
   void navigateToOnBoard() {

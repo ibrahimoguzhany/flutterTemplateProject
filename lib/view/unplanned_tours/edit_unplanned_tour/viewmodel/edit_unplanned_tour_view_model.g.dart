@@ -9,38 +9,98 @@ part of 'edit_unplanned_tour_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$EditUnPlannedTourViewModel on _EditUnPlannedTourViewModelBase, Store {
-  final _$isTeamMembersSelectedAtom =
-      Atom(name: '_EditUnPlannedTourViewModelBase.isTeamMembersSelected');
+  final _$locationsAtom =
+      Atom(name: '_EditUnPlannedTourViewModelBase.locations');
 
   @override
-  bool get isTeamMembersSelected {
-    _$isTeamMembersSelectedAtom.reportRead();
-    return super.isTeamMembersSelected;
+  List<LocationDDModel> get locations {
+    _$locationsAtom.reportRead();
+    return super.locations;
   }
 
   @override
-  set isTeamMembersSelected(bool value) {
-    _$isTeamMembersSelectedAtom.reportWrite(value, super.isTeamMembersSelected,
-        () {
-      super.isTeamMembersSelected = value;
+  set locations(List<LocationDDModel> value) {
+    _$locationsAtom.reportWrite(value, super.locations, () {
+      super.locations = value;
     });
   }
 
-  final _$isTourAccompaniesSelectedAtom =
-      Atom(name: '_EditUnPlannedTourViewModelBase.isTourAccompaniesSelected');
+  final _$fieldsAtom = Atom(name: '_EditUnPlannedTourViewModelBase.fields');
 
   @override
-  bool get isTourAccompaniesSelected {
-    _$isTourAccompaniesSelectedAtom.reportRead();
-    return super.isTourAccompaniesSelected;
+  List<FieldDDModel> get fields {
+    _$fieldsAtom.reportRead();
+    return super.fields;
   }
 
   @override
-  set isTourAccompaniesSelected(bool value) {
-    _$isTourAccompaniesSelectedAtom
-        .reportWrite(value, super.isTourAccompaniesSelected, () {
-      super.isTourAccompaniesSelected = value;
+  set fields(List<FieldDDModel> value) {
+    _$fieldsAtom.reportWrite(value, super.fields, () {
+      super.fields = value;
     });
+  }
+
+  final _$usersAtom = Atom(name: '_EditUnPlannedTourViewModelBase.users');
+
+  @override
+  List<UserDDModel>? get users {
+    _$usersAtom.reportRead();
+    return super.users;
+  }
+
+  @override
+  set users(List<UserDDModel>? value) {
+    _$usersAtom.reportWrite(value, super.users, () {
+      super.users = value;
+    });
+  }
+
+  final _$userListAtom = Atom(name: '_EditUnPlannedTourViewModelBase.userList');
+
+  @override
+  List<MultiSelectItem<UserDDModel>> get userList {
+    _$userListAtom.reportRead();
+    return super.userList;
+  }
+
+  @override
+  set userList(List<MultiSelectItem<UserDDModel>> value) {
+    _$userListAtom.reportWrite(value, super.userList, () {
+      super.userList = value;
+    });
+  }
+
+  final _$addUnPlannedTourAsyncAction =
+      AsyncAction('_EditUnPlannedTourViewModelBase.addUnPlannedTour');
+
+  @override
+  Future<void> addUnPlannedTour(UnplannedTourModel tour, BuildContext context) {
+    return _$addUnPlannedTourAsyncAction
+        .run(() => super.addUnPlannedTour(tour, context));
+  }
+
+  final _$getLocationsAsyncAction =
+      AsyncAction('_EditUnPlannedTourViewModelBase.getLocations');
+
+  @override
+  Future<List<LocationDDModel>?> getLocations() {
+    return _$getLocationsAsyncAction.run(() => super.getLocations());
+  }
+
+  final _$getFieldsAsyncAction =
+      AsyncAction('_EditUnPlannedTourViewModelBase.getFields');
+
+  @override
+  Future<List<FieldDDModel>?> getFields() {
+    return _$getFieldsAsyncAction.run(() => super.getFields());
+  }
+
+  final _$getUsersAsyncAction =
+      AsyncAction('_EditUnPlannedTourViewModelBase.getUsers');
+
+  @override
+  Future<List<UserDDModel>?> getUsers() {
+    return _$getUsersAsyncAction.run(() => super.getUsers());
   }
 
   final _$updateTourAsyncAction =
@@ -51,40 +111,13 @@ mixin _$EditUnPlannedTourViewModel on _EditUnPlannedTourViewModelBase, Store {
     return _$updateTourAsyncAction.run(() => super.updateTour(tour, context));
   }
 
-  final _$_EditUnPlannedTourViewModelBaseActionController =
-      ActionController(name: '_EditUnPlannedTourViewModelBase');
-
-  @override
-  void changeIsTourAccompaniesSelected() {
-    final _$actionInfo =
-        _$_EditUnPlannedTourViewModelBaseActionController.startAction(
-            name:
-                '_EditUnPlannedTourViewModelBase.changeIsTourAccompaniesSelected');
-    try {
-      return super.changeIsTourAccompaniesSelected();
-    } finally {
-      _$_EditUnPlannedTourViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void changeIsTourTeamMembersSelected() {
-    final _$actionInfo =
-        _$_EditUnPlannedTourViewModelBaseActionController.startAction(
-            name:
-                '_EditUnPlannedTourViewModelBase.changeIsTourTeamMembersSelected');
-    try {
-      return super.changeIsTourTeamMembersSelected();
-    } finally {
-      _$_EditUnPlannedTourViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''
-isTeamMembersSelected: ${isTeamMembersSelected},
-isTourAccompaniesSelected: ${isTourAccompaniesSelected}
+locations: ${locations},
+fields: ${fields},
+users: ${users},
+userList: ${userList}
     ''';
   }
 }

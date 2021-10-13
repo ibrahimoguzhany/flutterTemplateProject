@@ -1,16 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/viewmodel/unplanned_tour_detail_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
-import 'package:esd_mobil/view/_product/_constants/image_path_svg.dart';
 
 import '../../../../core/base/view/base_view.dart';
-import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
-import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import '../../../../core/init/lang/locale_keys.g.dart';
+import '../../../_product/_constants/image_path_svg.dart';
+import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/unplanned_tour_list_view_model.dart';
 
 class UnPlannedTourListView extends StatefulWidget {
@@ -31,30 +27,82 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
           (BuildContext context, UnPlannedTourListViewModel viewModel) =>
               Scaffold(
                   appBar: buildAppBar(context),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.miniEndFloat,
                   floatingActionButton: FloatingActionButton(
-                    onPressed: () async {
-                      await UnPlannedTourService.instance!.getUnplannedTours();
-                      NavigationService.instance.navigateToPage(
-                          NavigationConstants.ADD_UNPLANNED_TOUR_VIEW);
-                    },
+                    onPressed: viewModel.navigateToAddUnplannedTourView,
                     child: Icon(Icons.add),
                   ),
                   body: FutureBuilder(
                     future: viewModel.getUnplannedTours(),
-                    builder: (context, snapshot) {
+                    builder: (context,
+                        AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
                       if (snapshot.hasError)
                         return Text("Error = ${snapshot.error}");
 
                       if (snapshot.hasData) {
                         // print(snapshot.data);
-                        final tours = snapshot.data;
-                        return buildListView(tours);
+                        final List<UnplannedTourModel>? tours = snapshot.data;
+                        return buildListView(tours!, viewModel);
                       }
                       return Center(
                         child: CircularProgressIndicator(),
                       );
                     },
                   )),
+    );
+  }
+
+  Widget buildListView(
+      List<UnplannedTourModel> tours, UnPlannedTourListViewModel viewModel) {
+    if (tours.isEmpty) {
+      return buildNoDataColumn();
+    }
+    return buildListViewSeperated(tours, viewModel);
+  }
+
+  ListView buildListViewSeperated(
+      List<UnplannedTourModel> tours, UnPlannedTourListViewModel viewModel) {
+    return ListView.separated(
+      padding: EdgeInsets.all(8),
+      separatorBuilder: (context, index) => Divider(
+        color: Colors.black26,
+      ),
+      itemCount: tours.length,
+      itemBuilder: (context, index) {
+        return buildListTile(tours[index], viewModel);
+      },
+    );
+  }
+
+  ListTile buildListTile(
+      UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
+    return ListTile(
+      enableFeedback: true,
+      contentPadding: EdgeInsets.all(8.0),
+      onTap: () async =>
+          await viewModel.navigateToUnplannedTourDetailView(tour),
+      selectedTileColor: Colors.black12,
+      hoverColor: Colors.black12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      leading: Text(
+        tour.locationName!,
+        style: TextStyle(fontSize: 16),
+      ),
+      subtitle: Text(
+        tour.id.toString(),
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 14),
+      ),
+      title: Text(
+        tour.fieldName!,
+        style: TextStyle(fontSize: 14),
+      ),
+      trailing: Text(
+        tour.tourDate!,
+        textAlign: TextAlign.right,
+        style: TextStyle(fontSize: 14),
+      ),
     );
   }
 
@@ -66,75 +114,33 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
   }
 
   SvgPicture buildSvgPicture(String path) => SvgPicture.asset(path);
-  Widget buildListView(dynamic docs) {
-    if (docs.isEmpty) {
-      return Column(
-        children: [
-          Expanded(
-              flex: 6,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32.0, left: 32, right: 32),
-                child:
-                    buildSvgPicture(SVGImagePaths.instance!.real_time_sync_SVG),
-              )),
-          Expanded(
-            flex: 2,
-            child: Text(
-              LocaleKeys.unplanned_tours_list_noData.tr(),
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      );
-    }
-    return ListView.separated(
-      padding: EdgeInsets.all(8),
-      separatorBuilder: (context, index) => Divider(
-        color: Colors.black26,
-      ),
-      itemCount: docs.length,
-      itemBuilder: (context, index) {
-        return buildListTile(docs[index], index);
-      },
+
+  Column buildNoDataColumn() {
+    return Column(
+      children: [
+        buildEmptyDataSVG(),
+        buildNoDataText(),
+      ],
     );
   }
 
-  ListTile buildListTile(UnplannedTourModel data, int index) {
-    return ListTile(
-      enableFeedback: true,
-      contentPadding: EdgeInsets.all(8.0),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UnPlannedTourDetailView(
-              tour: data,
-            ),
-          ),
-        );
-      },
-      selectedTileColor: Colors.black12,
-      hoverColor: Colors.black12,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      leading: Text(
-        data.locationName!,
-        style: TextStyle(fontSize: 16),
-      ),
-      subtitle: Text(
-        data.id.toString(),
-        textAlign: TextAlign.left,
-        style: TextStyle(fontSize: 14),
-      ),
-      title: Text(
-        data.fieldName!,
-        style: TextStyle(fontSize: 14),
-      ),
-      trailing: Text(
-        data.tourDate!,
-        textAlign: TextAlign.right,
-        style: TextStyle(fontSize: 14),
+  Expanded buildNoDataText() {
+    return Expanded(
+      flex: 2,
+      child: Text(
+        LocaleKeys.unplanned_tours_list_noData.tr(),
+        style: TextStyle(fontSize: 18),
+        textAlign: TextAlign.center,
       ),
     );
+  }
+
+  Expanded buildEmptyDataSVG() {
+    return Expanded(
+        flex: 6,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32.0, left: 32, right: 32),
+          child: buildSvgPicture(SVGImagePaths.instance!.real_time_sync_SVG),
+        ));
   }
 }

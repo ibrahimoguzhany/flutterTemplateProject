@@ -1,3 +1,4 @@
+import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
 
 class UnplannedTourModel {
@@ -75,6 +76,7 @@ class UnplannedTourModel {
 }
 
 class FindingModel {
+  CategoryDDModel? findingCategory;
   int? findingType;
   String? findingTypeStr;
   List<int>? categoryIds;
@@ -86,7 +88,8 @@ class FindingModel {
   int? id;
 
   FindingModel(
-      {this.findingType,
+      {this.findingCategory,
+      this.findingType,
       this.findingTypeStr,
       this.categoryIds,
       this.categoryNames,

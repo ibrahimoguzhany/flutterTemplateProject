@@ -25,7 +25,6 @@ abstract class _AddUnPlannedTourViewModelBase with Store, BaseViewModel {
         .map((accompany) =>
             MultiSelectItem<UserDDModel>(accompany, accompany.fullName!))
         .toList();
-    // print(userList);
   }
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();

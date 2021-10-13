@@ -1,1 +1,1 @@
-enum PreferencesKeys { TOKEN, IS_FIRST_APP, EMAIL, PASSWORD }
+enum PreferencesKeys { TOKEN, IS_FIRST_APP, EMAIL, PASSWORD, ACCESSTOKEN }

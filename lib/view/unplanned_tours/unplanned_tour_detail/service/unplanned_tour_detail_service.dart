@@ -1,13 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../core/init/auth/authentication_provider.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import 'package:http/http.dart' as http;
 
 class UnPlannedTourDetailService {
   static UnPlannedTourDetailService? _instance;
@@ -17,55 +15,29 @@ class UnPlannedTourDetailService {
   }
 
   UnPlannedTourDetailService._init();
-  final firestoreInstance = FirebaseFirestore.instance;
 
-  // Future<void> addFinding(
-  //     FindingModel finding, BuildContext context, String tourDocumentKey) {
-  //   return firestoreInstance
-  //       .collection("users")
-  //       .doc(Provider.of<AuthenticationProvider>(context, listen: false)
-  //           .firebaseAuth
-  //           .currentUser!
-  //           .uid)
-  //       .collection("unplannedtours")
-  //       .doc(tourDocumentKey)
-  //       .collection("findings")
-  //       .add({
-  //         'actionsMustBeTaken': finding.actionsMustBeTaken,
-  //         'actionsTakenInField': finding.actionsTakenInField,
-  //         'category': finding.category,
-  //         'fieldManagerStatements': finding.fieldManagerStatements,
-  //         'file': finding.file,
-  //         'findingType': finding.findingType,
-  //         'observations': finding.observations,
-  //         'imageUrl': finding.imageUrl,
-  //       })
-  //       .then((value) => print("Finding Added"))
-  //       .catchError((error) => print("Failed to add Finding: $error"));
-  // }
+  var addFindingUrl =
+      "http://10.0.2.2:8009/api/services/app/Tours/CreateFindingForTour";
 
-  dynamic getFindingsSnapshots(BuildContext context, String key) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection('unplannedtours')
-        .doc(key)
-        .collection("findings")
-        .snapshots();
-  }
+  Future<bool> addFinding(
+    FindingModel finding,
+    String tourId,
+  ) async {
+    final response = await http.post(
+      Uri.parse(addFindingUrl + "?tourId=" + tourId),
+      body: json.encode(finding),
+      headers: {
+        "Content-Type": "application/json-patch+json",
+      },
+    );
+    print(response.body);
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        return true;
 
-  dynamic getSelectedTour(BuildContext context, String key) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<AuthenticationProvider>(context)
-            .firebaseAuth
-            .currentUser!
-            .uid)
-        .collection('unplannedtours')
-        .doc(key);
+      default:
+        return false;
+    }
   }
 
   UploadTask? uploadFile(String destination, File file) {

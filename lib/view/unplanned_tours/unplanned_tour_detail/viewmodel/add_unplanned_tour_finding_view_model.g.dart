@@ -10,6 +10,38 @@ part of 'add_unplanned_tour_finding_view_model.dart';
 
 mixin _$AddUnPlannedTourFindingViewModel
     on _AddUnPlannedTourFindingViewModelBase, Store {
+  final _$categoriesAtom =
+      Atom(name: '_AddUnPlannedTourFindingViewModelBase.categories');
+
+  @override
+  List<CategoryDDModel>? get categories {
+    _$categoriesAtom.reportRead();
+    return super.categories;
+  }
+
+  @override
+  set categories(List<CategoryDDModel>? value) {
+    _$categoriesAtom.reportWrite(value, super.categories, () {
+      super.categories = value;
+    });
+  }
+
+  final _$categoryListAtom =
+      Atom(name: '_AddUnPlannedTourFindingViewModelBase.categoryList');
+
+  @override
+  List<MultiSelectItem<CategoryDDModel>> get categoryList {
+    _$categoryListAtom.reportRead();
+    return super.categoryList;
+  }
+
+  @override
+  set categoryList(List<MultiSelectItem<CategoryDDModel>> value) {
+    _$categoryListAtom.reportWrite(value, super.categoryList, () {
+      super.categoryList = value;
+    });
+  }
+
   final _$isUploadedAtom =
       Atom(name: '_AddUnPlannedTourFindingViewModelBase.isUploaded');
 
@@ -24,6 +56,16 @@ mixin _$AddUnPlannedTourFindingViewModel
     _$isUploadedAtom.reportWrite(value, super.isUploaded, () {
       super.isUploaded = value;
     });
+  }
+
+  final _$addFindingAsyncAction =
+      AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
+
+  @override
+  Future<bool> addFinding(
+      FindingModel model, BuildContext context, String tourId) {
+    return _$addFindingAsyncAction
+        .run(() => super.addFinding(model, context, tourId));
   }
 
   final _$pickImageAsyncAction =
@@ -61,6 +103,8 @@ mixin _$AddUnPlannedTourFindingViewModel
   @override
   String toString() {
     return '''
+categories: ${categories},
+categoryList: ${categoryList},
 isUploaded: ${isUploaded}
     ''';
   }

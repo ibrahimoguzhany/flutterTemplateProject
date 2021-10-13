@@ -21,4 +21,5 @@ class NavigationConstants {
   static const SETTINGS_WEB_PROJECT_VIEW = '/settings_web_project_view';
   static const SETTINGS_VIEW = "/settings_view";
   static const ONBOARD = "/on_board";
+  static const UNPLANNED_TOUR_FINDING_DETAIL_VIEW = "/unplanned_tour_finding_detail_view";
 }

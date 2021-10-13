@@ -36,13 +36,9 @@ class UnPlannedTourService {
     print(response.body);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        // final responseBody = await json.decode(response.body)["result"];
         // print(responseBody);
-        if (responseBody != null) {
-          return true;
-        } else {
-          return responseBody;
-        }
+        return true;
       default:
         return false;
     }
@@ -50,7 +46,7 @@ class UnPlannedTourService {
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     final response = await http.post(Uri.parse(toursUrl),
-        headers: {"Content-Type": "application/json"});
+        headers: {"Content-Type": "application/json", "Content-Length": "0"});
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await json.decode(response.body)["result"];

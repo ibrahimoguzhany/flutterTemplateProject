@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
 
@@ -16,15 +19,33 @@ class AddUnPlannedTourFindingViewModel = _AddUnPlannedTourFindingViewModelBase
 
 abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
-  void init() {}
+  Future<void> init() async {
+    categories = (await getCategories())!;
+    categoryList = categories!
+        .map((category) =>
+            MultiSelectItem<CategoryDDModel>(category, category.name!))
+        .toList();
+    print(categories);
+    print(categoryList);
+  }
+
+  @observable
+  List<CategoryDDModel>? categories = <CategoryDDModel>[];
+
+  @observable
+  List<MultiSelectItem<CategoryDDModel>> categoryList =
+      <MultiSelectItem<CategoryDDModel>>[];
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
-  // @action
-  // Future<void> addFinding(
-  //     FindingModel model, BuildContext context, String key) async {
-  //   await UnPlannedTourDetailService.instance!.addFinding(model, context, key);
-  // }
+  @action
+  Future<bool> addFinding(
+      FindingModel model, BuildContext context, String tourId) async {
+    final res =
+        await UnPlannedTourDetailService.instance!.addFinding(model, tourId);
+    if (!res) return false;
+    return true;
+  }
 
   @action
   Future<File?> pickImage(ImageSource imageSource) async {
@@ -49,8 +70,6 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
 
   @action
   Future<List<CategoryDDModel>?> getCategories() async {
-    var tours = await UnPlannedTourService.instance!.getCategories();
-
-    return tours;
+    return await UnPlannedTourService.instance!.getCategories();
   }
 }

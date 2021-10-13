@@ -1,8 +1,4 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
-import '../../model/field_dd_model.dart';
-import '../../model/location_dd_model.dart';
-import '../../model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
@@ -10,6 +6,10 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
+import '../../model/field_dd_model.dart';
+import '../../model/location_dd_model.dart';
+import '../../model/unplanned_tour_model.dart';
+import '../../model/user_dd_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
 
 class AddUnPlannedTourView extends StatefulWidget {
@@ -29,42 +29,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   String? observedPositiveFindings;
 
   late UnplannedTourModel tour;
-  // List<LocationModel> locationList = [
-  //   LocationModel( ),
-  //   LocationModel(1, "Izmir")
-  // ];
-  // List<String> fieldList = [
-  //   'Bursa Rafineri',
-  //   'İzmir Rafineri',
-  //   'Ankara Rafineri',
-  //   'İstanbul Rafineri'
-  // ];
-  // String? dropdownValue;
   late TextEditingController _datePickerController;
-
-  // static List<TourAccompaniesDDModel> _tourAccompaniesList = [
-  //   TourAccompaniesDDModel(1, "Oğuzhan Yılmaz"),
-  //   TourAccompaniesDDModel(2, "Ercan Tırman"),
-  //   TourAccompaniesDDModel(3, "Gülden Kelez"),
-  //   TourAccompaniesDDModel(4, "Buse Kara"),
-  // ];
-
-  // static List<TourTeamMembersDDModel> _tourTeamMembers = [
-  //   TourTeamMembersDDModel(1, "Oğuzhan Yılmaz"),
-  //   TourTeamMembersDDModel(2, "Ercan Tırman"),
-  //   TourTeamMembersDDModel(3, "Gülden Kelez"),
-  //   TourTeamMembersDDModel(4, "Buse Kara"),
-  // ];
-  // var _itemsTourAccompanies;
-
-  // _tourAccompaniesList
-  //     .map(
-  //       (accompany) =>
-  //           MultiSelectItem<TourAccompaniesDDModel>(accompany, accompany.name),
-  //     )
-  //     .toList();
-
-  // var _itemsTourTeamMembers;
 
   @override
   void initState() {
@@ -73,7 +38,6 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         TextEditingController(text: DateTime.now().toString());
 
     DateTime now = DateTime.now();
-    // String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     tour = UnplannedTourModel();
   }
 
@@ -88,16 +52,6 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       onModelReady: (AddUnPlannedTourViewModel model) async {
         model.setContext(context);
         await model.init();
-        // _itemsTourAccompanies = model.users
-        //     .map((accompany) =>
-        //         MultiSelectItem<UserDDModel>(accompany, accompany.fullName!))
-        //     .toList();
-
-        // _itemsTourTeamMembers = model.users
-        //     .map((teamMember) =>
-        //         MultiSelectItem<UserDDModel>(teamMember, teamMember.fullName!))
-        //     .toList();
-        // setState(() {});
       },
       onPageBuilder:
           (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
@@ -143,6 +97,8 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
                         _formKey.currentState!.save();
+                        tour.isPlanned = false;
+                        tour.fieldOrganizationOrderScore = 0;
                         await viewModel.addUnPlannedTour(tour, context);
                       } else {
                         final snackBar = SnackBar(

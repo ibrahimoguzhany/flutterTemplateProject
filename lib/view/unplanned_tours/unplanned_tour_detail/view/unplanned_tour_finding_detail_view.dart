@@ -5,18 +5,14 @@ import '../../../../core/base/view/base_view.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../viewmodel/finding_detail_view_model.dart';
 
-class FindingDetailView extends StatefulWidget {
-  final FindingModel finding;
-  final int findingNumber;
-  FindingDetailView(
-      {Key? key, required this.finding, required this.findingNumber})
-      : super(key: key);
+class UnplannedTourFindingDetailView extends StatefulWidget {
+  UnplannedTourFindingDetailView({Key? key}) : super(key: key);
 
   @override
   _FindingDetailViewState createState() => _FindingDetailViewState();
 }
 
-class _FindingDetailViewState extends State<FindingDetailView> {
+class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
   List<Widget> addedFileWidgets = <Widget>[];
   @override
   void initState() {
@@ -43,16 +39,8 @@ class _FindingDetailViewState extends State<FindingDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    // final selectedFinding = FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(Provider.of<AuthenticationProvider>(context)
-    //         .firebaseAuth
-    //         .currentUser!
-    //         .uid)
-    //     .collection('unplannedtours')
-    //     .doc(widget.tourKey)
-    //     .collection("findings")
-    //     .doc(widget.finding.key);
+    FindingModel finding =
+        ModalRoute.of(context)!.settings.arguments as FindingModel;
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -99,7 +87,7 @@ class _FindingDetailViewState extends State<FindingDetailView> {
             )
           ],
         ),
-        body: buildExpandedFindingDetails(widget.finding, viewModel),
+        body: buildExpandedFindingDetails(finding, viewModel),
       ),
     );
   }
@@ -117,7 +105,7 @@ class _FindingDetailViewState extends State<FindingDetailView> {
             children: [
               Center(
                 child: Text(
-                  "Bulgu ${widget.findingNumber}",
+                  "Bulgu ${finding.id}",
                   style: TextStyle(fontSize: 18),
                 ),
               ),
@@ -126,6 +114,9 @@ class _FindingDetailViewState extends State<FindingDetailView> {
               ),
               buildLittleTextWidget("Kategori"),
               buildBiggerDataTextWidget(finding.categoryNames),
+              SizedBox(height: 10),
+              buildLittleTextWidget("Bulgu Türü"),
+              buildBiggerDataTextWidget(finding.findingTypeStr),
               SizedBox(height: 10),
               buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
               buildBiggerDataTextWidget(finding.actionsShouldBeTaken != null
@@ -139,11 +130,16 @@ class _FindingDetailViewState extends State<FindingDetailView> {
               buildBiggerDataTextWidget(
                   finding.observations != null ? finding.observations : ""),
               SizedBox(height: 10),
-              buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
-              buildBiggerDataTextWidget(finding.fieldResponsibleExplanation),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Bulgu Türü"),
-              buildBiggerDataTextWidget(finding.findingTypeStr),
+              finding.fieldResponsibleExplanation == null
+                  ? SizedBox()
+                  : buildLittleTextWidget("Saha Yöneticisi Açıklamaları"),
+              finding.fieldResponsibleExplanation == null
+                  ? SizedBox()
+                  : buildBiggerDataTextWidget(
+                      finding.fieldResponsibleExplanation != null
+                          ? finding.fieldResponsibleExplanation
+                          : ""),
+
               SizedBox(height: 10),
               buildLittleTextWidget("Dosya"),
               SizedBox(height: 5),

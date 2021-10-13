@@ -1,11 +1,17 @@
 import 'dart:io';
 
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
@@ -14,12 +20,8 @@ import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
 class AddUnPlannedTourFindingView extends StatefulWidget {
-  final UnplannedTourModel tour;
-  const AddUnPlannedTourFindingView({Key? key, required this.tour})
-      : super(key: key);
+  const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
 
   @override
   _AddUnPlannedTourFindingViewState createState() =>
@@ -37,21 +39,11 @@ class _AddUnPlannedTourFindingViewState
   List<CategoryDDModel>? findingTypes = <CategoryDDModel>[];
   List<String>? findingTypeNames = <String>[];
   List<String>? findingCategories = <String>[];
-  // List<String> findingCategories = [
-  //   'Kaygan Zemin',
-  //   "Yüksek Sıcaklık",
-  //   "Baretsiz Çalışma",
-  //   "Uykusuz Çalışma"
-  // ];
 
   @override
   void initState() {
     super.initState();
     finding = FindingModel();
-
-    // print(findingTypeNames![0]);
-
-    // List<String> findingTypes = UnPlannedTourService.instance!.getCategories();
   }
 
   final _controllerActionMustBeTaken = TextEditingController();
@@ -59,28 +51,29 @@ class _AddUnPlannedTourFindingViewState
   final _controllerFieldManagerStatements = TextEditingController();
   final _controllerObservations = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    // UnplannedTourModel tour =
-    //     ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
-
-    final _formKey = GlobalKey<FormState>();
+    UnplannedTourModel tour =
+        ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
 
     return BaseView<AddUnPlannedTourFindingViewModel>(
       viewModel: AddUnPlannedTourFindingViewModel(),
       onModelReady: (AddUnPlannedTourFindingViewModel model) async {
         model.setContext(context);
-        model.init();
+        await model.init();
 
         findingTypes = (await model.getCategories());
-        print(findingTypes);
+        // print(findingTypes);
         setState(() {
           findingTypes!.forEach((element) {
             findingTypeNames!.add(element.findingTypeStr!);
             findingTypeNames!.removeDuplicates();
+            findingCategories!.add(element.name!);
           });
-          print(findingTypeNames);
-          print(findingCategories);
+          // print(findingTypeNames);
+          // print(findingCategories);
         });
       },
       onPageBuilder:
@@ -94,60 +87,80 @@ class _AddUnPlannedTourFindingViewState
         ),
         body: Form(
           key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.all(24),
-            children: [
-              buildLittleTextWidget("Bulgu Türü"),
-              SizedBox(height: 5),
-              buildFindingTypeDropdown,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Kategori"),
-              SizedBox(height: 5),
-              buildFindingCategoryDropdown,
-              SizedBox(height: 10),
-              buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
-              SizedBox(height: 5),
-              buildActionsMustBeTaken,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Sahada Alınması Gereken Aksiyonlar"),
-              SizedBox(height: 5),
-              buildActionTakenInField,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Gözlemler"),
-              SizedBox(height: 5),
-              buildObservations,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
-              SizedBox(height: 5),
-              buildFieldManagerStatements,
-              SizedBox(height: 20),
-              buildLittleTextWidget("Dosya"),
-              Container(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 0),
-                decoration: buildFileBoxDecoration(),
-                margin: EdgeInsets.all(10),
-                child: buildButtonWidgets(viewModel, context),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildLittleTextWidget("Bulgu Türü"),
+                  SizedBox(height: 5),
+                  buildFindingTypeDropdown,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Kategori"),
+                  SizedBox(height: 5),
+                  buildFindingCategoryMultiSelectDropdown(viewModel),
+                  SizedBox(height: 10),
+                  buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
+                  SizedBox(height: 5),
+                  buildActionsMustBeTaken,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Sahada Alınması Gereken Aksiyonlar"),
+                  SizedBox(height: 5),
+                  buildActionTakenInField,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Gözlemler"),
+                  SizedBox(height: 5),
+                  buildObservations,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
+                  SizedBox(height: 5),
+                  buildFieldManagerStatements,
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Dosya"),
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 20, right: 20, left: 20, bottom: 0),
+                    decoration: buildFileBoxDecoration(),
+                    margin: EdgeInsets.all(10),
+                    child: buildButtonWidgets(viewModel, context),
+                  ),
+                  FloatingActionButton.extended(
+                    onPressed: () async {
+                      final isValid = _formKey.currentState!.validate();
+                      if (isValid) {
+                        finding.id = 0;
+                        tour.findings!.add(finding);
+                        _formKey.currentState!.save();
+                        final isSuccess = await viewModel.addFinding(
+                            finding, context, tour.id.toString());
+                        if (isSuccess) {
+                          await NavigationService.instance.navigateToPageClear(
+                              NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
+                              data: tour);
+                          final snackBar = SnackBar(
+                            content: Text("Bulgu başarıyla eklendi."),
+                            backgroundColor: Colors.green,
+                          );
+
+                          setState(() {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          });
+                        } else {
+                          final snackBar = SnackBar(
+                            content: Text("Hata!!!"),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      }
+                    },
+                    label: Text("Kaydet"),
+                  ),
+                ],
               ),
-              FloatingActionButton.extended(
-                onPressed: () async {
-                  final isValid = _formKey.currentState!.validate();
-                  if (isValid) {
-                    widget.tour.findings!.add(
-                        finding); //TODO : Secilen bir tura bulgu girilebilmesi icin apide metot lazim.
-                    // _formKey.currentState!.save();
-                    // await viewModel.addFinding(finding, context, tour.key!);
-                    // Navigator.pop(context);
-                    // final snackBar = SnackBar(
-                    //   content: Text("Bulgu başarıyla eklendi."),
-                    //   backgroundColor: Colors.green,
-                    // );
-                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-                label: Text("Kaydet"),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -343,56 +356,63 @@ class _AddUnPlannedTourFindingViewState
           }
         },
       );
-
-  Padding get buildFindingCategoryDropdown => Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<String>(
-          validator: (val) {
-            if (val!.isEmpty) {
-              return "Kategori alanı boş bırakılamaz.";
-            }
-          },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          hint: Text('Kategori'),
-          value: finding.categoryNames,
-          icon: const Icon(
-            Icons.arrow_downward,
-            color: Colors.black38,
+  Widget buildFindingCategoryMultiSelectDropdown(
+      AddUnPlannedTourFindingViewModel viewModel) {
+    return Observer(builder: (_) {
+      return MultiSelectDialogField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (val) {
+          if (val == null) {
+            return "Bu alan boş bırakılamaz.";
+          }
+        },
+        items: viewModel.categoryList,
+        title: Text("Kategori"),
+        selectedColor: Colors.blue,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
           ),
-          iconSize: 24,
-          elevation: 20,
-          onChanged: (String? newValue) {
-            setState(() {
-              finding.categoryNames = newValue!;
-              findingTypes!.forEach((element) {
-                if (element.name == newValue) {
-                  findingTypeNames!.add(element.findingTypeStr!);
-                }
-              });
-              // findingTypeNames = <String>[];
-              // finding.findingTypeStr = "";
-            });
-          },
-          items:
-              findingCategories?.map<DropdownMenuItem<String>>((String? value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value!),
-            );
-          }).toList(),
+          border: Border.all(
+            width: 1,
+          ),
         ),
+        buttonIcon: Icon(
+          Icons.connect_without_contact_outlined,
+        ),
+        buttonText: Text(
+          "Kategori",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.values[4],
+          ),
+        ),
+        onConfirm: (List<CategoryDDModel?>? results) {
+          List<int> resultIds = <int>[];
+          List<String> resultNames = <String>[];
+          results!.forEach((item) {
+            resultIds.add(item!.id!);
+            resultNames.add(item.name!);
+          });
+          setState(() {
+            finding.categoryIds = resultIds;
+            finding.categoryNames = resultNames.join(";");
+          });
+        },
       );
+    });
+  }
 
   Padding get buildFindingTypeDropdown => Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<String>(
+        child: DropdownButtonFormField<CategoryDDModel>(
           validator: (val) {
-            if (val!.isEmpty) {
+            if (val == null) {
               return "Bulgu Türü alanı boş bırakılamaz.";
             }
           },
           hint: Text('Bulgu Tipi'),
-          value: finding.findingTypeStr,
+          value: finding.findingCategory,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black38,
@@ -400,16 +420,18 @@ class _AddUnPlannedTourFindingViewState
           isExpanded: true,
           iconSize: 24,
           elevation: 20,
-          onChanged: (String? newValue) {
+          onChanged: (CategoryDDModel? newCategoryModel) {
             setState(() {
-              finding.findingTypeStr = newValue!;
+              finding.findingType = newCategoryModel!.id;
+              finding.findingCategory = newCategoryModel;
+              print(finding.findingType);
             });
           },
-          items:
-              findingTypeNames?.map<DropdownMenuItem<String>>((String? value) {
-            return DropdownMenuItem<String>(
+          items: findingTypes?.map<DropdownMenuItem<CategoryDDModel>>(
+              (CategoryDDModel? value) {
+            return DropdownMenuItem<CategoryDDModel>(
               value: value,
-              child: Text(value!),
+              child: Text(value!.findingTypeStr!),
             );
           }).toList(),
         ),

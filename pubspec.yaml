@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  aad_oauth: ^0.3.0
   auto_size_text: ^2.1.0
   build_runner: ^2.1.1
   cloud_firestore: ^2.5.1

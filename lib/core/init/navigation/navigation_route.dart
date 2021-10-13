@@ -1,10 +1,10 @@
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_finding_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:esd_mobil/view/authenticate/onboard/view/on_board_view.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view2.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';
+import '../../../view/authenticate/onboard/view/on_board_view.dart';
 import '../../../view/authenticate/test/view/test_view.dart';
 import '../../../view/home/home_esd/view/home_view.dart';
 import '../../../view/planned_tours/planned_tour_detail/view/add_planned_tour_finding_view.dart';
@@ -65,14 +65,18 @@ class NavigationRoute {
       // case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
       //   return normalNavigate(AddUnPlannedTourView2());
 
-      // case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
-      //   return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);
+      case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
+        return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);
 
       case NavigationConstants.UNPLANNED_TOUR_LIST_VIEW:
         return normalNavigate(UnPlannedTourListView());
 
       case NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW:
         return navigateWithData(UnPlannedTourDetailView(), args.arguments);
+
+      case NavigationConstants.UNPLANNED_TOUR_FINDING_DETAIL_VIEW:
+        return navigateWithData(
+            UnplannedTourFindingDetailView(), args.arguments);
 
       case NavigationConstants.SETTINGS_WEB_VIEW:
         final model = args.arguments as SettingsDynamicModel;

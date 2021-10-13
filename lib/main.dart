@@ -6,6 +6,7 @@ import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/app/app_contansts.dart';
+import 'core/constants/enums/preferences_keys_enum.dart';
 import 'core/init/cache/locale_manager.dart';
 import 'core/init/lang/language_manager.dart';
 import 'core/init/navigation/navigation_route.dart';
@@ -56,13 +57,27 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Authenticate extends StatelessWidget {
+class Authenticate extends StatefulWidget {
+  @override
+  _AuthenticateState createState() => _AuthenticateState();
+}
+
+class _AuthenticateState extends State<Authenticate> {
+  late final String? token;
+  @override
+  void initState() {
+    super.initState();
+    token = LocaleManager.instance.getStringValue(PreferencesKeys.ACCESSTOKEN);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User>();
-
-    if (firebaseUser != null) {
-      return HomeView();
+    if (token != null) {
+      if (token!.isNotEmpty) {
+        return HomeView();
+      } else {
+        return LoginView();
+      }
     }
     return LoginView();
   }
