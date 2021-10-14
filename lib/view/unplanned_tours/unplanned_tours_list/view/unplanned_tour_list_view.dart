@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/viewmodel/unplanned_tour_detail_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -77,6 +76,9 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
 
   ListTile buildListTile(
       UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
+    var formattedTourDate =
+        DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
+    // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(tour);
     return ListTile(
       enableFeedback: true,
       contentPadding: EdgeInsets.all(8.0),
@@ -99,7 +101,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
         style: TextStyle(fontSize: 14),
       ),
       trailing: Text(
-        tour.tourDate!,
+        formattedTourDate,
         textAlign: TextAlign.right,
         style: TextStyle(fontSize: 14),
       ),

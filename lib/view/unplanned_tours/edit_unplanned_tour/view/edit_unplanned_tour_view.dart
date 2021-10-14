@@ -1,9 +1,11 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/viewmodel/edit_unplanned_tour_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -11,43 +13,41 @@ import '../../model/field_dd_model.dart';
 import '../../model/location_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../../model/user_dd_model.dart';
+import 'package:intl/intl.dart';
 
 class EditUnPlannedTourView extends StatefulWidget {
-  final UnplannedTourModel tour;
-  const EditUnPlannedTourView({Key? key, required this.tour}) : super(key: key);
+  // final UnplannedTourModel tour;
+  const EditUnPlannedTourView({Key? key}) : super(key: key);
 
   @override
   _EditUnPlannedTourViewState createState() => _EditUnPlannedTourViewState();
 }
 
 class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
-  String? location;
-  String? field;
-  List<Map<String, dynamic>> tourTeamMembers = [];
-  List<Map<String, dynamic>> tourAccompanies = [];
-  String? tourDate;
-  String? fieldOrganizationScore;
-  String? observedPositiveFindings;
-
-  late UnplannedTourModel tour;
+  var _controllerPositiveFindings = TextEditingController();
+  var _controllerTourAccompaniers = TextEditingController();
   late TextEditingController _datePickerController;
+  int _currentOrgScoreValue = 0;
 
   @override
   void initState() {
     super.initState();
     _datePickerController =
         TextEditingController(text: DateTime.now().toString());
-
-    DateTime now = DateTime.now();
-    tour = UnplannedTourModel();
   }
-
-  var _controllerPositiveFindings = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    UnplannedTourModel tour =
+        ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
+    _controllerPositiveFindings.text =
+        tour.observatedSecureCasesPositiveFindings!;
+    _controllerTourAccompaniers.text = tour.tourAccompaniers!;
+
+    print(tour.tourTeamMemberUsers);
+
     return BaseView<EditUnPlannedTourViewModel>(
       viewModel: EditUnPlannedTourViewModel(),
       onModelReady: (EditUnPlannedTourViewModel model) async {
@@ -58,7 +58,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
-          title: Text("Plansız Tur Ekleme Sayfası"),
+          title: Text("Plansız Tur Güncelle"),
         ),
         body: Form(
           key: _formKey,
@@ -69,28 +69,28 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildLittleTextWidget("Lokasyon"),
-                  buildLocationDropDownFormField(viewModel),
+                  buildLocationDropDownFormField(viewModel, tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha"),
-                  buildFieldDropDownFormField(viewModel),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tura Eşlik Edenler"),
-                  SizedBox(height: 5),
-                  buildTourAccompaniesMultiDropdownField(viewModel),
+                  buildFieldDropDownFormField(viewModel, tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Takım Üyeleri"),
                   SizedBox(height: 5),
-                  buildTourTeamMembersMultiDropdownField(viewModel),
+                  buildTourTeamMembersMultiDropdownField(viewModel, tour),
+                  SizedBox(height: 20),
+                  buildLittleTextWidget("Tura Eşlik Edenler"),
+                  SizedBox(height: 5),
+                  buildTourAccompaniesTextField(tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Tarihi"),
-                  buildTourDatePicker,
+                  buildTourDatePicker(tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha Tertip Skoru"),
-                  buildFieldOrganizationScoreField,
+                  buildFieldOrganizationScoreField(tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
                   SizedBox(height: 5),
-                  buildPositiveFindingTextFormField,
+                  buildPositiveFindingTextFormField(tour),
                   SizedBox(height: 20),
                   FloatingActionButton.extended(
                     label: Text("Kaydet"),
@@ -99,8 +99,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                       if (isValid) {
                         _formKey.currentState!.save();
                         tour.isPlanned = false;
-                        tour.fieldOrganizationOrderScore = 0;
-                        // await viewModel.addUnPlannedTour(tour, context);
+                        await viewModel.updateUnplannedTour(tour);
                       } else {
                         final snackBar = SnackBar(
                           content: Text("Lütfen gerekli alanları doldurunuz."),
@@ -119,68 +118,86 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
     );
   }
 
-  DateTimePicker get buildTourDatePicker => DateTimePicker(
-        validator: (val) {
-          if (val == null) {
-            return "Tur Tarihi Boş Bırakılamaz.";
-          }
-        },
-        type: DateTimePickerType.date,
-        dateMask: 'dd/MM/yyyy',
-        controller: _datePickerController,
-        firstDate: DateTime(2000),
-        calendarTitle: "Tur Tarihi",
-        lastDate: DateTime(2100),
-        icon: Icon(Icons.event),
-        dateLabelText: 'Tur Tarihi',
-        onChanged: (val) {
-          setState(() {
-            tour.tourDate = _datePickerController.text;
-          });
-        },
-      );
+  DateTimePicker buildTourDatePicker(UnplannedTourModel tour) {
+    // String formattedDate =
+    //     DateFormat('yyyy-MM-dd – kk:mm').format(tour.tourDate!);
+    // var initialDate = DateTime.parse(formattedDate);
+    return DateTimePicker(
+      validator: (val) {
+        if (val == null) {
+          return "Tur Tarihi Boş Bırakılamaz.";
+        }
+      },
+      type: DateTimePickerType.date,
+      // dateMask: 'dd/MM/yyyy',
+      controller: _datePickerController,
+      initialDate: tour.tourDate,
+      firstDate: DateTime(2000),
+      calendarTitle: "Tur Tarihi",
+      lastDate: DateTime(2100),
+      icon: Icon(Icons.event),
+      dateLabelText: 'Tur Tarihi',
+      onChanged: (val) {
+        setState(() {
+          tour.tourDate = DateTime.parse(_datePickerController.text);
+        });
+      },
+    );
+  }
 
-  TextFormField get buildPositiveFindingTextFormField => TextFormField(
-        focusNode: FocusNode(canRequestFocus: false),
-        controller: _controllerPositiveFindings,
-        keyboardType: TextInputType.multiline,
-        maxLines: 5,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          // fillColor: Colors.white,
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(width: 1.0),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(width: 1.0),
-            borderRadius: BorderRadius.circular(5),
-          ),
+  TextFormField buildPositiveFindingTextFormField(UnplannedTourModel tour) {
+    return TextFormField(
+      focusNode: FocusNode(canRequestFocus: false),
+      controller: _controllerPositiveFindings,
+      keyboardType: TextInputType.multiline,
+      maxLines: 5,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        // fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
         ),
-        onSaved: (val) {
-          tour.observatedSecureCasesPositiveFindings =
-              _controllerPositiveFindings.text;
-        },
-        onChanged: (val) {
-          tour.observatedSecureCasesPositiveFindings =
-              _controllerPositiveFindings.text;
-        },
-      );
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+      onSaved: (val) {
+        tour.observatedSecureCasesPositiveFindings =
+            _controllerPositiveFindings.text;
+      },
+      onChanged: (val) {
+        tour.observatedSecureCasesPositiveFindings =
+            _controllerPositiveFindings.text;
+      },
+    );
+  }
 
-  Center get buildFieldOrganizationScoreField => Center(
-        child: CustomNumberPicker(
-          initialValue: 0,
-          maxValue: 100,
+  Center buildFieldOrganizationScoreField(UnplannedTourModel tour) {
+    if (tour.fieldOrganizationOrderScore == null)
+      tour.fieldOrganizationOrderScore = 0;
+    return Center(
+      child: NumberPicker(
+          value: tour.fieldOrganizationOrderScore!,
+          axis: Axis.horizontal,
+          itemWidth: 50,
+          itemHeight: 40,
           minValue: 0,
+          maxValue: 10,
           step: 1,
-          onValue: (int value) {
-            tour.fieldOrganizationOrderScore = value;
-          },
-        ),
-      );
+          haptics: true,
+          onChanged: (value) {
+            setState(() {
+              _currentOrgScoreValue = value;
+            });
+            tour.fieldOrganizationOrderScore = _currentOrgScoreValue;
+          }),
+    );
+  }
 
   Widget buildTourTeamMembersMultiDropdownField(
-      EditUnPlannedTourViewModel viewModel) {
+      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
     return Observer(builder: (_) {
       return MultiSelectDialogField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -189,9 +206,12 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             return "Bu alan boş bırakılamaz.";
           }
         },
+        initialValue: tour.tourTeamMemberUsers,
         items: viewModel.userList,
         title: Text("Tur Takım Üyeleri"),
         selectedColor: Colors.blue,
+        searchable: true,
+        searchHint: "Kullanıcı ara...",
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -217,59 +237,41 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             result.add(item!.id!);
           });
           tour.tourTeamMembersIds =
-              result; // Tur Takım üyesinin veritabanında TourAccompanıers sütununda ismiyle yazılmasını bu alan sağlıyor.
+              result; // Tur Takım üyesinin veritabanında TourAccompaniers sütununda ismiyle yazılmasını bu alan sağlıyor.
         },
       );
     });
   }
 
-  Widget buildTourAccompaniesMultiDropdownField(
-      EditUnPlannedTourViewModel viewModel) {
-    return Observer(builder: (_) {
-      return MultiSelectDialogField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (val) {
-          if (val == null) {
-            return "Bu alan boş bırakılamaz.";
-          }
-        },
-        items: viewModel.userList,
-        title: Text("Tura Eşlik Edenler"),
-        selectedColor: Colors.blue,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          ),
-          border: Border.all(
-            width: 1,
-          ),
+  TextFormField buildTourAccompaniesTextField(UnplannedTourModel tour) {
+    return TextFormField(
+      focusNode: FocusNode(canRequestFocus: false),
+      controller: _controllerTourAccompaniers,
+      keyboardType: TextInputType.multiline,
+      maxLines: 2,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        // fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
         ),
-        buttonIcon: Icon(
-          Icons.work_outline_outlined,
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
         ),
-        buttonText: Text(
-          "Tura Eşlik Edenler",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.values[4],
-          ),
-        ),
-        onConfirm: (List<UserDDModel?>? results) {
-          List<String> result = <String>[];
-          results!.forEach((item) {
-            result.add(item!.fullName!);
-          });
-          setState(() {
-            tour.tourAccompaniers = result.join(",");
-          });
-          // print(results);
-          // print(tourAccompanies);
-        },
-      );
-    });
+      ),
+      onSaved: (val) {
+        tour.tourAccompaniers = _controllerTourAccompaniers.text;
+      },
+      onChanged: (val) {
+        tour.tourAccompaniers = _controllerTourAccompaniers.text;
+      },
+    );
   }
 
-  Padding buildFieldDropDownFormField(EditUnPlannedTourViewModel viewModel) {
+  Padding buildFieldDropDownFormField(
+      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Observer(builder: (_) {
@@ -316,7 +318,8 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
   }
 
 // XX
-  Padding buildLocationDropDownFormField(EditUnPlannedTourViewModel viewModel) {
+  Padding buildLocationDropDownFormField(
+      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Observer(builder: (_) {

@@ -41,6 +41,8 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
   Widget build(BuildContext context) {
     FindingModel finding =
         ModalRoute.of(context)!.settings.arguments as FindingModel;
+    print(finding);
+    print(finding.findingTypeStr);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -53,36 +55,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
           title: Text("Bulgu Detayı"),
           actions: [
             IconButton(
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text("Bulgu Sil"),
-                    content: Text("Bulguyu silmek istediğinize emin misiniz?"),
-                    actions: [
-                      TextButton(
-                          child: Text("Evet"),
-                          onPressed: () async {
-                            // await selectedFinding.delete();
-                            // Navigator.pop(context);
-                            // Navigator.pop(context);
-                            // final snackBar = SnackBar(
-                            //   content: Text(
-                            //       "Bulgu ${widget.findingNumber} Başarıyla Silindi."),
-                            //   backgroundColor: Colors.blueGrey.shade700,
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
-                          }),
-                      TextButton(
-                          child: Text("Hayır"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                );
-              },
+              onPressed: viewModel.showDeleteDialog,
               icon: Icon(Icons.delete_forever_rounded),
             )
           ],
@@ -105,8 +78,11 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
             children: [
               Center(
                 child: Text(
-                  "Bulgu ${finding.id}",
-                  style: TextStyle(fontSize: 18),
+                  "Bulgu: Detayı",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1),
                 ),
               ),
               SizedBox(

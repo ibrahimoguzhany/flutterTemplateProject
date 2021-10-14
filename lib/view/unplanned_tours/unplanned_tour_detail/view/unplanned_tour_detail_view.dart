@@ -1,4 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,6 +26,9 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   Widget build(BuildContext context) {
     UnplannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
+    print(tour.tourTeamMemberUsers);
+    // print(tour.tourAccompaniers);
+
     return BaseView<UnPlannedTourDetailViewModel>(
       viewModel: UnPlannedTourDetailViewModel(),
       onModelReady: (UnPlannedTourDetailViewModel model) {
@@ -50,19 +56,25 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(
-              child: buildHorizontalChips(tour.findings, viewModel),
-            ),
-            Observer(builder: (_) {
-              return Expanded(
-                flex: 12,
-                child: buildExpandedTourDetails(tour),
-              );
-            }),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            final refreshedTour =
+                await UnPlannedTourService.instance!.getTourById(tour.id!);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Expanded(
+                child: buildHorizontalChips(tour.findings, viewModel),
+              ),
+              Observer(builder: (_) {
+                return Expanded(
+                  flex: 12,
+                  child: buildExpandedTourDetails(tour),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -89,12 +101,12 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
-              onTap: () async => await viewModel.navigateToFindingDetail(
-                  context, findings[index]),
+              onTap: () async =>
+                  await viewModel.navigateToFindingDetail(findings[index]),
               child: Chip(
                 labelPadding: EdgeInsets.symmetric(horizontal: 10),
                 label: Text(
-                  "Bulgu $index",
+                  "Bulgu ID: $index",
                   style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.w500,
@@ -138,7 +150,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
                   tour.tourAccompaniers!.isEmpty ? "-" : tour.tourAccompaniers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tur Tarihi"),
-              buildBiggerDataTextWidget(tour.tourDate),
+              buildBiggerDataTextWidget(tour.tourDate.toString()),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Organinasyon Skoru"),
               buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null

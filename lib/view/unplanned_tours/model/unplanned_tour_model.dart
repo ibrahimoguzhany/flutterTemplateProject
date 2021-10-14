@@ -7,7 +7,7 @@ class UnplannedTourModel {
   String? tourAccompaniers;
   String? observatedSecureCasesPositiveFindings;
   bool? isPlanned;
-  String? tourDate;
+  DateTime? tourDate;
   int? fieldId;
   int? locationId;
   String? fieldName;
@@ -15,6 +15,7 @@ class UnplannedTourModel {
   String? tourTeamMembers;
   List<int>? tourTeamMembersIds;
   List<FindingModel>? findings;
+  List<UserDDModel>? tourTeamMemberUsers;
 
   UnplannedTourModel(
       {this.id,
@@ -29,7 +30,8 @@ class UnplannedTourModel {
       this.locationName,
       this.tourTeamMembers,
       this.tourTeamMembersIds,
-      this.findings});
+      this.findings,
+      this.tourTeamMemberUsers});
 
   UnplannedTourModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,7 +40,7 @@ class UnplannedTourModel {
     observatedSecureCasesPositiveFindings =
         json['observatedSecureCases_PositiveFindings'];
     isPlanned = json['isPlanned'];
-    tourDate = json['tourDate'];
+    tourDate = DateTime.parse(json['tourDate']);
     fieldId = json['fieldId'];
     locationId = json['locationId'];
     fieldName = json['fieldName'];
@@ -51,6 +53,13 @@ class UnplannedTourModel {
         findings!.add(new FindingModel.fromJson(v));
       });
     }
+    if (json["tourTeamMemberUsers"] != null) {
+      tourTeamMemberUsers = <UserDDModel>[];
+      json['tourTeamMemberUsers'].forEach((v) {
+        tourTeamMemberUsers!.add(new UserDDModel.fromJson(v));
+      });
+      // print(tourTeamMemberUsers);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -61,7 +70,7 @@ class UnplannedTourModel {
     data['observatedSecureCases_PositiveFindings'] =
         this.observatedSecureCasesPositiveFindings;
     data['isPlanned'] = this.isPlanned;
-    data['tourDate'] = this.tourDate;
+    data['tourDate'] = this.tourDate.toString();
     data['fieldId'] = this.fieldId;
     data['locationId'] = this.locationId;
     data['fieldName'] = this.fieldName;
@@ -70,6 +79,10 @@ class UnplannedTourModel {
     data['tourTeamMembersIds'] = this.tourTeamMembersIds;
     if (this.findings != null) {
       data['findings'] = this.findings!.map((v) => v.toJson()).toList();
+    }
+    if (this.tourTeamMemberUsers != null) {
+      data['tourTeamMemberUsers'] =
+          this.tourTeamMemberUsers!.map((v) => v.toJson()).toList();
     }
     return data;
   }

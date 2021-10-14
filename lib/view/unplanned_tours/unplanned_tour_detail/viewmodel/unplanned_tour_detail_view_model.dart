@@ -66,16 +66,18 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
   }
 
   Future<dynamic> navigateToEditUnplannedTour(UnplannedTourModel tour) {
-    return Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditUnPlannedTourView(tour: tour),
-      ),
-    );
+    return NavigationService.instance
+        .navigateToPage(NavigationConstants.EDIT_PLANNED_TOUR_VIEW, data: tour);
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => EditUnPlannedTourView(tour: tour),
+    //   ),
+    // );
   }
 
-  Future<dynamic> navigateToFindingDetail(
-      BuildContext context, FindingModel finding) {
+  Future<dynamic> navigateToFindingDetail(FindingModel finding) {
     return NavigationService.instance.navigateToPage(
         NavigationConstants.UNPLANNED_TOUR_FINDING_DETAIL_VIEW,
         data: finding);

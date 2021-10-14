@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
 import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -129,23 +131,28 @@ class _AddUnPlannedTourFindingViewState
                     onPressed: () async {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
-                        finding.id = 0;
+                        // finding.id = 0;// TODO : CreatorUserId alani authentication eklendikten sonra eklenecek. Session daki user id kullanilabilir.
                         tour.findings!.add(finding);
+                        UnplannedTourModel newTour = tour;
                         _formKey.currentState!.save();
                         final isSuccess = await viewModel.addFinding(
                             finding, context, tour.id.toString());
                         if (isSuccess) {
-                          await NavigationService.instance.navigateToPageClear(
-                              NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
-                              data: tour);
+                          final refreshedTour = await UnPlannedTourService
+                              .instance!
+                              .getTourById(tour.id!);
                           final snackBar = SnackBar(
                             content: Text("Bulgu başarıyla eklendi."),
                             backgroundColor: Colors.green,
                           );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          // await NavigationService.instance.navigateToPageClear(
+                          //     NavigationConstants.UNPLANNED_TOUR_LIST_VIEW);
 
                           setState(() {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            NavigationService.instance.navigateToPageClear(
+                                NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
+                                data: refreshedTour);
                           });
                         } else {
                           final snackBar = SnackBar(
@@ -422,9 +429,9 @@ class _AddUnPlannedTourFindingViewState
           elevation: 20,
           onChanged: (CategoryDDModel? newCategoryModel) {
             setState(() {
-              finding.findingType = newCategoryModel!.id;
+              finding.findingType = newCategoryModel!.findingType;
               finding.findingCategory = newCategoryModel;
-              print(finding.findingType);
+              finding.findingTypeStr = newCategoryModel.findingTypeStr;
             });
           },
           items: findingTypes?.map<DropdownMenuItem<CategoryDDModel>>(
@@ -563,6 +570,20 @@ class _AddUnPlannedTourFindingViewState
       );
 }
 
+Widget buildLittleTextWidget(String? title) {
+  if (title == null) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+  return AutoLocaleText(
+    value: title,
+    style: TextStyle(
+        fontSize: 12,
+        decoration: TextDecoration.underline,
+        fontWeight: FontWeight.w800),
+  );
+}
 // class InputWidgets extends StatefulWidget {
 //   final Text text;
 //   final VoidCallback onDelete;

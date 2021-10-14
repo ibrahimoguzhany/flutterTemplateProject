@@ -1,3 +1,4 @@
+import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
 import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_finding_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -59,17 +60,20 @@ class NavigationRoute {
       case NavigationConstants.PLANNED_TOUR_DETAIL_VIEW:
         return navigateWithData(PlannedTourDetailView(), args.arguments);
 
+      case NavigationConstants.UNPLANNED_TOUR_LIST_VIEW:
+        return normalNavigate(UnPlannedTourListView());
+
       case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW:
         return normalNavigate(AddUnPlannedTourView());
+
+      case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
+        return navigateWithData(EditUnPlannedTourView(), args.arguments);
 
       // case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
       //   return normalNavigate(AddUnPlannedTourView2());
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
         return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);
-
-      case NavigationConstants.UNPLANNED_TOUR_LIST_VIEW:
-        return normalNavigate(UnPlannedTourListView());
 
       case NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW:
         return navigateWithData(UnPlannedTourDetailView(), args.arguments);

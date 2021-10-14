@@ -2,7 +2,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
 import '../../model/planned_tour_model.dart';
 import '../../model/tour_accompanies_dd_model.dart';
@@ -238,18 +237,18 @@ class _EditPlannedTourViewState extends State<EditPlannedTourView> {
 
   Center buildFieldOrganizationScoreField(String? val) {
     return Center(
-      child: CustomNumberPicker(
-        initialValue: int.parse(val ?? "0"),
-        maxValue: 10,
-        minValue: 0,
-        step: 1,
-        onValue: (value) {
-          setState(() {
-            newTour.fieldOrganizationScore = value.toString();
-          });
-        },
-      ),
-    );
+        // child: CustomNumberPicker(
+        //   initialValue: int.parse(val ?? "0"),
+        //   maxValue: 10,
+        //   minValue: 0,
+        //   step: 1,
+        //   onValue: (value) {
+        //     setState(() {
+        //       newTour.fieldOrganizationScore = value.toString();
+        //     });
+        //   },
+        // ),
+        );
   }
 
   dynamic buildTourTeamMembersMultiDropdownField(

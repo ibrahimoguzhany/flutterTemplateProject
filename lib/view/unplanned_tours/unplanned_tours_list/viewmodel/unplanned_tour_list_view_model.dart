@@ -25,7 +25,6 @@ abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     List<UnplannedTourModel>? data =
         await UnPlannedTourService.instance!.getUnplannedTours();
-    print(data);
     return data;
   }
 

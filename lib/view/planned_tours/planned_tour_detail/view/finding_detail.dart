@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
@@ -20,17 +18,6 @@ class FindingDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(finding.imageUrl);
-    // final selectedFinding = FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(Provider.of<AuthenticationProvider>(context)
-    //         .firebaseAuth
-    //         .currentUser!
-    //         .uid)
-    //     .collection('plannedtours')
-    //     .doc(tourKey)
-    //     .collection("findings")
-    //     .doc(finding.key);
     return BaseView<FindingDetailViewModel>(
       viewModel: FindingDetailViewModel(),
       onModelReady: (FindingDetailViewModel model) {
@@ -43,36 +30,7 @@ class FindingDetailView extends StatelessWidget {
           title: Text("Bulgu Detayı"),
           actions: [
             IconButton(
-              onPressed: () async {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text("Bulgu Sil"),
-                    content: Text("Bulguyu silmek istediğinize emin misiniz?"),
-                    actions: [
-                      TextButton(
-                          child: Text("Evet"),
-                          onPressed: () async {
-                            // await selectedFinding.delete();
-                            // Navigator.pop(context);
-                            // Navigator.pop(context);
-                            // final snackBar = SnackBar(
-                            //   content: Text(
-                            //       "Bulgu $findingNumber Başarıyla Silindi."),
-                            //   backgroundColor: Colors.blueGrey.shade700,
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
-                          }),
-                      TextButton(
-                          child: Text("Hayır"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                );
-              },
+              onPressed: viewModel.deleteDialog,
               icon: Icon(Icons.delete_forever_rounded),
             )
           ],
@@ -94,7 +52,7 @@ class FindingDetailView extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Bulgu $findingNumber",
+                  "Bulgu ID: $findingNumber",
                   style: TextStyle(fontSize: 18),
                 ),
               ),

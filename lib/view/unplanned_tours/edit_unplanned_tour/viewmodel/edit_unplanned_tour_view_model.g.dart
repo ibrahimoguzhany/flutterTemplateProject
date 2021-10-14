@@ -70,13 +70,13 @@ mixin _$EditUnPlannedTourViewModel on _EditUnPlannedTourViewModelBase, Store {
     });
   }
 
-  final _$addUnPlannedTourAsyncAction =
-      AsyncAction('_EditUnPlannedTourViewModelBase.addUnPlannedTour');
+  final _$updateUnplannedTourAsyncAction =
+      AsyncAction('_EditUnPlannedTourViewModelBase.updateUnplannedTour');
 
   @override
-  Future<void> addUnPlannedTour(UnplannedTourModel tour, BuildContext context) {
-    return _$addUnPlannedTourAsyncAction
-        .run(() => super.addUnPlannedTour(tour, context));
+  Future<void> updateUnplannedTour(UnplannedTourModel tour) {
+    return _$updateUnplannedTourAsyncAction
+        .run(() => super.updateUnplannedTour(tour));
   }
 
   final _$getLocationsAsyncAction =

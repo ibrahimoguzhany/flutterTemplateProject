@@ -1,8 +1,8 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -20,16 +20,10 @@ class AddUnPlannedTourView extends StatefulWidget {
 }
 
 class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
-  String? location;
-  String? field;
-  List<Map<String, dynamic>> tourTeamMembers = [];
-  List<Map<String, dynamic>> tourAccompanies = [];
-  String? tourDate;
-  String? fieldOrganizationScore;
-  String? observedPositiveFindings;
-
   late UnplannedTourModel tour;
   late TextEditingController _datePickerController;
+  TextEditingController _controllerTourAccompaniers = TextEditingController();
+  int _currentOrgScoreValue = 0;
 
   @override
   void initState() {
@@ -75,7 +69,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tura Eşlik Edenler"),
                   SizedBox(height: 5),
-                  buildTourAccompaniesMultiDropdownField(viewModel),
+                  buildTourAccompaniesTextField(viewModel),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Takım Üyeleri"),
                   SizedBox(height: 5),
@@ -134,7 +128,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         dateLabelText: 'Tur Tarihi',
         onChanged: (val) {
           setState(() {
-            tour.tourDate = _datePickerController.text;
+            tour.tourDate = DateTime.parse(_datePickerController.text);
           });
         },
       );
@@ -167,15 +161,21 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       );
 
   Center get buildFieldOrganizationScoreField => Center(
-        child: CustomNumberPicker(
-          initialValue: 0,
-          maxValue: 100,
-          minValue: 0,
-          step: 1,
-          onValue: (int value) {
-            tour.fieldOrganizationOrderScore = value;
-          },
-        ),
+        child: NumberPicker(
+            value: _currentOrgScoreValue,
+            axis: Axis.horizontal,
+            itemWidth: 50,
+            itemHeight: 40,
+            minValue: 0,
+            maxValue: 10,
+            step: 1,
+            haptics: true,
+            onChanged: (value) {
+              setState(() {
+                _currentOrgScoreValue = value;
+              });
+              tour.fieldOrganizationOrderScore = _currentOrgScoreValue;
+            }),
       );
 
   Widget buildTourTeamMembersMultiDropdownField(
@@ -191,6 +191,8 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         items: viewModel.userList,
         title: Text("Tur Takım Üyeleri"),
         selectedColor: Colors.blue,
+        searchable: true,
+        searchHint: "Kullanıcı ara...",
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -222,51 +224,81 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
     });
   }
 
-  Widget buildTourAccompaniesMultiDropdownField(
+  TextFormField buildTourAccompaniesTextField(
       AddUnPlannedTourViewModel viewModel) {
-    return Observer(builder: (_) {
-      return MultiSelectDialogField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (val) {
-          if (val == null) {
-            return "Bu alan boş bırakılamaz.";
-          }
-        },
-        items: viewModel.userList,
-        title: Text("Tura Eşlik Edenler"),
-        selectedColor: Colors.blue,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          ),
-          border: Border.all(
-            width: 1,
-          ),
+    return TextFormField(
+      focusNode: FocusNode(canRequestFocus: false),
+      controller: _controllerTourAccompaniers,
+      keyboardType: TextInputType.multiline,
+      maxLines: 2,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        // fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
         ),
-        buttonIcon: Icon(
-          Icons.work_outline_outlined,
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1.0),
+          borderRadius: BorderRadius.circular(5),
         ),
-        buttonText: Text(
-          "Tura Eşlik Edenler",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.values[4],
-          ),
-        ),
-        onConfirm: (List<UserDDModel?>? results) {
-          List<String> result = <String>[];
-          results!.forEach((item) {
-            result.add(item!.fullName!);
-          });
-          setState(() {
-            tour.tourAccompaniers = result.join(",");
-          });
-          // print(results);
-          // print(tourAccompanies);
-        },
-      );
-    });
+      ),
+      onSaved: (val) {
+        tour.tourAccompaniers = _controllerTourAccompaniers.text;
+      },
+      onChanged: (val) {
+        tour.tourAccompaniers = _controllerTourAccompaniers.text;
+      },
+    );
   }
+
+  // Widget buildTourAccompaniesMultiDropdownField(
+  //     AddUnPlannedTourViewModel viewModel) {
+  //   return Observer(builder: (_) {
+  //     return MultiSelectDialogField(
+  //       autovalidateMode: AutovalidateMode.onUserInteraction,
+  //       validator: (val) {
+  //         if (val == null) {
+  //           return "Bu alan boş bırakılamaz.";
+  //         }
+  //       },
+  //       items: viewModel.userList,
+  //       title: Text("Tura Eşlik Edenler"),
+  //       searchable: true,
+  //       searchHint: "Kullanıcı ara...",
+  //       selectedColor: Colors.blue,
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.all(
+  //           Radius.circular(5),
+  //         ),
+  //         border: Border.all(
+  //           width: 1,
+  //         ),
+  //       ),
+  //       buttonIcon: Icon(
+  //         Icons.work_outline_outlined,
+  //       ),
+  //       buttonText: Text(
+  //         "Tura Eşlik Edenler",
+  //         style: TextStyle(
+  //           fontSize: 16,
+  //           fontWeight: FontWeight.values[4],
+  //         ),
+  //       ),
+  //       onConfirm: (List<UserDDModel?>? results) {
+  //         List<String> result = <String>[];
+  //         results!.forEach((item) {
+  //           result.add(item!.fullName!);
+  //         });
+  //         setState(() {
+  //           tour.tourAccompaniers = result.join(",");
+  //         });
+  //         // print(results);
+  //         // print(tourAccompanies);
+  //       },
+  //     );
+  //   });
+  // }
 
   Padding buildFieldDropDownFormField(AddUnPlannedTourViewModel viewModel) {
     return Padding(

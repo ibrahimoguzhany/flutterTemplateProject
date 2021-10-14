@@ -28,6 +28,11 @@ class UnPlannedTourService {
   final usersUrl = "http://10.0.2.2:8009/api/services/app/User/GetUsers";
   final createUnplannedTourUrl =
       "http://10.0.2.2:8009/api/services/app/Tours/CreateUnplannedTour";
+  final updateUnplannedTourURL =
+      "http://10.0.2.2:8009/api/services/app/Tours/UpdateTour";
+
+  final getTourByIdURL =
+      "http://10.0.2.2:8009/api/services/app/Tours/GetTourById";
 
   Future<bool> addUnPlannedTour(
       UnplannedTourModel tour, BuildContext context) async {
@@ -38,6 +43,21 @@ class UnPlannedTourService {
       case HttpStatus.ok:
         // final responseBody = await json.decode(response.body)["result"];
         // print(responseBody);
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  Future<bool> updateUnplannedTour(UnplannedTourModel tour) async {
+    final response = await http.post(Uri.parse(updateUnplannedTourURL),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(tour.toJson()));
+    print(response);
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        // final responseBody = await json.decode(response.body)["result"];
+        print(response.body);
         return true;
       default:
         return false;
@@ -59,6 +79,21 @@ class UnPlannedTourService {
               .toList();
         }
         return Future.error(responseBody);
+    }
+  }
+
+  Future<UnplannedTourModel?> getTourById(int id) async {
+    final response = await http.post(Uri.parse(getTourByIdURL + "?id=$id"),
+        headers: {"Content-Type": "application/json", "Content-Length": "0"});
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await json.decode(response.body)["result"];
+        if (responseBody is Map<String, dynamic>) {
+          return UnplannedTourModel.fromJson(responseBody);
+        }
+        return null;
+      // print(responseBody);
+
     }
   }
 

@@ -1,13 +1,15 @@
-import 'package:esd_mobil/view/unplanned_tours/model/field_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/location_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/view/unplanned_tours/add_unplanned_tour/model/unplanned_tour_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
+import '../../model/field_dd_model.dart';
+import '../../model/location_dd_model.dart';
+import '../../model/unplanned_tour_model.dart';
+import '../../model/user_dd_model.dart';
 import '../../service/unplanned_tour_service.dart';
 
 part 'edit_unplanned_tour_view_model.g.dart';
@@ -45,13 +47,19 @@ abstract class _EditUnPlannedTourViewModelBase with Store, BaseViewModel {
       <MultiSelectItem<UserDDModel>>[];
 
   @action
-  Future<void> addUnPlannedTour(
-      UnplannedTourModel tour, BuildContext context) async {
-    final res = await service.addUnPlannedTour(tour, context);
+  Future<void> updateUnplannedTour(UnplannedTourModel tour) async {
+    final res = await service.updateUnplannedTour(tour);
     if (res == true) {
-      Navigator.pop(context);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => UnPlannedTourDetailView(),
+              settings: RouteSettings(arguments: tour)),
+          (route) => route.isFirst);
+      // NavigationService.instance.navigateToPage(
+      //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
+      //     data: tour);
       final snackBar = SnackBar(
-        content: Text("Plansız Tur başarıyla eklendi."),
+        content: Text("Plansız Tur başarıyla güncellendi."),
         backgroundColor: Colors.green,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/app/app_contansts.dart';
@@ -15,8 +13,6 @@ import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
 import 'view/authenticate/login/view/login_view.dart';
 import 'view/home/home_esd/view/home_view.dart';
-import 'package:easy_localization/easy_localization.dart';
-import './view/settings/view/settings_view.dart';
 
 Future<void> main() async {
   await _init();
