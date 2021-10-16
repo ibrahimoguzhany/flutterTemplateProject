@@ -150,9 +150,16 @@ class _AddUnPlannedTourFindingViewState
                           //     NavigationConstants.UNPLANNED_TOUR_LIST_VIEW);
 
                           setState(() {
-                            NavigationService.instance.navigateToPageClear(
-                                NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
-                                data: refreshedTour);
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    settings:
+                                        RouteSettings(arguments: refreshedTour),
+                                    builder: (_) => UnPlannedTourDetailView()),
+                                result: UnPlannedTourDetailView);
+                            Navigator.of(context).pop();
+                            // NavigationService.instance.navigateToPageClear(
+                            //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
+                            //     data: refreshedTour);
                           });
                         } else {
                           final snackBar = SnackBar(
