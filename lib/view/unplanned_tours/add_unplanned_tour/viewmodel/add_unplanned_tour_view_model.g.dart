@@ -70,39 +70,6 @@ mixin _$AddUnPlannedTourViewModel on _AddUnPlannedTourViewModelBase, Store {
     });
   }
 
-  final _$addUnPlannedTourAsyncAction =
-      AsyncAction('_AddUnPlannedTourViewModelBase.addUnPlannedTour');
-
-  @override
-  Future<void> addUnPlannedTour(UnplannedTourModel tour, BuildContext context) {
-    return _$addUnPlannedTourAsyncAction
-        .run(() => super.addUnPlannedTour(tour, context));
-  }
-
-  final _$getLocationsAsyncAction =
-      AsyncAction('_AddUnPlannedTourViewModelBase.getLocations');
-
-  @override
-  Future<List<LocationDDModel>?> getLocations() {
-    return _$getLocationsAsyncAction.run(() => super.getLocations());
-  }
-
-  final _$getFieldsAsyncAction =
-      AsyncAction('_AddUnPlannedTourViewModelBase.getFields');
-
-  @override
-  Future<List<FieldDDModel>?> getFields() {
-    return _$getFieldsAsyncAction.run(() => super.getFields());
-  }
-
-  final _$getUsersAsyncAction =
-      AsyncAction('_AddUnPlannedTourViewModelBase.getUsers');
-
-  @override
-  Future<List<UserDDModel>?> getUsers() {
-    return _$getUsersAsyncAction.run(() => super.getUsers());
-  }
-
   @override
   String toString() {
     return '''

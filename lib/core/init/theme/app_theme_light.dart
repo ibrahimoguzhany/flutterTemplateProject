@@ -21,18 +21,17 @@ class AppThemeLight extends AppTheme with ILightTheme {
             ),
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black54))),
-        scaffoldBackgroundColor: Color(0xFFFAFAFA),
+        // scaffoldBackgroundColor: Color(0xFFFAFAFA),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         floatingActionButtonTheme: ThemeData.light()
             .floatingActionButtonTheme
-            .copyWith(backgroundColor: colorSchemeLight.lightGray),
+            .copyWith(backgroundColor: Color(0xff68CDD7)),
         tabBarTheme: TabBarTheme(
           labelPadding: insets.lowPaddingAll,
           unselectedLabelStyle:
               textThemeLight.headline4.copyWith(color: colorSchemeLight.gray),
         ),
-        appBarTheme:
-            AppBarTheme(color: colorSchemeLight.boldGreen.withOpacity(0.8)),
+        appBarTheme: AppBarTheme(color: Color.fromRGBO(120, 123, 157, 1)),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: colorSchemeLight.lightGray),
       );

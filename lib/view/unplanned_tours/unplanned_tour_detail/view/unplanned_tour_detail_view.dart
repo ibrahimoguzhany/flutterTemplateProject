@@ -1,6 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,30 +49,25 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
                 onPressed: () async =>
                     await viewModel.navigateToEditUnplannedTour(tour)),
             IconButton(
-              onPressed: () => viewModel.showDialogDeleteTour(context),
+              onPressed: () async =>
+                  await viewModel.showDialogDeleteTour(context, tour.id!),
               icon: Icon(Icons.delete_forever_rounded),
             ),
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            final refreshedTour =
-                await UnPlannedTourService.instance!.getTourById(tour.id!);
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: buildHorizontalChips(tour.findings, viewModel),
-              ),
-              Observer(builder: (_) {
-                return Expanded(
-                  flex: 12,
-                  child: buildExpandedTourDetails(tour),
-                );
-              }),
-            ],
-          ),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: buildHorizontalChips(tour.findings, viewModel),
+            ),
+            Observer(builder: (_) {
+              return Expanded(
+                flex: 12,
+                child: buildExpandedTourDetails(tour),
+              );
+            }),
+          ],
         ),
       ),
     );
@@ -82,7 +75,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
 
   Widget buildHorizontalChips(
       List<FindingModel>? findings, UnPlannedTourDetailViewModel viewModel) {
-    if (findings!.isEmpty) {
+    if (findings == null || findings.isEmpty) {
       return Center(
           child: Text(
         LocaleKeys.planned_tours_finding_noFinding.tr(),
@@ -143,11 +136,11 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
               SizedBox(height: 10),
               buildLittleTextWidget("Ekip Üyeleri"),
               buildBiggerDataTextWidget(
-                  tour.tourTeamMembers!.isEmpty ? "-" : tour.tourTeamMembers),
+                  tour.tourTeamMembers == null ? "-" : tour.tourTeamMembers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tura Eşlik Edenler"),
               buildBiggerDataTextWidget(
-                  tour.tourAccompaniers!.isEmpty ? "-" : tour.tourAccompaniers),
+                  tour.tourAccompaniers == null ? "-" : tour.tourAccompaniers),
               SizedBox(height: 10),
               buildLittleTextWidget("Tur Tarihi"),
               buildBiggerDataTextWidget(tour.tourDate.toString()),

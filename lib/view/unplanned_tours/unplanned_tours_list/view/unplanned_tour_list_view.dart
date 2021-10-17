@@ -1,4 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,6 +27,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       onPageBuilder:
           (BuildContext context, UnPlannedTourListViewModel viewModel) =>
               Scaffold(
+                  // backgroundColor: Colors.transparent,
                   appBar: buildAppBar(context),
                   floatingActionButtonLocation:
                       FloatingActionButtonLocation.miniEndFloat,
@@ -32,22 +35,28 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                     onPressed: viewModel.navigateToAddUnplannedTourView,
                     child: Icon(Icons.add),
                   ),
-                  body: FutureBuilder(
-                    future: viewModel.getUnplannedTours(),
-                    builder: (context,
-                        AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
-                      if (snapshot.hasError)
-                        return Text("Error = ${snapshot.error}");
-
-                      if (snapshot.hasData) {
-                        // print(snapshot.data);
-                        final List<UnplannedTourModel>? tours = snapshot.data;
-                        return buildListView(tours!, viewModel);
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
+                  body: RefreshIndicator(
+                    onRefresh: () async {
+                      await NavigationService.instance
+                          .navigateToPageClear(NavigationConstants.HOME_VIEW);
                     },
+                    child: FutureBuilder(
+                      future: viewModel.getUnplannedTours(),
+                      builder: (context,
+                          AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
+                        if (snapshot.hasError)
+                          return Text("Error = ${snapshot.error}");
+
+                        if (snapshot.hasData) {
+                          // print(snapshot.data);
+                          final List<UnplannedTourModel>? tours = snapshot.data;
+                          return buildListView(tours!, viewModel);
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
                   )),
     );
   }
@@ -65,8 +74,8 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
     return ListView.separated(
       padding: EdgeInsets.all(8),
       separatorBuilder: (context, index) => Divider(
-        color: Colors.black26,
-      ),
+          // color: Colors.black26,
+          ),
       itemCount: tours.length,
       itemBuilder: (context, index) {
         return buildListTile(tours[index], viewModel);
@@ -74,39 +83,97 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
     );
   }
 
-  ListTile buildListTile(
+  Widget buildListTile(
       UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
     var formattedTourDate =
         DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
     // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(tour);
-    return ListTile(
-      enableFeedback: true,
-      contentPadding: EdgeInsets.all(8.0),
-      onTap: () async =>
-          await viewModel.navigateToUnplannedTourDetailView(tour),
-      selectedTileColor: Colors.black12,
-      hoverColor: Colors.black12,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      leading: Text(
-        tour.locationName!,
-        style: TextStyle(fontSize: 16),
-      ),
-      subtitle: Text(
-        tour.id.toString(),
-        textAlign: TextAlign.left,
-        style: TextStyle(fontSize: 14),
-      ),
-      title: Text(
-        tour.fieldName!,
-        style: TextStyle(fontSize: 14),
-      ),
-      trailing: Text(
-        formattedTourDate,
-        textAlign: TextAlign.right,
-        style: TextStyle(fontSize: 14),
+    return Card(
+      color: Color.fromRGBO(120, 123, 157, 0.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      elevation: 8.0,
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        // decoration: BoxDecoration(color: Color.fromRGBO(38, 38, 38, 0.2)),
+        child: ListTile(
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          leading: Container(
+            padding: EdgeInsets.only(right: 12.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    right: new BorderSide(width: 1.0, color: Colors.white24))),
+            child: CircleAvatar(
+              child: Text(tour.id.toString()),
+              backgroundColor: Color.fromRGBO(64, 75, 96, .5),
+            ),
+          ),
+          title: Text(
+            "Tarih: " + formattedTourDate,
+            textAlign: TextAlign.center,
+          ),
+          subtitle: Row(
+            children: <Widget>[
+              Expanded(
+                  flex: 2,
+                  child: Container(
+                    // tag: 'hero',
+                    child: Text(tour.locationName!),
+                  )),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      tour.fieldName!,
+                    )),
+              )
+            ],
+          ),
+          trailing:
+              Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+          onTap: () async {
+            await viewModel.navigateToUnplannedTourDetailView(tour);
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => DetailPage()));
+          },
+        ),
       ),
     );
   }
+  // ListTile buildListTile(
+  //     UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
+  //   var formattedTourDate =
+  //       DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
+  //   // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(tour);
+  //   return ListTile(
+  //     enableFeedback: true,
+  //     contentPadding: EdgeInsets.all(8.0),
+  //     onTap: () async =>
+  //         await viewModel.navigateToUnplannedTourDetailView(tour),
+  //     selectedTileColor: Colors.black12,
+  //     hoverColor: Colors.black12,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+  //     leading: CircleAvatar(
+  //       child: Text(tour.id.toString()),
+  //       backgroundColor: Colors.white,
+  //     ),
+  //     subtitle: Text(
+  //       tour.locationName!,
+  //       textAlign: TextAlign.left,
+  //       style: TextStyle(fontSize: 14),
+  //     ),
+  //     title: Text(
+  //       tour.fieldName!,
+  //       style: TextStyle(fontSize: 14),
+  //     ),
+  //     trailing: Text(
+  //       formattedTourDate,
+  //       textAlign: TextAlign.right,
+  //       style: TextStyle(fontSize: 14),
+  //     ),
+  //   );
+  // }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(

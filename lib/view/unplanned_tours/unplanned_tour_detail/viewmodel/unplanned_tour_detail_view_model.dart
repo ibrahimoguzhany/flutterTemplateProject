@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -48,14 +49,28 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
     isVisible = false;
   }
 
-  Future<dynamic> showDialogDeleteTour(BuildContext context) {
+  Future<dynamic> showDialogDeleteTour(BuildContext context, int id) {
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(
               title: Text("Plansız Tur Sil"),
               content: Text("Plansız Turu silmek istediğinize emin misiniz?"),
               actions: [
-                TextButton(child: Text("Evet"), onPressed: () async {}),
+                TextButton(
+                    child: Text("Evet"),
+                    onPressed: () async {
+                      final result =
+                          await UnPlannedTourService.instance!.deleteTour(id);
+                      if (result) {
+                        final snackBar = SnackBar(
+                            content: Text(
+                                "$id numaralı plansız tur başarıyla silindi"));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                        await NavigationService.instance
+                            .navigateToPageClear(NavigationConstants.HOME_VIEW);
+                      }
+                    }),
                 TextButton(
                     child: Text("Hayır"),
                     onPressed: () {

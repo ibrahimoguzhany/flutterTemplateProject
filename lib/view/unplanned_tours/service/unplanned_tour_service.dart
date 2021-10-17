@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,30 +20,49 @@ class UnPlannedTourService {
 
   UnPlannedTourService._init();
 
-  final toursUrl = "http://10.0.2.2:8009/api/services/app/Tours/GetAllTours";
-  final categoryUrl =
+  final _toursUrl = "http://10.0.2.2:8009/api/services/app/Tours/GetAllTours";
+  final _categoryUrl =
       "http://10.0.2.2:8009/api/services/app/Categories/GetAllCategories";
-  final locationUrl =
+  final _locationUrl =
       "http://10.0.2.2:8009/api/services/app/Locations/GetAllLocations";
-  final fieldsUrl = "http://10.0.2.2:8009/api/services/app/Fields/GetAllFields";
-  final usersUrl = "http://10.0.2.2:8009/api/services/app/User/GetUsers";
-  final createUnplannedTourUrl =
+  final _fieldsUrl =
+      "http://10.0.2.2:8009/api/services/app/Fields/GetAllFields";
+  final _usersUrl = "http://10.0.2.2:8009/api/services/app/User/GetUsers";
+  final _createUnplannedTourUrl =
       "http://10.0.2.2:8009/api/services/app/Tours/CreateUnplannedTour";
-  final updateUnplannedTourURL =
+  final _updateUnplannedTourURL =
       "http://10.0.2.2:8009/api/services/app/Tours/UpdateTour";
 
-  final getTourByIdURL =
+  final _getTourByIdURL =
       "http://10.0.2.2:8009/api/services/app/Tours/GetTourById";
 
-  Future<bool> addUnPlannedTour(
+  final _deleteTourURL =
+      "http://10.0.2.2:8009/api/services/app/Tours/DeleteTour/";
+
+  Future<UnplannedTourModel?> addUnPlannedTour(
       UnplannedTourModel tour, BuildContext context) async {
-    final response = await http.post(Uri.parse(createUnplannedTourUrl),
-        headers: {"Content-Type": "application/json"}, body: json.encode(tour));
+    final response = await http.post(Uri.parse(_createUnplannedTourUrl),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(tour.toJson()));
     print(response.body);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        // final responseBody = await json.decode(response.body)["result"];
-        // print(responseBody);
+        final responseBody = await json.decode(response.body)["result"];
+
+        return UnplannedTourModel.fromJson(responseBody);
+
+      default:
+        return null;
+    }
+  }
+
+  Future<bool> deleteTour(int id) async {
+    final response = await http.post(
+      Uri.parse(_deleteTourURL + "?id=$id"),
+    );
+    print(response.body);
+    switch (response.statusCode) {
+      case HttpStatus.ok:
         return true;
       default:
         return false;
@@ -50,7 +70,7 @@ class UnPlannedTourService {
   }
 
   Future<bool> updateUnplannedTour(UnplannedTourModel tour) async {
-    final response = await http.post(Uri.parse(updateUnplannedTourURL),
+    final response = await http.post(Uri.parse(_updateUnplannedTourURL),
         headers: {"Content-Type": "application/json"},
         body: json.encode(tour.toJson()));
     print(response);
@@ -65,7 +85,7 @@ class UnPlannedTourService {
   }
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
-    final response = await http.post(Uri.parse(toursUrl),
+    final response = await http.post(Uri.parse(_toursUrl),
         headers: {"Content-Type": "application/json", "Content-Length": "0"});
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -83,7 +103,7 @@ class UnPlannedTourService {
   }
 
   Future<UnplannedTourModel?> getTourById(int id) async {
-    final response = await http.post(Uri.parse(getTourByIdURL + "?id=$id"),
+    final response = await http.post(Uri.parse(_getTourByIdURL + "?id=$id"),
         headers: {"Content-Type": "application/json", "Content-Length": "0"});
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -98,7 +118,7 @@ class UnPlannedTourService {
   }
 
   Future<List<UnplannedTourModel>?> getUnplannedTourFindings() async {
-    final response = await http.post(Uri.parse(toursUrl),
+    final response = await http.post(Uri.parse(_toursUrl),
         headers: {"Content-Type": "application/json"});
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -116,7 +136,7 @@ class UnPlannedTourService {
   }
 
   Future<List<CategoryDDModel>?> getCategories() async {
-    final response = await http.post(Uri.parse(categoryUrl),
+    final response = await http.post(Uri.parse(_categoryUrl),
         headers: {"Content-Type": "application/json"});
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -130,7 +150,7 @@ class UnPlannedTourService {
   }
 
   Future<List<LocationDDModel>?> getLocations() async {
-    final response = await http.post(Uri.parse(locationUrl),
+    final response = await http.post(Uri.parse(_locationUrl),
         headers: {"Content-Type": "application/json"});
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -145,7 +165,7 @@ class UnPlannedTourService {
   }
 
   Future<List<FieldDDModel>?> getFields() async {
-    final response = await http.post(Uri.parse(fieldsUrl),
+    final response = await http.post(Uri.parse(_fieldsUrl),
         headers: {"Content-Type": "application/json"});
 
     switch (response.statusCode) {
@@ -160,7 +180,7 @@ class UnPlannedTourService {
   }
 
   Future<List<UserDDModel>?> getUsers() async {
-    final response = await http.post(Uri.parse(usersUrl),
+    final response = await http.post(Uri.parse(_usersUrl),
         headers: {"Content-Type": "application/json"});
 
     switch (response.statusCode) {

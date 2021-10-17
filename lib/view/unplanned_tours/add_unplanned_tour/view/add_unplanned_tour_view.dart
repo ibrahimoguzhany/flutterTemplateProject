@@ -92,7 +92,6 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                       if (isValid) {
                         _formKey.currentState!.save();
                         tour.isPlanned = false;
-                        tour.fieldOrganizationOrderScore = 0;
                         await viewModel.addUnPlannedTour(tour, context);
                       } else {
                         final snackBar = SnackBar(
