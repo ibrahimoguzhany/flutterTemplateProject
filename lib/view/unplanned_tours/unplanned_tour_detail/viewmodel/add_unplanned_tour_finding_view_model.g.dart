@@ -62,7 +62,7 @@ mixin _$AddUnPlannedTourFindingViewModel
       AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
 
   @override
-  Future<bool> addFinding(
+  Future<UnplannedTourModel?> addFinding(
       FindingModel model, BuildContext context, String tourId) {
     return _$addFindingAsyncAction
         .run(() => super.addFinding(model, context, tourId));

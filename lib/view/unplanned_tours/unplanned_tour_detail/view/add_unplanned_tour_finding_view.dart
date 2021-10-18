@@ -131,36 +131,32 @@ class _AddUnPlannedTourFindingViewState
                     onPressed: () async {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
-                        // finding.id = 0;// TODO : CreatorUserId alani authentication eklendikten sonra eklenecek. Session daki user id kullanilabilir.
+                        // TODO : CreatorUserId alani authentication eklendikten sonra eklenecek. Session daki user id kullanilabilir.
                         tour.findings!.add(finding);
-                        UnplannedTourModel newTour = tour;
                         _formKey.currentState!.save();
-                        final isSuccess = await viewModel.addFinding(
+                        final refreshedTour = await viewModel.addFinding(
                             finding, context, tour.id.toString());
-                        if (isSuccess) {
-                          final refreshedTour = await UnPlannedTourService
-                              .instance!
-                              .getTourById(tour.id!);
+                        if (refreshedTour != null) {
+                          // final refreshedTour = await UnPlannedTourService
+                          //     .instance!
+                          //     .getTourById(tour.id!);
                           final snackBar = SnackBar(
                             content: Text("Bulgu başarıyla eklendi."),
                             backgroundColor: Colors.green,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          // await NavigationService.instance.navigateToPageClear(
-                          //     NavigationConstants.UNPLANNED_TOUR_LIST_VIEW);
+                          Navigator.of(context).pop();
 
-                          setState(() {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    settings:
-                                        RouteSettings(arguments: refreshedTour),
-                                    builder: (_) => UnPlannedTourDetailView()),
-                                result: UnPlannedTourDetailView);
-                            Navigator.of(context).pop();
-                            // NavigationService.instance.navigateToPageClear(
-                            //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
-                            //     data: refreshedTour);
-                          });
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  settings:
+                                      RouteSettings(arguments: refreshedTour),
+                                  builder: (_) => UnPlannedTourDetailView()),
+                              result: UnPlannedTourDetailView);
+
+                          // NavigationService.instance.navigateToPageClear(
+                          //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
+
                         } else {
                           final snackBar = SnackBar(
                             content: Text("Hata!!!"),

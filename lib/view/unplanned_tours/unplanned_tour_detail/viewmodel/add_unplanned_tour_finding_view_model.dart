@@ -39,12 +39,12 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @action
-  Future<bool> addFinding(
+  Future<UnplannedTourModel?> addFinding(
       FindingModel model, BuildContext context, String tourId) async {
-    final res =
+    final resultTour =
         await UnPlannedTourDetailService.instance!.addFinding(model, tourId);
-    if (!res) return false;
-    return true;
+    if (resultTour != null) return resultTour;
+    return null;
   }
 
   @action

@@ -19,7 +19,7 @@ class UnPlannedTourDetailService {
   var addFindingUrl =
       "http://10.0.2.2:8009/api/services/app/Tours/CreateFindingForTour";
 
-  Future<bool> addFinding(
+  Future<UnplannedTourModel?> addFinding(
     FindingModel finding,
     String tourId,
   ) async {
@@ -33,10 +33,10 @@ class UnPlannedTourDetailService {
     print(response.body);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        return true;
-
+        final responseBody = await json.decode(response.body)["result"];
+        return UnplannedTourModel.fromJson(responseBody);
       default:
-        return false;
+        return null;
     }
   }
 

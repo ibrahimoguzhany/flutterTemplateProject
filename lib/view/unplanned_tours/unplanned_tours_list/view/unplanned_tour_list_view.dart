@@ -87,14 +87,12 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
     var formattedTourDate =
         DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
-    // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(tour);
     return Card(
       color: Color.fromRGBO(120, 123, 157, 0.5),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
-        // decoration: BoxDecoration(color: Color.fromRGBO(38, 38, 38, 0.2)),
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -134,8 +132,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
               Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
           onTap: () async {
             await viewModel.navigateToUnplannedTourDetailView(tour);
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => DetailPage()));
           },
         ),
       ),
