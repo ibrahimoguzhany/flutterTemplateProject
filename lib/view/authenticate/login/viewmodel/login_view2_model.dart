@@ -1,32 +1,27 @@
-import 'dart:io';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:dio/dio.dart';
+import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
 import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
 import 'package:esd_mobil/core/init/cache/locale_manager.dart';
+import 'package:esd_mobil/core/init/network/vexana_manager.dart';
+import 'package:esd_mobil/view/authenticate/login/service/ILoginService.dart';
+import 'package:esd_mobil/view/authenticate/login/service/login_service.dart';
 import 'package:flutter/material.dart';
+
 import 'package:mobx/mobx.dart';
+part 'login_view2_model.g.dart';
 
-import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../../core/init/network/vexana_manager.dart';
-import '../service/ILoginService.dart';
-import '../service/login_service.dart';
-import 'package:dio/dio.dart' as dio;
-part 'login_view_model.g.dart';
+class Login2ViewModel = _Login2ViewModelBase with _$Login2ViewModel;
 
-class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
-
-abstract class _LoginViewModelBase with Store, BaseViewModel {
+abstract class _Login2ViewModelBase with Store, BaseViewModel {
+  @override
   void setContext(BuildContext context) => this.context = context;
+  @override
   void init() {
     super.init();
     loginService = LoginService(VexanaManager.instance!.networkManager);
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    //   await _onAuthStateChanged(user!);
-    // });
   }
 
   static final Config config = new Config(
@@ -111,48 +106,4 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   void isLoadingChange() {
     isLoading = !isLoading;
   }
-
-  // @action
-  // Future<void> fetchLoginService() async {
-  //   isLoadingChange();
-  //   if (formState.currentState!.validate()) {
-  //     final response = await loginService.fetchUserControl(LoginModel(
-  //         email: emailController.text, password: passwordController.text));
-
-  //     if (response != null) {
-  //       scaffoldState.currentState!
-  //           .showSnackBar(SnackBar(content: Text(response.token!)));
-  //       localeManager.setStringValue(PreferencesKeys.TOKEN, response.token!);
-  //     }
-  //   }
-
-  //   isLoadingChange();
-  // }
-
-  // @action
-  // Future<void> firebaseLogin() async {
-  //   isLoadingChange();
-  //   if (formState.currentState!.validate()) {
-  //     final response = await Provider.of<UserRepository>(context, listen: false)
-  //         .firebaseSignIn(emailController.text, passwordController.text);
-
-  //     if (response) {
-  //       scaffoldState.currentState!.showSnackBar(SnackBar(
-  //         content: Text("Oturum açıldı."),
-  //       ));
-  //     }
-  //     // NavigationService.instance.navigateToPage(NavigationConstants.HOME_VIEW);
-  //   }
-  //   isLoadingChange();
-  // }
-
-  // @action
-  // Future<void> _onAuthStateChanged(User firebaseUser) async {
-  //   if (firebaseUser.email == null) {
-  //     _status = Status.Unauthenticated;
-  //   } else {
-  //     _firebaseUser = firebaseUser;
-  //     _status = Status.Authenticated;
-  //   }
-  // }
 }

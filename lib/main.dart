@@ -12,6 +12,7 @@ import 'core/init/navigation/navigation_service.dart';
 import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
 import 'view/authenticate/login/view/login_view.dart';
+import 'view/authenticate/login/view/login_view2.dart';
 import 'view/home/home_esd/view/home_view.dart';
 
 Future<void> main() async {
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      home: Authenticate(),
+      home: LoginView2(),
       theme: Provider.of<ThemeNotifier>(context).currentTheme,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
