@@ -41,7 +41,7 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
   Future<void> logoutApp() async {
     await localeManager.clearAllSaveFirst();
     await NavigationService.instance
-        .navigateToPageClear(NavigationConstants.LOGIN_VIEW);
+        .navigateToPageClear(NavigationConstants.LOGIN_VIEW2);
 
     // await Provider.of<AuthenticationProvider>(context, listen: false)
     //     .signOut(context);

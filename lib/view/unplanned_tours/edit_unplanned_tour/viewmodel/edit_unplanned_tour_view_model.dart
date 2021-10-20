@@ -48,16 +48,15 @@ abstract class _EditUnPlannedTourViewModelBase with Store, BaseViewModel {
 
   @action
   Future<void> updateUnplannedTour(UnplannedTourModel tour) async {
-    final res = await service.updateUnplannedTour(tour);
-    if (res == true) {
+    final updatedTour = await service.updateUnplannedTour(tour);
+    // print(updatedTour!.tourTeamMembersIds!);
+    if (updatedTour != null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => UnPlannedTourDetailView(),
-              settings: RouteSettings(arguments: tour)),
+              settings: RouteSettings(arguments: updatedTour)),
           (route) => route.isFirst);
-      // NavigationService.instance.navigateToPage(
-      //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
-      //     data: tour);
+
       final snackBar = SnackBar(
         content: Text("Plansız Tur başarıyla güncellendi."),
         backgroundColor: Colors.green,

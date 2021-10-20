@@ -213,7 +213,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         ),
         onConfirm: (List<UserDDModel?>? results) {
           List<int>? result = <int>[];
-          results!.forEach((item) {
+          results!.forEach((item) { 
             result.add(item!.id!);
           });
           tour.tourTeamMembersIds =

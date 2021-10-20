@@ -24,6 +24,23 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
+  final _$rememberMeIsCheckhedAtom =
+      Atom(name: '_Login2ViewModelBase.rememberMeIsCheckhed');
+
+  @override
+  bool get rememberMeIsCheckhed {
+    _$rememberMeIsCheckhedAtom.reportRead();
+    return super.rememberMeIsCheckhed;
+  }
+
+  @override
+  set rememberMeIsCheckhed(bool value) {
+    _$rememberMeIsCheckhedAtom.reportWrite(value, super.rememberMeIsCheckhed,
+        () {
+      super.rememberMeIsCheckhed = value;
+    });
+  }
+
   final _$isLockOpenAtom = Atom(name: '_Login2ViewModelBase.isLockOpen');
 
   @override
@@ -70,8 +87,26 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
+  final _$signInAsyncAction = AsyncAction('_Login2ViewModelBase.signIn');
+
+  @override
+  Future<String?> signIn() {
+    return _$signInAsyncAction.run(() => super.signIn());
+  }
+
   final _$_Login2ViewModelBaseActionController =
       ActionController(name: '_Login2ViewModelBase');
+
+  @override
+  void changeIsChecked(bool? val) {
+    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
+        name: '_Login2ViewModelBase.changeIsChecked');
+    try {
+      return super.changeIsChecked(val);
+    } finally {
+      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeVisibility() {
@@ -121,6 +156,7 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
+rememberMeIsCheckhed: ${rememberMeIsCheckhed},
 isLockOpen: ${isLockOpen},
 isVisible: ${isVisible},
 currentTabIndex: ${currentTabIndex}

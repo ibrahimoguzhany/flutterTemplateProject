@@ -1,3 +1,4 @@
+import 'package:esd_mobil/view/authenticate/login/view/login_view2.dart';
 import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
 import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_finding_detail_view.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ class NavigationRoute {
 
       case NavigationConstants.LOGIN_VIEW:
         return normalNavigate(LoginView());
+
+      case NavigationConstants.LOGIN_VIEW2:
+        return normalNavigate(LoginView2());
 
       case NavigationConstants.SETTINGS_VIEW:
         return normalNavigate(SettingsView());

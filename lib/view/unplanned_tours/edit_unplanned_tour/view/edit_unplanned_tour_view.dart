@@ -13,7 +13,6 @@ import '../../model/field_dd_model.dart';
 import '../../model/location_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../../model/user_dd_model.dart';
-import 'package:intl/intl.dart';
 
 class EditUnPlannedTourView extends StatefulWidget {
   // final UnplannedTourModel tour;

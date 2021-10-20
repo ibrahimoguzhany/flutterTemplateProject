@@ -33,6 +33,7 @@ abstract class _Login2ViewModelBase with Store, BaseViewModel {
 
   final AadOAuth oauth = new AadOAuth(config);
 
+  @action
   Future<String?> signIn() async {
     await oauth.login();
     var accessToken = await oauth.getAccessToken();
@@ -52,9 +53,11 @@ abstract class _Login2ViewModelBase with Store, BaseViewModel {
       //   ),
       // );
       // print(response);
-      await LocaleManager.instance
-          .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-      return accessToken;
+      if (rememberMeIsCheckhed) {
+        await LocaleManager.instance
+            .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
+        return accessToken;
+      }
     }
   }
 
@@ -73,6 +76,9 @@ abstract class _Login2ViewModelBase with Store, BaseViewModel {
   bool isLoading = false;
 
   @observable
+  bool rememberMeIsCheckhed = false;
+
+  @observable
   bool isLockOpen = true;
 
   @observable
@@ -80,6 +86,11 @@ abstract class _Login2ViewModelBase with Store, BaseViewModel {
 
   @observable
   int currentTabIndex = 0;
+
+  @action
+  void changeIsChecked(bool? val) {
+    rememberMeIsCheckhed = val!;
+  }
 
   @action
   void changeVisibility() {

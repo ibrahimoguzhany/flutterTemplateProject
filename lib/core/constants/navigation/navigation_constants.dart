@@ -2,6 +2,7 @@ class NavigationConstants {
   static const TEST_VIEW = "/test";
   static const HOME_VIEW = "/home";
   static const LOGIN_VIEW = "/login";
+  static const LOGIN_VIEW2 = "/login2";
   static const PLANNED_TOUR_DETAIL_VIEW = "/planned_tour_detail_view";
   static const ADD_PLANNED_TOUR_VIEW = "/add_planned_tour_view";
   static const ADD_PLANNED_TOUR_FINDING = "/add_planned_tour_finding";
@@ -21,5 +22,6 @@ class NavigationConstants {
   static const SETTINGS_WEB_PROJECT_VIEW = '/settings_web_project_view';
   static const SETTINGS_VIEW = "/settings_view";
   static const ONBOARD = "/on_board";
-  static const UNPLANNED_TOUR_FINDING_DETAIL_VIEW = "/unplanned_tour_finding_detail_view";
+  static const UNPLANNED_TOUR_FINDING_DETAIL_VIEW =
+      "/unplanned_tour_finding_detail_view";
 }

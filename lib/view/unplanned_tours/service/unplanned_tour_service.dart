@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:esd_mobil/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -69,18 +70,19 @@ class UnPlannedTourService {
     }
   }
 
-  Future<bool> updateUnplannedTour(UnplannedTourModel tour) async {
+  Future<UnplannedTourModel?> updateUnplannedTour(
+      UnplannedTourModel tour) async {
     final response = await http.post(Uri.parse(_updateUnplannedTourURL),
         headers: {"Content-Type": "application/json"},
         body: json.encode(tour.toJson()));
     print(response);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        // final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await json.decode(response.body)["result"];
         print(response.body);
-        return true;
+        return UnplannedTourModel.fromJson(responseBody);
       default:
-        return false;
+        return null;
     }
   }
 

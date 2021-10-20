@@ -59,8 +59,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
       // print(response);
       await LocaleManager.instance
           .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-      return accessToken;
     }
+    return accessToken;
   }
 
   signOut() async {
