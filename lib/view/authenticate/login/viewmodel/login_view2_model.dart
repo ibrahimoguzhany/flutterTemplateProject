@@ -1,14 +1,17 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
-import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
-import 'package:esd_mobil/core/init/cache/locale_manager.dart';
-import 'package:esd_mobil/core/init/network/vexana_manager.dart';
-import 'package:esd_mobil/view/authenticate/login/service/ILoginService.dart';
-import 'package:esd_mobil/view/authenticate/login/service/login_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:mobx/mobx.dart';
+
+import '../../../../core/base/model/base_viewmodel.dart';
+import '../../../../core/constants/enums/preferences_keys_enum.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/cache/locale_manager.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../../../core/init/network/vexana_manager.dart';
+import '../service/ILoginService.dart';
+import '../service/login_service.dart';
+
 part 'login_view2_model.g.dart';
 
 class Login2ViewModel = _Login2ViewModelBase with _$Login2ViewModel;
@@ -33,32 +36,19 @@ abstract class _Login2ViewModelBase with Store, BaseViewModel {
 
   final AadOAuth oauth = new AadOAuth(config);
 
-  @action
   Future<String?> signIn() async {
     await oauth.login();
-    var accessToken = await oauth.getAccessToken();
-    print(accessToken);
+    final accessToken = await oauth.getAccessToken();
 
     if (accessToken!.isNotEmpty) {
-      // await http.get(Uri.parse("https://graph.microsoft.com/v1.0/me/contacts"),headers: {
-      //   ""
-      // })
-      // Dio dio = Dio();
-      // var response = await dio.get(
-      //   "https://graph.microsoft.com/v1.0/me/contacts",
-      //   options: Options(
-      //     headers: {
-      //       HttpHeaders.authorizationHeader: '$accessToken',
-      //     },
-      //   ),
-      // );
-      // print(response);
       if (rememberMeIsCheckhed) {
         await LocaleManager.instance
             .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-        return accessToken;
       }
+      await NavigationService.instance
+          .navigateToPage(NavigationConstants.HOME_VIEW);
     }
+    return accessToken;
   }
 
   signOut() async {

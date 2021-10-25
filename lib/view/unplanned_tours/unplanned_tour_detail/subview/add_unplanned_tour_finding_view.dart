@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import '../view/unplanned_tour_detail_view.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
-import '../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../_widgets/button/button_widget.dart';
 import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';

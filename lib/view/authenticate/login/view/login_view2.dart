@@ -29,7 +29,7 @@ class _LoginView2State extends State<LoginView2> {
           padding: EdgeInsets.symmetric(
               vertical: MediaQuery.of(context).size.height / 6),
           child: viewModel.isLoading
-              ? CircularProgressIndicator()
+              ? Center(child: CircularProgressIndicator())
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -88,24 +88,7 @@ class _LoginView2State extends State<LoginView2> {
                           SizedBox(
                             height: 16,
                           ),
-                          RaisedButton(
-                            color: Colors.blue,
-                            onPressed: () {},
-                            child: Center(
-                                child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: "Giriş Yap ",
-                                      style: TextStyle(color: Colors.black87)),
-                                  WidgetSpan(
-                                    child: Icon(Icons.login, size: 16),
-                                  ),
-                                ],
-                              ),
-                            )),
-                            shape: StadiumBorder(),
-                          ),
+                          loginButton(),
                           buildWrap(viewModel),
                         ],
                       ),
@@ -114,6 +97,26 @@ class _LoginView2State extends State<LoginView2> {
                 ),
         ),
       ),
+    );
+  }
+
+  RaisedButton loginButton() {
+    return RaisedButton(
+      color: Colors.blue,
+      onPressed: () {},
+      child: Center(
+          child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+                text: "Giriş Yap ", style: TextStyle(color: Colors.black87)),
+            WidgetSpan(
+              child: Icon(Icons.login, size: 16),
+            ),
+          ],
+        ),
+      )),
+      shape: StadiumBorder(),
     );
   }
 
@@ -153,12 +156,15 @@ class _LoginView2State extends State<LoginView2> {
                   onTap: viewModel.isLoading
                       ? null
                       : () async {
-                          var token = await viewModel.signIn();
+                          final token = await viewModel.signIn();
                           viewModel.isLoadingChange();
                           if (token != null) {
-                            await NavigationService.instance
-                                .navigateToPage(NavigationConstants.HOME_VIEW);
-                            viewModel.isLoadingChange();
+                            final snackBar = SnackBar(
+                              content: Text("Giriş Yapıldı"),
+                              backgroundColor: Colors.green,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                         },
                   child: Image.asset(

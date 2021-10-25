@@ -69,13 +69,11 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   Widget build(BuildContext context) {
-    if (token != null) {
-      if (token!.isNotEmpty) {
-        return HomeView();
-      } else {
-        return SplashWidget();
-      }
+    if (token!.isNotEmpty) {
+      print(token);
+      return HomeView();
+    } else {
+      return SplashWidget();
     }
-    return SplashWidget();
   }
 }

@@ -30,7 +30,7 @@ abstract class _AddUnPlannedTourViewModelBase with Store, BaseViewModel {
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
-  var service = UnPlannedTourService.instance!;
+  final unplannedTourService = UnPlannedTourService.instance!;
 
   @observable
   List<LocationDDModel> locations = <LocationDDModel>[];
@@ -47,7 +47,8 @@ abstract class _AddUnPlannedTourViewModelBase with Store, BaseViewModel {
 
   Future<void> addUnPlannedTour(
       UnplannedTourModel tour, BuildContext context) async {
-    final addedTour = await service.addUnPlannedTour(tour, context);
+    final addedTour =
+        await unplannedTourService.addUnPlannedTour(tour, context);
     if (addedTour != null) {
       final snackBar = SnackBar(
         content:
@@ -69,14 +70,14 @@ abstract class _AddUnPlannedTourViewModelBase with Store, BaseViewModel {
   }
 
   Future<List<LocationDDModel>?> getLocations() async {
-    return await UnPlannedTourService.instance!.getLocations();
+    return await unplannedTourService.getLocations();
   }
 
   Future<List<FieldDDModel>?> getFields() async {
-    return await UnPlannedTourService.instance!.getFields();
+    return await unplannedTourService.getFields();
   }
 
   Future<List<UserDDModel>?> getUsers() async {
-    return await UnPlannedTourService.instance!.getUsers();
+    return await unplannedTourService.getUsers();
   }
 }

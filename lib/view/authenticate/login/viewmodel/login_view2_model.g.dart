@@ -87,13 +87,6 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
-  final _$signInAsyncAction = AsyncAction('_Login2ViewModelBase.signIn');
-
-  @override
-  Future<String?> signIn() {
-    return _$signInAsyncAction.run(() => super.signIn());
-  }
-
   final _$_Login2ViewModelBaseActionController =
       ActionController(name: '_Login2ViewModelBase');
 

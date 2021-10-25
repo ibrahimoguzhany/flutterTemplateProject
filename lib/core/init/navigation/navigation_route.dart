@@ -1,6 +1,6 @@
 import 'package:esd_mobil/view/authenticate/login/view/login_view2.dart';
 import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_finding_detail_view.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,7 +18,7 @@ import '../../../view/settings/model/settings_dynamic_model.dart';
 import '../../../view/settings/view/settings_view.dart';
 import '../../../view/settings/view/subview/settings_dynamic_view.dart';
 import '../../../view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view.dart';
-import '../../../view/unplanned_tours/unplanned_tour_detail/view/add_unplanned_tour_finding_view.dart';
+import '../../../view/unplanned_tours/unplanned_tour_detail/subview/add_unplanned_tour_finding_view.dart';
 import '../../../view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import '../../../view/unplanned_tours/unplanned_tours_list/view/unplanned_tour_list_view.dart';
 import '../../components/card/not_found_navigation_widget.dart';
