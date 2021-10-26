@@ -1,14 +1,12 @@
-import 'package:esd_mobil/view/authenticate/login/view/login_view2.dart';
-import 'package:esd_mobil/view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';
+import '../../../view/authenticate/login/view/login_view2.dart';
 import '../../../view/authenticate/onboard/view/on_board_view.dart';
 import '../../../view/authenticate/test/view/test_view.dart';
-import '../../../view/home/home_esd/view/home_view.dart';
+import '../../../view/home/view/home_view.dart';
 import '../../../view/planned_tours/planned_tour_detail/view/add_planned_tour_finding_view.dart';
 import '../../../view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import '../../../view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
@@ -18,7 +16,9 @@ import '../../../view/settings/model/settings_dynamic_model.dart';
 import '../../../view/settings/view/settings_view.dart';
 import '../../../view/settings/view/subview/settings_dynamic_view.dart';
 import '../../../view/unplanned_tours/add_unplanned_tour/view/add_unplanned_tour_view.dart';
+import '../../../view/unplanned_tours/edit_unplanned_tour/view/edit_unplanned_tour_view.dart';
 import '../../../view/unplanned_tours/unplanned_tour_detail/subview/add_unplanned_tour_finding_view.dart';
+import '../../../view/unplanned_tours/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
 import '../../../view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import '../../../view/unplanned_tours/unplanned_tours_list/view/unplanned_tour_list_view.dart';
 import '../../components/card/not_found_navigation_widget.dart';
@@ -72,9 +72,6 @@ class NavigationRoute {
 
       case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
         return navigateWithData(EditUnPlannedTourView(), args.arguments);
-
-      // case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW2:
-      //   return normalNavigate(AddUnPlannedTourView2());
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_FINDING:
         return navigateWithData(AddUnPlannedTourFindingView(), args.arguments);

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,7 +8,7 @@ import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/init/lang/locale_keys.g.dart';
 import '../../model/unplanned_tour_model.dart';
-import '../viewmodel/unplanned_tour_detail_view_model.dart';
+import '../viewmodel/subview_model/unplanned_tour_detail_view_model.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
   UnPlannedTourDetailView({Key? key}) : super(key: key);
@@ -59,7 +58,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Expanded(
-              child: buildHorizontalChips(tour.findings, viewModel),
+              child: buildHorizontalChips(tour.findings, viewModel, tour.id!),
             ),
             Observer(builder: (_) {
               return Expanded(
@@ -73,8 +72,8 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
     );
   }
 
-  Widget buildHorizontalChips(
-      List<FindingModel>? findings, UnPlannedTourDetailViewModel viewModel) {
+  Widget buildHorizontalChips(List<FindingModel>? findings,
+      UnPlannedTourDetailViewModel viewModel, int tourId) {
     if (findings == null || findings.isEmpty) {
       return Center(
           child: Text(
@@ -93,7 +92,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           return Text(LocaleKeys.planned_tours_finding_noFinding.tr());
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
-          child: GestureDetector(
+          child: InkWell(
               onTap: () async =>
                   await viewModel.navigateToFindingDetail(findings[index]),
               child: Chip(

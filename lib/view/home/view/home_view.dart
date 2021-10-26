@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/view/settings/view/settings_view.dart';
 
 import '../../../../core/init/lang/locale_keys.g.dart';
-import '../../../planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
-import '../../../unplanned_tours/unplanned_tours_list/view/unplanned_tour_list_view.dart';
+import '../../planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
+import '../../settings/view/settings_view.dart';
+import '../../unplanned_tours/unplanned_tours_list/view/unplanned_tour_list_view.dart';
 
 class HomeView extends StatefulWidget {
   @override

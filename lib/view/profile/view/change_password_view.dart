@@ -105,6 +105,10 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     if (val!.length < 6) {
                       return "Şifreniz en az 6 karakterden oluşmalıdır.";
                     }
+                    if (_newPasswordController.text !=
+                        _newPasswordAgainController.text) {
+                      return "Yeni şifre, Tekrar Yeni Şifre ile eşleşmiyor";
+                    }
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: _newPasswordAgainController,

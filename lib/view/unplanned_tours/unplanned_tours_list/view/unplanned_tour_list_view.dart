@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/base/view/base_view.dart';
@@ -27,7 +28,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       onPageBuilder:
           (BuildContext context, UnPlannedTourListViewModel viewModel) =>
               Scaffold(
-                  // backgroundColor: Colors.transparent,
                   appBar: buildAppBar(context),
                   floatingActionButtonLocation:
                       FloatingActionButtonLocation.miniEndFloat,
@@ -40,23 +40,24 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                       await NavigationService.instance
                           .navigateToPageClear(NavigationConstants.HOME_VIEW);
                     },
-                    child: FutureBuilder(
-                      future: viewModel.getUnplannedTours(),
-                      builder: (context,
-                          AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
-                        if (snapshot.hasError)
-                          return Text("Error = ${snapshot.error}");
+                    child: Observer(builder: (_) {
+                      return FutureBuilder(
+                        future: viewModel.getUnplannedTours(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError)
+                            return Text("Error = ${snapshot.error}");
 
-                        if (snapshot.hasData) {
-                          // print(snapshot.data);
-                          final List<UnplannedTourModel>? tours = snapshot.data;
-                          return buildListView(tours!, viewModel);
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                    ),
+                          if (snapshot.hasData) {
+                            // print(snapshot.data);
+                            // final List<UnplannedTourModel>? tours = snapshot.data;
+                            return buildListView(viewModel.tours, viewModel);
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      );
+                    }),
                   )),
     );
   }
@@ -115,7 +116,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
               Expanded(
                   flex: 2,
                   child: Container(
-                    // tag: 'hero',
                     child: Text(tour.locationName!),
                   )),
               Expanded(

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/view/authenticate/login/view/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +11,8 @@ import 'core/init/navigation/navigation_route.dart';
 import 'core/init/navigation/navigation_service.dart';
 import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
-import 'view/authenticate/login/view/login_view.dart';
-import 'view/home/home_esd/view/home_view.dart';
+import 'view/authenticate/login/view/splash_screen.dart';
+import 'view/home/view/home_view.dart';
 
 Future<void> main() async {
   await _init();

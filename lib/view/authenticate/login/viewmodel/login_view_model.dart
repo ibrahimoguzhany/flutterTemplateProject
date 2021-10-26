@@ -1,18 +1,15 @@
-import 'dart:io';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:dio/dio.dart';
-import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
-import 'package:esd_mobil/core/init/cache/locale_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
+import '../../../../core/constants/enums/preferences_keys_enum.dart';
+import '../../../../core/init/cache/locale_manager.dart';
 import '../../../../core/init/network/vexana_manager.dart';
 import '../service/ILoginService.dart';
 import '../service/login_service.dart';
-import 'package:dio/dio.dart' as dio;
+
 part 'login_view_model.g.dart';
 
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
@@ -44,19 +41,6 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
     print(accessToken);
 
     if (accessToken!.isNotEmpty) {
-      // await http.get(Uri.parse("https://graph.microsoft.com/v1.0/me/contacts"),headers: {
-      //   ""
-      // })
-      // Dio dio = Dio();
-      // var response = await dio.get(
-      //   "https://graph.microsoft.com/v1.0/me/contacts",
-      //   options: Options(
-      //     headers: {
-      //       HttpHeaders.authorizationHeader: '$accessToken',
-      //     },
-      //   ),
-      // );
-      // print(response);
       await LocaleManager.instance
           .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
     }

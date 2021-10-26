@@ -158,7 +158,7 @@ class _LoginView2State extends State<LoginView2> {
                       : () async {
                           final token = await viewModel.signIn();
                           viewModel.isLoadingChange();
-                          if (token != null) {
+                          if (token!.isNotEmpty) {
                             final snackBar = SnackBar(
                               content: Text("Giriş Yapıldı"),
                               backgroundColor: Colors.green,

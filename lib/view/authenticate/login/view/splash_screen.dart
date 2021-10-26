@@ -1,5 +1,4 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import 'login_view2.dart';
@@ -74,42 +73,5 @@ class SplashWidget extends StatelessWidget {
       centered: true,
       duration: 5,
     );
-
-    // MaterialApp(
-    //   title: 'Flutter Demo',
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //     visualDensity: VisualDensity.adaptivePlatformDensity,
-    //   ),
-    //   home: Scaffold(
-    //     body: AnimatedSplashScreen(
-    //       splashTransition: SplashTransition.scaleTransition,
-    //       nextScreen: LoginView2(),
-    //       splash: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           Container(
-    //             padding: EdgeInsets.symmetric(horizontal: 48),
-    //             child: Hero(
-    //               tag: "socarLogo",
-    //               child: Image.asset('assets/image/800pxlogo_of_socar1.png'),
-    //             ),
-    //           ),
-    //           Text(
-    //             'Emniyet Turu Uygulaması',
-    //             textAlign: TextAlign.left,
-    //             style: TextStyle(
-    //               color: Color.fromRGBO(0, 0, 0, 1),
-    //               fontFamily: 'Source Sans Pro',
-    //               fontSize: 24,
-    //               fontWeight: FontWeight.bold,
-    //               // height: 0.4,
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -7,14 +7,14 @@ import '../../../../core/extensions/context_extension.dart';
 import '../../../_widgets/listview/on_board_indicator.dart';
 import '../viewmodel/on_board_view_model.dart';
 
-class OnBoardView extends StatefulWidget {
-  const OnBoardView({Key? key}) : super(key: key);
+class OnBoardViewDemo extends StatefulWidget {
+  const OnBoardViewDemo({Key? key}) : super(key: key);
 
   @override
   OnBoardViewState createState() => OnBoardViewState();
 }
 
-class OnBoardViewState extends State<OnBoardView> {
+class OnBoardViewState extends State<OnBoardViewDemo> {
   late OnBoardViewModel viewModel;
 
   @override

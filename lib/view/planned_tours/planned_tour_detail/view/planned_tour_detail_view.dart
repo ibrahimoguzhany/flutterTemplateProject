@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:esd_mobil/view/planned_tours/model/planned_tour_model.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../../unplanned_tours/model/unplanned_tour_model.dart';
 import '../../edit_planned_tour/view/edit_planned_tour_view.dart';
-import '../service/planned_tour_detail_service.dart';
+import '../../model/planned_tour_model.dart';
 import '../viewmodel/planned_tour_detail_view_model.dart';
 import 'finding_detail.dart';
 

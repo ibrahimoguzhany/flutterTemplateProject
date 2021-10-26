@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../home/home_esd/model/finding_model.dart';
+import '../../../../core/init/auth/authentication_provider.dart';
+import '../../../unplanned_tours/model/unplanned_tour_model.dart';
 
 part 'planned_tour_list_view_model.g.dart';
 

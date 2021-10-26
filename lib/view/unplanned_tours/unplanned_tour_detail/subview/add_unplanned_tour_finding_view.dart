@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import '../view/unplanned_tour_detail_view.dart';
+import 'package:esd_mobil/view/_product/_model/finding_file.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +17,8 @@ import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../_widgets/button/button_widget.dart';
 import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
-import '../viewmodel/add_unplanned_tour_finding_view_model.dart';
+import '../view/unplanned_tour_detail_view.dart';
+import '../viewmodel/subview_model/add_unplanned_tour_finding_view_model.dart';
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
   const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _AddUnPlannedTourFindingViewState
   late FindingModel finding;
   UploadTask? task;
   File? file;
+  List<FindingFile> findingFiles = [];
 
   List<File>? files = <File>[];
 
@@ -214,6 +217,8 @@ class _AddUnPlannedTourFindingViewState
 
             setState(() {
               files!.add(takenPhoto);
+              findingFiles
+                  .add(FindingFile(fileBytes: takenPhoto.readAsBytesSync()));
             });
           },
         ),
@@ -259,7 +264,8 @@ class _AddUnPlannedTourFindingViewState
       for (var i = 0; i < files!.length; i++) {
         widgets.add(InputChip(
             onPressed: () async {
-              await launch(files![i].uri.toString(), forceWebView: false);
+              await launch(findingFiles[i].filename.toString(),
+                  forceWebView: false);
             },
             onDeleted: () {
               setState(() {
@@ -307,61 +313,65 @@ class _AddUnPlannedTourFindingViewState
   // }
 
   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result == null) return;
 
     for (var i = 0; i < result.files.length; i++) {
       final path = result.files[i].path!;
+      final fileBytes = result.files[i].bytes;
+      final filename = result.files[i].name;
       files!.add(File(path));
+      findingFiles.add(FindingFile(fileBytes: fileBytes, filename: filename));
     }
     setState(() {});
   }
 
-  Future<String> uploadFile(File _image) async {
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('files/${_image.path}');
-    UploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.whenComplete(() => null);
+  // Future<String> uploadFile(File _image) async {
+  //   Reference storageReference =
+  //       FirebaseStorage.instance.ref().child('files/${_image.path}');
+  //   UploadTask uploadTask = storageReference.putFile(_image);
+  //   await uploadTask.whenComplete(() => null);
 
-    return await storageReference.getDownloadURL();
-  }
+  //   return await storageReference.getDownloadURL();
+  // }
 
-  Future<List<String>> uploadFiles(List<File> _images) async {
-    var imageUrls =
-        await Future.wait(_images.map((_image) => uploadFile(_image)));
-    print(imageUrls);
-    return imageUrls;
-  }
+  // Future<List<String>> uploadFiles(List<File> _images) async {
+  //   var imageUrls =
+  //       await Future.wait(_images.map((_image) => uploadFile(_image)));
+  //   print(imageUrls);
+  //   return imageUrls;
+  // }
 
   // void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
   //     await canLaunch(vm.imageUrl!)
   //         ? await launch(vm.imageUrl!)
   //         : throw '${vm.imageUrl!} başlatılamadı.';
 
-  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
-        stream: task.snapshotEvents,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final snap = snapshot.data!;
-            final progress = snap.bytesTransferred / snap.totalBytes;
-            final percentage = (progress * 100).toStringAsFixed(2);
+  // Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+  //       stream: task.snapshotEvents,
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasData) {
+  //           final snap = snapshot.data!;
+  //           final progress = snap.bytesTransferred / snap.totalBytes;
+  //           final percentage = (progress * 100).toStringAsFixed(2);
 
-            if (percentage != "100.00") {
-              return Text(
-                '$percentage %',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              );
-            }
-            return Text(
-              'Yüklendi',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            );
-          } else {
-            return Container();
-          }
-        },
-      );
+  //           if (percentage != "100.00") {
+  //             return Text(
+  //               '$percentage %',
+  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //             );
+  //           }
+  //           return Text(
+  //             'Yüklendi',
+  //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //           );
+  //         } else {
+  //           return Container();
+  //         }
+  //       },
+  //     );
   Widget buildFindingCategoryMultiSelectDropdown(
       AddUnPlannedTourFindingViewModel viewModel) {
     return Observer(builder: (_) {
