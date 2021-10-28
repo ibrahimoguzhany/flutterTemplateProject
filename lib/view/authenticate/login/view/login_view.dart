@@ -1,24 +1,24 @@
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:esd_mobil/core/init/auth/authentication_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/base/view/base_view.dart';
-import '../../../../core/components/text/auto_locale.text.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import '../viewmodel/login_view_model.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({Key? key}) : super(key: key);
+class LoginView extends StatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
 
-  // final List<Widget> _children = [
-  //   LoginView(),
-  //   RegisterView(),
-  // ];
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
 
+final _formKey = GlobalKey<FormState>();
+
+class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<LoginViewModel>(
@@ -28,303 +28,301 @@ class LoginView extends StatelessWidget {
         model.init();
       },
       onPageBuilder: (BuildContext context, LoginViewModel viewModel) =>
-          DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          key: viewModel.scaffoldState,
-          body: SafeArea(
-            child: Column(
-              children: [
-                buildAnimatedContainer(context),
-                buildTabBarContainer(context, viewModel),
-                Observer(builder: (_) {
-                  return Visibility(
-                    child: buildExpandedLoginForm(context, viewModel),
-                    visible: viewModel.currentTabIndex == 0,
-                  );
-                }),
-                Observer(builder: (_) {
-                  return Visibility(
-                    child: buildExpandedRegisterForm(context, viewModel),
-                    visible: viewModel.currentTabIndex == 1,
-                  );
-                }),
-              ],
-            ),
-          ),
+          Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height / 5),
+          child: viewModel.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 84),
+                      child: Hero(
+                        tag: "socarLogo",
+                        child:
+                            Image.asset('assets/image/800pxlogo_of_socar1.png'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 24.0,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.only(
+                          bottom: 10.0, top: 30, right: 10, left: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: context.colors.onSurface,
+                          width: 0.8,
+                        ),
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            buildWelcomeText(),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            buildSubWelcomeText(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                      height: 64,
+                                      child: buildTextFormFieldEmail(
+                                          context, viewModel)),
+                                  SizedBox(
+                                    height: 64,
+                                    child: buildTextFormFieldPassword(
+                                        context, viewModel),
+                                  ),
+                                  loginButton(viewModel),
+                                  buildWrap(viewModel),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
   }
 
-  Expanded buildExpandedLoginForm(
-      BuildContext context, LoginViewModel viewModel) {
-    return Expanded(
-        flex: 8,
-        child: Padding(
-          padding: context.paddingNormalAll,
-          child: buildLoginForm(viewModel, context),
-        ));
+  Text buildSubWelcomeText() {
+    return Text(
+      'E-mail adresiniz ile giriş yapabilirsiniz.',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: Color.fromRGBO(0, 0, 0, 1),
+          fontFamily: 'Public Sans',
+          fontSize: 12,
+          letterSpacing:
+              0 /*percentages not used in flutter. defaulting to zero*/,
+          fontWeight: FontWeight.normal,
+          height: 1),
+    );
   }
 
-  Expanded buildExpandedRegisterForm(
-      BuildContext context, LoginViewModel viewModel) {
-    return Expanded(
-        flex: 8,
-        child: Padding(
-          padding: context.paddingNormalAll,
-          child: buildRegisterForm(viewModel, context),
-        ));
-  }
-
-  Form buildLoginForm(LoginViewModel viewModel, BuildContext context) {
-    return Form(
-      key: viewModel.formState,
-      autovalidateMode: AutovalidateMode.always,
-      child: Column(
-        children: [
-          Spacer(
-            flex: 6,
-          ),
-          buildTextFormFieldEmail(context, viewModel),
-          buildTextFormFieldPassword(context, viewModel),
-          Spacer(),
-          buildTextForgot(),
-          Spacer(
-            flex: 6,
-          ),
-          buildRaisedButtonLogin(context, viewModel),
-          buildWrapForgot(),
-          Spacer(
-            flex: 6,
-          )
-        ],
+  Center buildWelcomeText() {
+    return Center(
+      child: Text(
+        'Hoşgeldiniz!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Color.fromRGBO(0, 0, 0, 1),
+            fontFamily: 'Public Sans',
+            fontSize: 18,
+            letterSpacing:
+                0 /*percentages not used in flutter. defaulting to zero*/,
+            fontWeight: FontWeight.w600,
+            height: 1),
       ),
     );
   }
 
-  Form buildRegisterForm(LoginViewModel viewModel, BuildContext context) {
-    return Form(
-      key: viewModel.formState,
-      autovalidateMode: AutovalidateMode.always,
-      child: Column(
-        children: [
-          Spacer(
-            flex: 6,
+  SizedBox loginButton(LoginViewModel viewModel) {
+    return SizedBox(
+      height: 30,
+      child: RaisedButton(
+        color: context.colors.onSurface,
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (isValid) {
+            // await viewModel.signIn(viewModel.emailController.text);
+          }
+          final snackBar = SnackBar(
+            content: Text("E-mail adresiniz ya da şifreniz geçerli değil."),
+            backgroundColor: Colors.red,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+        child: Center(
+            child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(text: "GİRİŞ ", style: TextStyle(color: Colors.black87)),
+              WidgetSpan(
+                child: Icon(Icons.login, size: 16),
+              ),
+            ],
           ),
-          buildTextFormFieldEmail(context, viewModel),
-          buildTextFormFieldPassword(context, viewModel),
-          Spacer(),
-          buildTextForgot(),
-          Spacer(
-            flex: 6,
-          ),
-          buildRaisedButtonRegister(context, viewModel),
-          buildWrapForgot(),
-          Spacer(
-            flex: 6,
-          )
-        ],
+        )),
+        shape: StadiumBorder(),
       ),
+    );
+  }
+
+  Wrap buildWrap(LoginViewModel viewModel) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Column(
+          children: [
+            Row(
+              children: [
+                Observer(builder: (_) {
+                  return Checkbox(
+                    value: viewModel.rememberMeIsCheckhed,
+                    onChanged: viewModel.changeIsChecked,
+                  );
+                }),
+                Text("Beni Hatırla"),
+                Spacer(
+                  flex: 2,
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Şifremi Unuttum",
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text("Diğer Giriş Seçenekleri"),
+                InkWell(
+                  onTap: () {
+                    NavigationService.instance
+                        .navigateToPage(NavigationConstants.LoginViaAzureView);
+                  },
+                  child: Image.asset(
+                    'assets/image/Rectangle10.png',
+                    width: 100,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ],
     );
   }
 
   TextFormField buildTextFormFieldEmail(
       BuildContext context, LoginViewModel viewModel) {
     return TextFormField(
-      controller: viewModel.emailController,
-      validator: (value) => value.isValidEmail,
-      decoration: InputDecoration(
-        labelText: "Email",
-        labelStyle: context.textTheme.subtitle1,
-        icon: buildContainerIconField(context, Icons.email),
-      ),
-    );
+        controller: viewModel.emailController,
+        validator: (value) => value!.isValidEmail,
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          helperText: ' ',
+          prefixIcon: buildContainerIconField(context, Icons.email_outlined),
+          hintStyle: TextStyle(fontWeight: FontWeight.w100),
+          prefixStyle: TextStyle(fontWeight: FontWeight.w100),
+          contentPadding: EdgeInsets.all(10),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: context.colors.onSurface, width: 1.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: context.colors.onError,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: context.colors.onError,
+              width: 1.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: context.colors.onSurface,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: context.colors.onSurface, width: 1.0),
+          ),
+          labelText: "Email",
+          labelStyle: context.textTheme.subtitle1,
+        ));
   }
 
   Widget buildTextFormFieldPassword(
-          BuildContext context, LoginViewModel viewModel) =>
-      Observer(builder: (_) {
-        return TextFormField(
+      BuildContext context, LoginViewModel viewModel) {
+    return Observer(builder: (_) {
+      return TextFormField(
           controller: viewModel.passwordController,
+          obscureText: viewModel.isLockOpen,
           validator: (value) =>
               value!.isNotEmpty ? null : "Bu alan gereklidir.",
-          decoration: InputDecoration(
-            labelText: "Parola",
-            labelStyle: context.textTheme.subtitle1,
-            icon: buildContainerIconField(context, Icons.vpn_key),
-            suffixIcon: InkWell(
-              child: Observer(builder: (_) {
-                return Icon(
-                    viewModel.isLockOpen ? Icons.lock : Icons.lock_open);
-              }),
-              onTap: () {
-                viewModel.isLockStateChange();
-              },
+          decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10),
+            helperText: ' ',
+            prefixIcon: buildContainerPasswordField(context, Icons.password),
+            suffixIcon: Observer(builder: (_) {
+              return InkWell(
+                child: buildContainerPasswordField(context,
+                    viewModel.isLockOpen ? Icons.lock : Icons.lock_open_sharp),
+                onTap: () {
+                  viewModel.isLockStateChange();
+                },
+              );
+            }),
+            border: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: context.colors.onSurface, width: 1.0),
             ),
-          ),
-        );
-      });
-
-  AnimatedContainer buildAnimatedContainer(BuildContext context) {
-    return AnimatedContainer(
-      duration: context.durationLow,
-      height:
-          context.mediaQuery.viewInsets.bottom > 0 ? 0 : context.height * 0.27,
-      padding: EdgeInsets.only(
-        right: 30,
-        left: 30,
-      ),
-      color: Colors.white,
-      child: Column(
-        children: [
-          Image.asset("assets/image/logosocarPNG.png"),
-          // SvgPicture.asset(SVGImagePaths.instance!.socar_logo_SVG),
-          AutoLocaleText(
-            value: "Emniyet Denetim Sistemleri Mobil Uygulaması",
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container buildTabBarContainer(
-      BuildContext context, LoginViewModel viewModel) {
-    return Container(
-      // color: context.randomColor,
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(50),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colors.onError,
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 50, right: 50, bottom: 5),
-              child: buildTabBar(context, viewModel),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colors.onError,
+                width: 1.0,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  TabBar buildTabBar(BuildContext context, LoginViewModel viewModel) {
-    return TabBar(
-      onTap: (val) {
-        viewModel.changeCurrentTabIndex(val);
-      },
-      labelStyle: context.textTheme.headline6,
-      labelColor: Colors.black,
-      indicatorSize: TabBarIndicatorSize.label,
-      unselectedLabelStyle: context.textTheme.headline6,
-      indicatorColor: context.colors.secondaryVariant,
-      indicatorWeight: 5,
-      tabs: [
-        Tab(
-          text: "Giriş Yap",
-        ),
-        Tab(
-          text: "Kayıt Ol",
-        ),
-      ],
-    );
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colors.onSurface,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: context.colors.onSurface, width: 1.0),
+            ),
+            labelText: "Şifre",
+            labelStyle: context.textTheme.subtitle1,
+          ));
+    });
   }
 
   Container buildContainerIconField(BuildContext context, IconData icon) {
     return Container(
-      color: context.colors.secondaryVariant,
+      // color: context.colors.secondaryVariant,
       padding: context.paddingLowAll,
       child: Icon(
         icon,
-        color: context.colors.primaryVariant,
+        // color: context.colors.primaryVariant,
       ),
     );
   }
+}
 
-  Widget buildTextForgot() => Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          child: Text("Şifremi Unuttum"),
-          onPressed: () {},
-        ),
-      );
-
-  Widget buildRaisedButtonLogin(
-      BuildContext context, LoginViewModel viewModel) {
-    return Observer(builder: (_) {
-      return RaisedButton(
-        padding: context.paddingNormalAll,
-        shape: StadiumBorder(),
-        onPressed: viewModel.isLoading
-            ? null
-            : () async {
-                var token = await viewModel.signIn();
-                viewModel.isLoadingChange();
-                if (token != null) {
-                  await NavigationService.instance
-                      .navigateToPage(NavigationConstants.HOME_VIEW);
-                  viewModel.isLoadingChange();
-                }
-                // await context.read<AuthenticationProvider>().signIn(
-                //     viewModel.emailController.text.trim(),
-                //     viewModel.passwordController.text.trim(),
-                //     context);
-              },
-        // var token = await viewModel.signIn();
-        // print(token);
-        // if (token != null) {
-        //   await NavigationService.instance
-        //       .navigateToPage(NavigationConstants.HOME_VIEW);
-
-        child: Center(
-            child: Text(
-          "Giriş Yap",
-          style: context.textTheme.headline6,
-        )),
-        color: context.colors.secondaryVariant,
-      );
-    });
-  }
-
-  Widget buildRaisedButtonRegister(
-      BuildContext context, LoginViewModel viewModel) {
-    return Observer(builder: (_) {
-      return RaisedButton(
-        padding: context.paddingNormalAll,
-        shape: StadiumBorder(),
-        onPressed: viewModel.isLoading
-            ? null
-            : () async {
-                context.read<AuthenticationProvider>().signUp(
-                      email: viewModel.emailController.text.trim(),
-                      password: viewModel.passwordController.text.trim(),
-                    );
-              },
-        child: Center(
-            child: Text(
-          "Kayıt Ol",
-          style: context.textTheme.headline6,
-        )),
-        color: context.colors.secondaryVariant,
-      );
-    });
-  }
-
-  Wrap buildWrapForgot() {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text("Henüz Üye Değil Misiniz?"),
-        TextButton(onPressed: () {}, child: Text("Üye Ol"))
-      ],
-    );
-  }
+Container buildContainerPasswordField(BuildContext context, IconData icon) {
+  return Container(
+    // color: context.colors.secondaryVariant,
+    padding: context.paddingLowAll,
+    child: Icon(
+      icon,
+      // color: context.colors.primaryVariant,
+    ),
+  );
 }

@@ -1,11 +1,11 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:esd_mobil/view/authenticate/login/view/login_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_via_azure_view.dart';
 
 class SplashWidget extends StatelessWidget {
   const SplashWidget({Key? key}) : super(key: key);
-  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class SplashWidget extends StatelessWidget {
       ),
       animationDuration: Duration(milliseconds: 1800),
       curve: Curves.easeIn,
-      nextScreen: LoginViaAzureView(),
+      nextScreen: LoginView(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,

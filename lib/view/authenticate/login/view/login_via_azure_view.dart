@@ -68,8 +68,12 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  buildTextFormFieldEmail(context, viewModel),
+                                  SizedBox(
+                                      height: 64,
+                                      child: buildTextFormFieldEmail(
+                                          context, viewModel)),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height /
                                         64.0,
@@ -223,37 +227,38 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
       child: TextFormField(
           controller: viewModel.emailController,
           validator: (value) => value!.isValidEmail,
-          decoration: new InputDecoration(
+          decoration: InputDecoration(
+            helperText: ' ',
             prefixIcon: buildContainerIconField(context, Icons.email_outlined),
             hintStyle: TextStyle(fontWeight: FontWeight.w100),
             prefixStyle: TextStyle(fontWeight: FontWeight.w100),
             contentPadding: EdgeInsets.all(10),
+            errorMaxLines: 3,
+            // errorText: "Lütfen mail adresinizi kontrol edin.",
             border: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: context.colors.onSurface, width: 1.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colors.onError,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colors.onError,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: context.colors.onSurface,
               ),
             ),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(
-            //     color: context.colors.onError,
-            //   ),
-            // ),
-            // focusedErrorBorder: OutlineInputBorder(
-            //   borderRadius: BorderRadius.all(Radius.circular(20)),
-            //   borderSide: BorderSide(
-            //     color: context.colors.onError,
-            //     width: 1.0,
-            //   ),
-            // ),
-            // focusedBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(
-            //     color: context.colors.onSurface,
-            //   ),
-            // ),
-            // enabledBorder: OutlineInputBorder(
-            //   borderSide:
-            //       BorderSide(color: context.colors.onSurface, width: 1.0),
-            // ),
+            enabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: context.colors.onSurface, width: 1.0),
+            ),
             labelText: "Email",
             labelStyle: context.textTheme.subtitle1,
             // icon: buildContainerIconField(context, Icons.email),
@@ -269,7 +274,7 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
   //         obscureText: viewModel.isLockOpen,
   //         validator: (value) =>
   //             value!.isNotEmpty ? null : "Bu alan gereklidir.",
-  //         // validator: (value) => value!.isValidEmail,
+  // validator: (value) => value!.isValidEmail,
   //         decoration: new InputDecoration(
   //           prefixIcon: buildContainerPasswordField(context, Icons.password),
   //           suffixIcon: Observer(builder: (_) {
@@ -288,7 +293,7 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
   //           ),
   //           labelText: "Şifre",
   //           labelStyle: context.textTheme.subtitle1,
-  //           // icon: buildContainerIconField(context, Icons.email),
+  // icon: buildContainerIconField(context, Icons.email),
   //           enabledBorder: OutlineInputBorder(
   //             borderSide: BorderSide(color: Colors.blue, width: 2.0),
   //           ),

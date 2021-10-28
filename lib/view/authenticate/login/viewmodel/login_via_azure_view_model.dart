@@ -38,10 +38,10 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
     domainHint: "consumers",
   );
 
-  final AadOAuth oauth = new AadOAuth(config);
-
   Future<String?> signIn(String email) async {
     config.loginHint = email;
+    final AadOAuth oauth = new AadOAuth(config);
+
     await oauth.login();
     final accessToken = await oauth.getAccessToken();
     print(accessToken);
@@ -65,6 +65,8 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
   }
 
   signOut() async {
+    final AadOAuth oauth = new AadOAuth(config);
+
     await oauth.logout();
   }
 

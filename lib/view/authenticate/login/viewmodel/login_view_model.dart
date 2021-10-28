@@ -1,55 +1,44 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/base_viewmodel.dart';
 import '../../../../core/constants/enums/preferences_keys_enum.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/cache/locale_manager.dart';
-import '../../../../core/init/network/vexana_manager.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
 import '../service/ILoginService.dart';
-import '../service/login_service.dart';
 
 part 'login_view_model.g.dart';
 
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 
 abstract class _LoginViewModelBase with Store, BaseViewModel {
+  @override
   void setContext(BuildContext context) => this.context = context;
+  @override
   void init() {
     super.init();
-    loginService = LoginService(VexanaManager.instance!.networkManager);
+    // loginService = LoginService(VexanaManager.instance!.networkManager);
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    //   await _onAuthStateChanged(user!);
-    // });
   }
 
-  static final Config config = new Config(
-      tenant: "58d32a83-95a1-4062-8a76-25689bc3e158",
-      clientId: "66d55d0c-2b44-4fcd-9943-5d9c58e420ff",
-      scope: "api://66d55d0c-2b44-4fcd-9943-5d9c58e420ff/Users.Read",
-      redirectUri:
-          "msauth://com.example.esd_aad2/bmngs59kS8VEgFGOdo1BwLTcfHE%3D");
-
-  final AadOAuth oauth = new AadOAuth(config);
-
-  Future<String?> signIn() async {
-    await oauth.login();
-    var accessToken = await oauth.getAccessToken();
-    print(accessToken);
-
-    if (accessToken!.isNotEmpty) {
-      await LocaleManager.instance
-          .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-    }
-    return accessToken;
+  Future<String?> signIn(String email) async {
+    // if (accessToken!.isNotEmpty) {
+    //   if (rememberMeIsCheckhed) {
+    //     await LocaleManager.instance
+    //         .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
+    //   }
+    //   await NavigationService.instance
+    //       .navigateToPage(NavigationConstants.HOME_VIEW);
+    // }
+    // return accessToken;
   }
 
-  signOut() async {
-    await oauth.logout();
-  }
+  signOut() async {}
 
   late TextEditingController emailController;
   late TextEditingController passwordController;
@@ -62,13 +51,29 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   bool isLoading = false;
 
   @observable
+  bool rememberMeIsCheckhed = false;
+
+  @observable
   bool isLockOpen = true;
+
+  @observable
+  String userEmail = "";
 
   @observable
   bool isVisible = true;
 
   @observable
   int currentTabIndex = 0;
+
+  @action
+  void setUserEmail(String email) {
+    userEmail = email;
+  }
+
+  @action
+  void changeIsChecked(bool? val) {
+    rememberMeIsCheckhed = val!;
+  }
 
   @action
   void changeVisibility() {
@@ -95,48 +100,4 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   void isLoadingChange() {
     isLoading = !isLoading;
   }
-
-  // @action
-  // Future<void> fetchLoginService() async {
-  //   isLoadingChange();
-  //   if (formState.currentState!.validate()) {
-  //     final response = await loginService.fetchUserControl(LoginModel(
-  //         email: emailController.text, password: passwordController.text));
-
-  //     if (response != null) {
-  //       scaffoldState.currentState!
-  //           .showSnackBar(SnackBar(content: Text(response.token!)));
-  //       localeManager.setStringValue(PreferencesKeys.TOKEN, response.token!);
-  //     }
-  //   }
-
-  //   isLoadingChange();
-  // }
-
-  // @action
-  // Future<void> firebaseLogin() async {
-  //   isLoadingChange();
-  //   if (formState.currentState!.validate()) {
-  //     final response = await Provider.of<UserRepository>(context, listen: false)
-  //         .firebaseSignIn(emailController.text, passwordController.text);
-
-  //     if (response) {
-  //       scaffoldState.currentState!.showSnackBar(SnackBar(
-  //         content: Text("Oturum açıldı."),
-  //       ));
-  //     }
-  //     // NavigationService.instance.navigateToPage(NavigationConstants.HOME_VIEW);
-  //   }
-  //   isLoadingChange();
-  // }
-
-  // @action
-  // Future<void> _onAuthStateChanged(User firebaseUser) async {
-  //   if (firebaseUser.email == null) {
-  //     _status = Status.Unauthenticated;
-  //   } else {
-  //     _firebaseUser = firebaseUser;
-  //     _status = Status.Authenticated;
-  //   }
-  // }
 }
