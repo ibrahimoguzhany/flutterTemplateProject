@@ -147,7 +147,6 @@ class LoginView extends StatelessWidget {
       Observer(builder: (_) {
         return TextFormField(
           controller: viewModel.passwordController,
-         
           validator: (value) =>
               value!.isNotEmpty ? null : "Bu alan gereklidir.",
           decoration: InputDecoration(

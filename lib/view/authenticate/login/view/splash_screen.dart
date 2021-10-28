@@ -1,7 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'login_view2.dart';
+import 'login_via_azure_view.dart';
 
 class SplashWidget extends StatelessWidget {
   const SplashWidget({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class SplashWidget extends StatelessWidget {
                       pageBuilder: (BuildContext context,
                           Animation<double> animation,
                           Animation<double> secondaryAnimation) {
-                        return LoginView2();
+                        return LoginViaAzureView();
                       },
                       transitionsBuilder: (BuildContext context,
                           Animation<double> animation,
@@ -67,7 +67,7 @@ class SplashWidget extends StatelessWidget {
       ),
       animationDuration: Duration(milliseconds: 1800),
       curve: Curves.easeIn,
-      nextScreen: LoginView2(),
+      nextScreen: LoginViaAzureView(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,

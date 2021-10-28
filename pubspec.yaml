@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   aad_oauth: ^0.3.0
+  animated_splash_screen: ^1.1.0
   auto_size_text: ^2.1.0
   build_runner: ^2.1.1
   cloud_firestore: ^2.5.1
@@ -43,7 +44,6 @@ dependencies:
   url_launcher: any
   vexana: ^2.3.0
   webview_flutter: ^2.0.4
-  animated_splash_screen: ^1.1.0
 
 dependency_overrides:
   analyzer: ^2.1.0

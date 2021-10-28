@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../product/exception/navigate_model_not_found.dart';
 import '../../../view/authenticate/login/view/login_view.dart';
-import '../../../view/authenticate/login/view/login_view2.dart';
+import '../../../view/authenticate/login/view/login_via_azure_view.dart';
 import '../../../view/authenticate/onboard/view/on_board_view.dart';
 import '../../../view/authenticate/test/view/test_view.dart';
 import '../../../view/home/view/home_view.dart';
@@ -43,8 +43,8 @@ class NavigationRoute {
       case NavigationConstants.LOGIN_VIEW:
         return normalNavigate(LoginView());
 
-      case NavigationConstants.LOGIN_VIEW2:
-        return normalNavigate(LoginView2());
+      case NavigationConstants.LoginViaAzureView:
+        return normalNavigate(LoginViaAzureView());
 
       case NavigationConstants.SETTINGS_VIEW:
         return normalNavigate(SettingsView());

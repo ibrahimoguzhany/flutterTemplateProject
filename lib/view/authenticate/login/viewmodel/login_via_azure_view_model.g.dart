@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_view2_model.dart';
+part of 'login_via_azure_view_model.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'login_view2_model.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
-  final _$isLoadingAtom = Atom(name: '_Login2ViewModelBase.isLoading');
+mixin _$LoginViaAzureViewModel on _LoginViaAzureViewModelBase, Store {
+  final _$isLoadingAtom = Atom(name: '_LoginViaAzureViewModelBase.isLoading');
 
   @override
   bool get isLoading {
@@ -25,7 +25,7 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
   }
 
   final _$rememberMeIsCheckhedAtom =
-      Atom(name: '_Login2ViewModelBase.rememberMeIsCheckhed');
+      Atom(name: '_LoginViaAzureViewModelBase.rememberMeIsCheckhed');
 
   @override
   bool get rememberMeIsCheckhed {
@@ -41,7 +41,7 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
-  final _$isLockOpenAtom = Atom(name: '_Login2ViewModelBase.isLockOpen');
+  final _$isLockOpenAtom = Atom(name: '_LoginViaAzureViewModelBase.isLockOpen');
 
   @override
   bool get isLockOpen {
@@ -56,7 +56,22 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
-  final _$isVisibleAtom = Atom(name: '_Login2ViewModelBase.isVisible');
+  final _$userEmailAtom = Atom(name: '_LoginViaAzureViewModelBase.userEmail');
+
+  @override
+  String get userEmail {
+    _$userEmailAtom.reportRead();
+    return super.userEmail;
+  }
+
+  @override
+  set userEmail(String value) {
+    _$userEmailAtom.reportWrite(value, super.userEmail, () {
+      super.userEmail = value;
+    });
+  }
+
+  final _$isVisibleAtom = Atom(name: '_LoginViaAzureViewModelBase.isVisible');
 
   @override
   bool get isVisible {
@@ -72,7 +87,7 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
   }
 
   final _$currentTabIndexAtom =
-      Atom(name: '_Login2ViewModelBase.currentTabIndex');
+      Atom(name: '_LoginViaAzureViewModelBase.currentTabIndex');
 
   @override
   int get currentTabIndex {
@@ -87,61 +102,72 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
     });
   }
 
-  final _$_Login2ViewModelBaseActionController =
-      ActionController(name: '_Login2ViewModelBase');
+  final _$_LoginViaAzureViewModelBaseActionController =
+      ActionController(name: '_LoginViaAzureViewModelBase');
+
+  @override
+  void setUserEmail(String email) {
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.setUserEmail');
+    try {
+      return super.setUserEmail(email);
+    } finally {
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeIsChecked(bool? val) {
-    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
-        name: '_Login2ViewModelBase.changeIsChecked');
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.changeIsChecked');
     try {
       return super.changeIsChecked(val);
     } finally {
-      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeVisibility() {
-    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
-        name: '_Login2ViewModelBase.changeVisibility');
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.changeVisibility');
     try {
       return super.changeVisibility();
     } finally {
-      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeCurrentTabIndex(int val) {
-    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
-        name: '_Login2ViewModelBase.changeCurrentTabIndex');
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.changeCurrentTabIndex');
     try {
       return super.changeCurrentTabIndex(val);
     } finally {
-      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void isLockStateChange() {
-    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
-        name: '_Login2ViewModelBase.isLockStateChange');
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.isLockStateChange');
     try {
       return super.isLockStateChange();
     } finally {
-      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void isLoadingChange() {
-    final _$actionInfo = _$_Login2ViewModelBaseActionController.startAction(
-        name: '_Login2ViewModelBase.isLoadingChange');
+    final _$actionInfo = _$_LoginViaAzureViewModelBaseActionController
+        .startAction(name: '_LoginViaAzureViewModelBase.isLoadingChange');
     try {
       return super.isLoadingChange();
     } finally {
-      _$_Login2ViewModelBaseActionController.endAction(_$actionInfo);
+      _$_LoginViaAzureViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
@@ -151,6 +177,7 @@ mixin _$Login2ViewModel on _Login2ViewModelBase, Store {
 isLoading: ${isLoading},
 rememberMeIsCheckhed: ${rememberMeIsCheckhed},
 isLockOpen: ${isLockOpen},
+userEmail: ${userEmail},
 isVisible: ${isVisible},
 currentTabIndex: ${currentTabIndex}
     ''';
