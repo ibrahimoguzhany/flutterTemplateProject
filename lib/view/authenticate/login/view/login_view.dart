@@ -102,7 +102,7 @@ class _LoginViewState extends State<LoginView> {
 
   Text buildSubWelcomeText() {
     return Text(
-      'E-mail adresiniz ile giriş yapabilirsiniz.',
+      'E-mail adresiniz ve şifreniz ile giriş yapabilirsiniz.',
       textAlign: TextAlign.center,
       style: TextStyle(
           color: Color.fromRGBO(0, 0, 0, 1),
@@ -138,30 +138,37 @@ class _LoginViewState extends State<LoginView> {
       child: RaisedButton(
         color: context.colors.onSurface,
         onPressed: () async {
-          final isValid = _formKey.currentState!.validate();
-          if (isValid) {
-            // await viewModel.signIn(viewModel.emailController.text);
-          }
-          final snackBar = SnackBar(
-            content: Text("E-mail adresiniz ya da şifreniz geçerli değil."),
-            backgroundColor: Colors.red,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          // final isValid = _formKey.currentState!.validate();
+          // if (isValid) {
+          await viewModel.signIn(
+              viewModel.emailController.text,
+              viewModel.passwordController.text,
+              viewModel.rememberMeIsCheckhed);
+          // }
+          // final snackBar = SnackBar(
+          //   content: Text("E-mail adresiniz ya da şifreniz geçerli değil."),
+          //   backgroundColor: Colors.red,
+          // );
+          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
-        child: Center(
-            child: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(text: "GİRİŞ ", style: TextStyle(color: Colors.black87)),
-              WidgetSpan(
-                child: Icon(Icons.login, size: 16),
-              ),
-            ],
-          ),
-        )),
+        child: buildLoginButtonText(),
         shape: StadiumBorder(),
       ),
     );
+  }
+
+  Center buildLoginButtonText() {
+    return Center(
+        child: RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: "GİRİŞ ", style: TextStyle(color: Colors.black87)),
+          WidgetSpan(
+            child: Icon(Icons.login, size: 16),
+          ),
+        ],
+      ),
+    ));
   }
 
   Wrap buildWrap(LoginViewModel viewModel) {
@@ -218,7 +225,7 @@ class _LoginViewState extends State<LoginView> {
       BuildContext context, LoginViewModel viewModel) {
     return TextFormField(
         controller: viewModel.emailController,
-        validator: (value) => value!.isValidEmail,
+        // validator: (value) => value!.isValidEmail,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           helperText: ' ',
@@ -226,28 +233,6 @@ class _LoginViewState extends State<LoginView> {
           hintStyle: TextStyle(fontWeight: FontWeight.w100),
           prefixStyle: TextStyle(fontWeight: FontWeight.w100),
           contentPadding: EdgeInsets.all(10),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: context.colors.onSurface, width: 1.0),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: context.colors.onError,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: context.colors.onError,
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: context.colors.onSurface,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: context.colors.onSurface, width: 1.0),
-          ),
           labelText: "Email",
           labelStyle: context.textTheme.subtitle1,
         ));
@@ -274,30 +259,6 @@ class _LoginViewState extends State<LoginView> {
                 },
               );
             }),
-            border: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: context.colors.onSurface, width: 1.0),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onError,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onError,
-                width: 1.0,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onSurface,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: context.colors.onSurface, width: 1.0),
-            ),
             labelText: "Şifre",
             labelStyle: context.textTheme.subtitle1,
           ));

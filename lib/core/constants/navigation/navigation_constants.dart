@@ -1,6 +1,6 @@
 class NavigationConstants {
   static const TEST_VIEW = "/test";
-  static const HOME_VIEW = "/home";
+  static const TOURS_HOME_VIEW = "/tours_home_view";
   static const LOGIN_VIEW = "/login";
   static const LoginViaAzureView = "/login_via_azure_view";
   static const PLANNED_TOUR_DETAIL_VIEW = "/planned_tour_detail_view";

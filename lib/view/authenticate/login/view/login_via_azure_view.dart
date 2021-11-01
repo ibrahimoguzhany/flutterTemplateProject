@@ -1,8 +1,10 @@
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/core/extensions/string_extension.dart';
-import 'package:esd_mobil/view/authenticate/login/viewmodel/login_via_azure_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../viewmodel/login_via_azure_view_model.dart';
 
 class LoginViaAzureView extends StatefulWidget {
   const LoginViaAzureView({Key? key}) : super(key: key);
@@ -24,72 +26,82 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
       },
       onPageBuilder: (BuildContext context, LoginViaAzureViewModel viewModel) =>
           Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height / 5),
-          child: viewModel.isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 84),
-                      child: Hero(
-                        tag: "socarLogo",
-                        child:
-                            Image.asset('assets/image/800pxlogo_of_socar1.png'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 24.0,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(10.0),
-                      padding: const EdgeInsets.only(
-                          bottom: 30.0, top: 30, right: 10, left: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: context.colors.onSurface,
-                          width: 0.8,
-                        ),
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            buildWelcomeText(),
-                            SizedBox(
-                              height: 12,
+        body: Observer(
+          builder: (_) {
+            return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height / 5),
+                child: viewModel.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 84),
+                            child: Hero(
+                              tag: "socarLogo",
+                              child: Image.asset(
+                                  'assets/image/800pxlogo_of_socar1.png'),
                             ),
-                            buildSubWelcomeText(),
-                            SizedBox(
-                              height: 10,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 24.0,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.only(
+                                bottom: 30.0, top: 30, right: 10, left: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: context.colors.onSurface,
+                                width: 0.8,
+                              ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
+                            child: Form(
+                              key: _formKey,
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  buildWelcomeText(),
                                   SizedBox(
-                                      height: 64,
-                                      child: buildTextFormFieldEmail(
-                                          context, viewModel)),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height /
-                                        64.0,
+                                    height: 12,
                                   ),
-                                  // buildTextFormFieldPassword(context, viewModel),
-                                  loginButton(viewModel),
-                                  // buildWrap(viewModel),
+                                  buildSubWelcomeText(),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 64,
+                                          child: buildTextFormFieldEmail(
+                                              context, viewModel),
+                                        ),
+                                        SizedBox(
+                                          height: 64,
+                                          child: buildTextFormFieldPassword(
+                                              context, viewModel),
+                                        ),
+                                        loginButton(viewModel),
+                                        Container(
+                                          alignment: Alignment.bottomRight,
+                                          child: TextButton(
+                                            child: Text("Geri git"),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ));
+          },
         ),
       ),
     );
@@ -130,12 +142,14 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
   SizedBox loginButton(LoginViaAzureViewModel viewModel) {
     return SizedBox(
       height: 30,
+      // ignore: deprecated_member_use
       child: RaisedButton(
         color: context.colors.onSurface,
         onPressed: () async {
           final isValid = _formKey.currentState!.validate();
           if (isValid) {
-            await viewModel.signIn(viewModel.emailController.text);
+            await viewModel.signIn(viewModel.emailController.text,
+                viewModel.passwordController.text);
           }
           final snackBar = SnackBar(
             content: Text("E-mail adresiniz geçerli değil."),
@@ -159,149 +173,62 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
     );
   }
 
-  // Wrap buildWrap(Login2ViewModel viewModel) {
-  //   return Wrap(
-  //     crossAxisAlignment: WrapCrossAlignment.center,
-  //     children: [
-  //       Column(
-  //         children: [
-  //           Row(
-  //             children: [
-  //               Observer(builder: (_) {
-  //                 return Checkbox(
-  //                   value: viewModel.rememberMeIsCheckhed,
-  //                   onChanged: viewModel.changeIsChecked,
-  //                 );
-  //               }),
-  //               Text("Beni Hatırla"),
-  //               Spacer(
-  //                 flex: 2,
-  //               ),
-  //               TextButton(
-  //                 onPressed: () {},
-  //                 child: Text(
-  //                   "Şifremi Unuttum",
-  //                   style: TextStyle(
-  //                     color: Colors.blue,
-  //                   ),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //           Row(
-  //             children: [
-  //               Text("Diğer Giriş Seçenekleri"),
-  //               InkWell(
-  //                 onTap: viewModel.isLoading
-  //                     ? null
-  //                     : () async {
-  //                         final token = await viewModel.signIn();
-  //                         viewModel.isLoadingChange();
-  //                         if (token!.isNotEmpty) {
-  //                           final snackBar = SnackBar(
-  //                             content: Text("Giriş Yapıldı"),
-  //                             backgroundColor: Colors.green,
-  //                           );
-  //                           ScaffoldMessenger.of(context)
-  //                               .showSnackBar(snackBar);
-  //                         }
-  //                       },
-  //                 child: Image.asset(
-  //                   'assets/image/Rectangle10.png',
-  //                   width: 100,
-  //                 ),
-  //               )
-  //             ],
-  //           )
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Container buildTextFormFieldEmail(
       BuildContext context, LoginViaAzureViewModel viewModel) {
-    final maxLines = 5;
     return Container(
-      height: maxLines * 8,
       child: TextFormField(
           controller: viewModel.emailController,
           validator: (value) => value!.isValidEmail,
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             helperText: ' ',
             prefixIcon: buildContainerIconField(context, Icons.email_outlined),
             hintStyle: TextStyle(fontWeight: FontWeight.w100),
             prefixStyle: TextStyle(fontWeight: FontWeight.w100),
             contentPadding: EdgeInsets.all(10),
-            errorMaxLines: 3,
-            // errorText: "Lütfen mail adresinizi kontrol edin.",
-            border: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: context.colors.onSurface, width: 1.0),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onError,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onError,
-                width: 1.0,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: context.colors.onSurface,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: context.colors.onSurface, width: 1.0),
-            ),
             labelText: "Email",
             labelStyle: context.textTheme.subtitle1,
-            // icon: buildContainerIconField(context, Icons.email),
           )),
     );
   }
 
-  // Widget buildTextFormFieldPassword(
-  //     BuildContext context, Login2ViewModel viewModel) {
-  //   return Observer(builder: (_) {
-  //     return TextFormField(
-  //         controller: viewModel.passwordController,
-  //         obscureText: viewModel.isLockOpen,
-  //         validator: (value) =>
-  //             value!.isNotEmpty ? null : "Bu alan gereklidir.",
-  // validator: (value) => value!.isValidEmail,
-  //         decoration: new InputDecoration(
-  //           prefixIcon: buildContainerPasswordField(context, Icons.password),
-  //           suffixIcon: Observer(builder: (_) {
-  //             return InkWell(
-  //               child: buildContainerPasswordField(context,
-  //                   viewModel.isLockOpen ? Icons.lock : Icons.lock_open_sharp),
-  //               onTap: () {
-  //                 viewModel.isLockStateChange();
-  //               },
-  //             );
-  //           }),
-  //           focusedBorder: OutlineInputBorder(
-  //             borderSide: BorderSide(
-  //               color: Colors.blueAccent,
-  //             ),
-  //           ),
-  //           labelText: "Şifre",
-  //           labelStyle: context.textTheme.subtitle1,
-  // icon: buildContainerIconField(context, Icons.email),
-  //           enabledBorder: OutlineInputBorder(
-  //             borderSide: BorderSide(color: Colors.blue, width: 2.0),
-  //           ),
-  //         ));
-  //   });
-  // }
+  Widget buildTextFormFieldPassword(
+      BuildContext context, LoginViaAzureViewModel viewModel) {
+    return Observer(builder: (_) {
+      return TextFormField(
+          controller: viewModel.passwordController,
+          obscureText: viewModel.isLockOpen,
+          validator: (value) =>
+              value!.isNotEmpty ? null : "Bu alan gereklidir.",
+          decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10),
+            helperText: ' ',
+            prefixIcon: buildContainerPasswordField(context, Icons.password),
+            suffixIcon: Observer(builder: (_) {
+              return InkWell(
+                child: buildContainerPasswordField(context,
+                    viewModel.isLockOpen ? Icons.lock : Icons.lock_open_sharp),
+                onTap: () {
+                  viewModel.isLockStateChange();
+                },
+              );
+            }),
+            labelText: "Şifre",
+            labelStyle: context.textTheme.subtitle1,
+          ));
+    });
+  }
 
   Container buildContainerIconField(BuildContext context, IconData icon) {
+    return Container(
+      padding: context.paddingLowAll,
+      child: Icon(
+        icon,
+      ),
+    );
+  }
+
+  Container buildContainerPasswordField(BuildContext context, IconData icon) {
     return Container(
       // color: context.colors.secondaryVariant,
       padding: context.paddingLowAll,
@@ -312,14 +239,3 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
     );
   }
 }
-
-// Container buildContainerPasswordField(BuildContext context, IconData icon) {
-//   return Container(
-//     // color: context.colors.secondaryVariant,
-//     padding: context.paddingLowAll,
-//     child: Icon(
-//       icon,
-//       // color: context.colors.primaryVariant,
-//     ),
-//   );
-// }

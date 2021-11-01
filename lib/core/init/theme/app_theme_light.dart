@@ -13,14 +13,27 @@ class AppThemeLight extends AppTheme with ILightTheme {
         colorScheme: _appColorScheme,
         textTheme: buildTextTheme(),
         inputDecorationTheme: InputDecorationTheme(
-            focusColor: Colors.black12,
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black54)),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.black54),
-            ),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black54))),
+          // focusColor: Colors.black12,
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorSchemeLight.onError, width: 1.0),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorSchemeLight.onError, width: 1.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+          ),
+          border: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+          ),
+        ),
+
         // scaffoldBackgroundColor: Color(0xFFFAFAFA),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         floatingActionButtonTheme: ThemeData.light()

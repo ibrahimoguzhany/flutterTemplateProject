@@ -1,14 +1,15 @@
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
+import 'dart:convert';
+
+import 'package:esd_mobil/core/constants/enums/preferences_keys_enum.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/cache/locale_manager.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:mobx/mobx.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../../core/base/model/base_viewmodel.dart';
-import '../../../../core/constants/enums/preferences_keys_enum.dart';
-import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/cache/locale_manager.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
 import '../service/ILoginService.dart';
 
 part 'login_view_model.g.dart';
@@ -26,16 +27,30 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
     passwordController = TextEditingController();
   }
 
-  Future<String?> signIn(String email) async {
-    // if (accessToken!.isNotEmpty) {
-    //   if (rememberMeIsCheckhed) {
-    //     await LocaleManager.instance
-    //         .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-    //   }
-    //   await NavigationService.instance
-    //       .navigateToPage(NavigationConstants.HOME_VIEW);
-    // }
-    // return accessToken;
+  final authenticateURL = "http://10.0.2.2:8009/api/TokenAuth/Authenticate";
+
+  Future<String?> signIn(String email, String password, bool rememberMe) async {
+    final response = await http.post(Uri.parse(authenticateURL), body: {
+      "UserNameOrEmailAddress": "${emailController.text}",
+      "Password": "${passwordController.text}",
+      "RememberClient": rememberMe == true ? "true" : "false"
+    });
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await json.decode(response.body)["result"];
+        final accessToken = responseBody["accessToken"];
+        print(responseBody);
+
+        if (accessToken!.isNotEmpty) {
+          if (rememberMeIsCheckhed) {
+            await LocaleManager.instance
+                .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
+          }
+          await NavigationService.instance
+              .navigateToPage(NavigationConstants.TOURS_HOME_VIEW);
+        }
+        return accessToken;
+    }
   }
 
   signOut() async {}

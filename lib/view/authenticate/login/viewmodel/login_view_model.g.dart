@@ -24,6 +24,23 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
     });
   }
 
+  final _$rememberMeIsCheckhedAtom =
+      Atom(name: '_LoginViewModelBase.rememberMeIsCheckhed');
+
+  @override
+  bool get rememberMeIsCheckhed {
+    _$rememberMeIsCheckhedAtom.reportRead();
+    return super.rememberMeIsCheckhed;
+  }
+
+  @override
+  set rememberMeIsCheckhed(bool value) {
+    _$rememberMeIsCheckhedAtom.reportWrite(value, super.rememberMeIsCheckhed,
+        () {
+      super.rememberMeIsCheckhed = value;
+    });
+  }
+
   final _$isLockOpenAtom = Atom(name: '_LoginViewModelBase.isLockOpen');
 
   @override
@@ -36,6 +53,21 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   set isLockOpen(bool value) {
     _$isLockOpenAtom.reportWrite(value, super.isLockOpen, () {
       super.isLockOpen = value;
+    });
+  }
+
+  final _$userEmailAtom = Atom(name: '_LoginViewModelBase.userEmail');
+
+  @override
+  String get userEmail {
+    _$userEmailAtom.reportRead();
+    return super.userEmail;
+  }
+
+  @override
+  set userEmail(String value) {
+    _$userEmailAtom.reportWrite(value, super.userEmail, () {
+      super.userEmail = value;
     });
   }
 
@@ -72,6 +104,28 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
 
   final _$_LoginViewModelBaseActionController =
       ActionController(name: '_LoginViewModelBase');
+
+  @override
+  void setUserEmail(String email) {
+    final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
+        name: '_LoginViewModelBase.setUserEmail');
+    try {
+      return super.setUserEmail(email);
+    } finally {
+      _$_LoginViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeIsChecked(bool? val) {
+    final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
+        name: '_LoginViewModelBase.changeIsChecked');
+    try {
+      return super.changeIsChecked(val);
+    } finally {
+      _$_LoginViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeVisibility() {
@@ -121,7 +175,9 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
+rememberMeIsCheckhed: ${rememberMeIsCheckhed},
 isLockOpen: ${isLockOpen},
+userEmail: ${userEmail},
 isVisible: ${isVisible},
 currentTabIndex: ${currentTabIndex}
     ''';

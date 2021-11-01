@@ -1,6 +1,9 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:esd_mobil/view/authenticate/login/model/user_ad_result_model.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
 
@@ -9,9 +12,7 @@ import '../../../../core/constants/enums/preferences_keys_enum.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/cache/locale_manager.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
-import '../../../../core/init/network/vexana_manager.dart';
 import '../service/ILoginService.dart';
-import '../service/login_service.dart';
 
 part 'login_via_azure_view_model.g.dart';
 
@@ -30,16 +31,21 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
   }
 
   static final Config config = new Config(
-    tenant: "58d32a83-95a1-4062-8a76-25689bc3e158",
-    clientId: "66d55d0c-2b44-4fcd-9943-5d9c58e420ff",
-    scope: "openid profile offline_access User.read",
-    redirectUri: "https://login.microsoftonline.com/common/oauth2/nativeclient",
-    isB2C: false,
-    domainHint: "consumers",
-  );
+      tenant: "58d32a83-95a1-4062-8a76-25689bc3e158",
+      clientId: "66d55d0c-2b44-4fcd-9943-5d9c58e420ff",
+      scope: "openid profile offline_access User.read",
+      redirectUri:
+          "https://login.microsoftonline.com/common/oauth2/nativeclient",
+      isB2C: false,
+      domainHint: "consumers",
+      loginHint: "Lütfen şifrenizi tekrar giriniz");
 
-  Future<String?> signIn(String email) async {
-    config.loginHint = email;
+  final createUserInMobileURL =
+      "http://10.0.2.2/api/services/app/User/CreateUserInMobile";
+
+  final authenticateMobile = "http://10.0.2.2/api/TokenAuth/AuthenticateMobile";
+
+  Future<String?> signIn(String email, String password) async {
     final AadOAuth oauth = new AadOAuth(config);
 
     await oauth.login();
@@ -52,16 +58,56 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
       "Content-Type": "application/json"
     });
     print(graphResponse.body);
+    switch (graphResponse.statusCode) {
+      case HttpStatus.ok:
+        final graphResponseBody = await json.decode(graphResponse.body);
+        final authResponse = await http.post(Uri.parse(authenticateMobile),
+            body: {...graphResponseBody, "password": "$password"});
+        if (authResponse.statusCode == 200) {
+          final responseBody = await json.decode(authResponse.body);
+          if (responseBody == null) {
+            final createUserResponse = await http.post(
+                Uri.parse(createUserInMobileURL),
+                body: graphResponseBody);
+            if (createUserResponse.statusCode == 200) {
+              final createUserResponseBody =
+                  await json.decode(createUserResponse.body);
+              if (createUserResponseBody != null) {
+                final resultAfterSignUp = await http.post(
+                    Uri.parse(authenticateMobile),
+                    body: graphResponseBody);
+                if (resultAfterSignUp.statusCode == 200) {
+                  final responseBody = json.decode(resultAfterSignUp.body);
+                  final access_token = responseBody["access_token"];
+                  if (access_token!.isNotEmpty) {
+                    if (rememberMeIsCheckhed) {
+                      await LocaleManager.instance.setStringValue(
+                          PreferencesKeys.ACCESSTOKEN, access_token);
+                    }
+                    await NavigationService.instance
+                        .navigateToPage(NavigationConstants.TOURS_HOME_VIEW);
 
-    if (accessToken!.isNotEmpty) {
-      if (rememberMeIsCheckhed) {
-        await LocaleManager.instance
-            .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
-      }
-      await NavigationService.instance
-          .navigateToPage(NavigationConstants.HOME_VIEW);
+                    return access_token;
+                  }
+                }
+              } else {
+                print("Kullanici olusturulamadi");
+              }
+            }
+          } else {
+            if (accessToken!.isNotEmpty) {
+              if (rememberMeIsCheckhed) {
+                await LocaleManager.instance
+                    .setStringValue(PreferencesKeys.ACCESSTOKEN, accessToken);
+              }
+              await NavigationService.instance
+                  .navigateToPage(NavigationConstants.TOURS_HOME_VIEW);
+
+              return accessToken;
+            }
+          }
+        }
     }
-    return accessToken;
   }
 
   signOut() async {

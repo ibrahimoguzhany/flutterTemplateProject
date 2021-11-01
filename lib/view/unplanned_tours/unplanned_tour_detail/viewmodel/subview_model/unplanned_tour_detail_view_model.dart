@@ -67,7 +67,7 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                         await NavigationService.instance
-                            .navigateToPageClear(NavigationConstants.HOME_VIEW);
+                            .navigateToPageClear(NavigationConstants.TOURS_HOME_VIEW);
                       }
                     }),
                 TextButton(

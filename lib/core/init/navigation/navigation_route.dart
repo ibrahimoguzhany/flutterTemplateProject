@@ -1,3 +1,4 @@
+import 'package:esd_mobil/view/_product/_widgets/tours_home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -6,7 +7,6 @@ import '../../../view/authenticate/login/view/login_view.dart';
 import '../../../view/authenticate/login/view/login_via_azure_view.dart';
 import '../../../view/authenticate/onboard/view/on_board_view.dart';
 import '../../../view/authenticate/test/view/test_view.dart';
-import '../../../view/home/view/home_view.dart';
 import '../../../view/planned_tours/planned_tour_detail/view/add_planned_tour_finding_view.dart';
 import '../../../view/planned_tours/planned_tour_detail/view/planned_tour_detail_view.dart';
 import '../../../view/planned_tours/planned_tours_list/view/planned_tour_list_view.dart';
@@ -35,8 +35,8 @@ class NavigationRoute {
       case NavigationConstants.TEST_VIEW:
         return normalNavigate(TestView());
 
-      case NavigationConstants.HOME_VIEW:
-        return normalNavigate(HomeView());
+      case NavigationConstants.TOURS_HOME_VIEW:
+        return normalNavigate(ToursHomeView());
       case NavigationConstants.ONBOARD:
         return normalNavigate(OnBoardView());
 

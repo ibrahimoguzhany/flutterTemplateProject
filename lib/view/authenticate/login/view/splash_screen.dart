@@ -1,8 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:esd_mobil/view/authenticate/login/view/login_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_via_azure_view.dart';
+import 'login_view.dart';
 
 class SplashWidget extends StatelessWidget {
   const SplashWidget({Key? key}) : super(key: key);
@@ -52,17 +52,17 @@ class SplashWidget extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          Text(
-            'Emniyet Turu Uygulaması',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 1),
-              fontFamily: 'Source Sans Pro',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              // height: 0.4,
-            ),
-          ),
+          // Text(
+          //   'Emniyet Turu Uygulaması',
+          //   textAlign: TextAlign.left,
+          //   style: TextStyle(
+          //     color: Color.fromRGBO(0, 0, 0, 1),
+          //     fontFamily: 'Source Sans Pro',
+          //     fontSize: 24,
+          //     fontWeight: FontWeight.bold,
+          //     // height: 0.4,
+          //   ),
+          // ),
         ],
       ),
       animationDuration: Duration(milliseconds: 1800),
