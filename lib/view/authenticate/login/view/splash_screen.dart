@@ -1,4 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:esd_mobil/view/home/view/home_view.dart';
+import 'package:esd_mobil/view/inbox/view/inbox_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_via_azure_view.dart';
@@ -67,7 +69,7 @@ class SplashWidget extends StatelessWidget {
       ),
       animationDuration: Duration(milliseconds: 1800),
       curve: Curves.easeIn,
-      nextScreen: LoginView(),
+      nextScreen: HomeView(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,

@@ -24,4 +24,6 @@ class NavigationConstants {
   static const ONBOARD = "/on_board";
   static const UNPLANNED_TOUR_FINDING_DETAIL_VIEW =
       "/unplanned_tour_finding_detail_view";
+
+  static const INBOX_VIEW = "/inbox_view";
 }

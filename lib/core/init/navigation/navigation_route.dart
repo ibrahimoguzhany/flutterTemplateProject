@@ -1,4 +1,5 @@
 import 'package:esd_mobil/view/_product/_widgets/tours_home_view.dart';
+import 'package:esd_mobil/view/inbox/view/inbox_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -69,6 +70,9 @@ class NavigationRoute {
 
       case NavigationConstants.ADD_UNPLANNED_TOUR_VIEW:
         return normalNavigate(AddUnPlannedTourView());
+
+      case NavigationConstants.INBOX_VIEW:
+        return normalNavigate(InboxView());
 
       case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
         return navigateWithData(EditUnPlannedTourView(), args.arguments);
