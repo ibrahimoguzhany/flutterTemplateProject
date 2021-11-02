@@ -174,7 +174,10 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text(LocaleKeys.home_bottom_app_bar_tabs_unplanned_tours.tr()),
+      title: Text(
+        LocaleKeys.home_bottom_app_bar_tabs_unplanned_tours.tr(),
+        style: TextStyle(color: Color(0xFF31201B)),
+      ),
     );
   }
 

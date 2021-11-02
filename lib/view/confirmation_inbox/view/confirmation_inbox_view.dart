@@ -15,7 +15,6 @@ class ConfirmationInboxView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Spacer(flex: 1),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 84),
             child: Hero(
@@ -24,7 +23,7 @@ class ConfirmationInboxView extends StatelessWidget {
             ),
           ),
           Spacer(
-            flex: 2,
+            flex: 1,
           ),
           Expanded(
             flex: 20,
@@ -157,12 +156,103 @@ class ConfirmationInboxView extends StatelessWidget {
               ),
             )),
           ),
-          Expanded(
-            child: Container(
-              color: Color(0xffF9EEDF),
-            ),
-            flex: 4,
-          )
+          SizedBox(height: 18),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(
+                    flex: 1,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      NavigationService.instance
+                          .navigateToPage(NavigationConstants.INBOX_VIEW);
+                    },
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Icon(
+                              Icons.inbox_outlined,
+                              size: 42,
+                            ),
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Color(0xffF9EEDF),
+                              foregroundColor: Colors.black,
+                              child: Text("2"),
+                            )
+                          ],
+                        ),
+                        Text(
+                          "Inbox",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      NavigationService.instance
+                          .navigateToPage(NavigationConstants.INBOX_VIEW);
+                    },
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Icon(
+                              Icons.notifications_none_outlined,
+                              size: 42,
+                            ),
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Color(0xffF9EEDF),
+                              foregroundColor: Colors.black,
+                              child: Text("9"),
+                            )
+                          ],
+                        ),
+                        Text(
+                          "Notifications",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.settings_outlined,
+                          size: 42,
+                        ),
+                        Text(
+                          "Settings",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                ],
+              )
+            ],
+          ),
+          Spacer(flex: 1)
         ],
       ),
     );

@@ -51,7 +51,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
-          title: Text("Plansız Tur Ekleme Sayfası"),
+          title: Text(
+            "Plansız Tur Ekleme Sayfası",
+            style: TextStyle(color: Color(0xFF31201B)),
+          ),
         ),
         body: Form(
           key: _formKey,
@@ -213,7 +216,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         ),
         onConfirm: (List<UserDDModel?>? results) {
           List<int>? result = <int>[];
-          results!.forEach((item) { 
+          results!.forEach((item) {
             result.add(item!.id!);
           });
           tour.tourTeamMembersIds =
