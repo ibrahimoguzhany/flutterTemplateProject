@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/product/enum/lottie_path_enum.dart';
 import 'package:lottie/lottie.dart';
+
+import '../enum/lottie_path_enum.dart';
 
 extension LottiePathEnumExtension on LottiePathEnum {
   String get rawValue {

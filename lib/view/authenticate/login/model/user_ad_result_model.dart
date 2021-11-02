@@ -8,7 +8,7 @@ class UserAdResult {
   String? preferredLanguage;
   String? surname;
   String? userPrincipalName;
-  String? id;
+  String? azureId;
 
   UserAdResult(
       {this.displayName,
@@ -20,7 +20,7 @@ class UserAdResult {
       this.preferredLanguage,
       this.surname,
       this.userPrincipalName,
-      this.id});
+      this.azureId});
 
   UserAdResult.fromJson(Map<String, dynamic> json) {
     displayName = json['displayName'];
@@ -32,7 +32,7 @@ class UserAdResult {
     preferredLanguage = json['preferredLanguage'];
     surname = json['surname'];
     userPrincipalName = json['userPrincipalName'];
-    id = json['id'];
+    azureId = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,7 +46,7 @@ class UserAdResult {
     data['preferredLanguage'] = this.preferredLanguage;
     data['surname'] = this.surname;
     data['userPrincipalName'] = this.userPrincipalName;
-    data['id'] = this.id;
+    data['id'] = this.azureId;
     return data;
   }
 }

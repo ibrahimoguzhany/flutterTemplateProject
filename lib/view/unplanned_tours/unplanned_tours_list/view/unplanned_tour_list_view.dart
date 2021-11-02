@@ -89,7 +89,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
     var formattedTourDate =
         DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
     return Card(
-      color: Color.fromRGBO(120, 123, 157, 0.5),
+      color: Color(0xffFF6333).withOpacity(0.75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),

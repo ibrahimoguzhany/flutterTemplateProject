@@ -1,8 +1,8 @@
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../_product/_widgets/big_little_text_widget.dart';
+import '../../../unplanned_tours/model/unplanned_tour_model.dart';
 import '../viewmodel/finding_detail_view_model.dart';
 
 class FindingDetailView extends StatelessWidget {

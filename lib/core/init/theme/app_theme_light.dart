@@ -33,20 +33,30 @@ class AppThemeLight extends AppTheme with ILightTheme {
                 BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
           ),
         ),
-
-        // scaffoldBackgroundColor: Color(0xFFFAFAFA),
+        scaffoldBackgroundColor: Color(0xffF9EEDF),
         fontFamily: ApplicationConstants.FONT_FAMILY,
         floatingActionButtonTheme: ThemeData.light()
             .floatingActionButtonTheme
-            .copyWith(backgroundColor: Color(0xff68CDD7)),
+            .copyWith(backgroundColor: Color(0xffFF6333)),
         tabBarTheme: TabBarTheme(
           labelPadding: insets.lowPaddingAll,
           unselectedLabelStyle:
               textThemeLight.headline4.copyWith(color: colorSchemeLight.gray),
         ),
-        appBarTheme: AppBarTheme(color: Color.fromRGBO(120, 123, 157, 1)),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: colorSchemeLight.lightGray),
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: Color(0xffFF6333)),
+          color: Color(0xffF9EEDF),
+          elevation: 0,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              color: Color(0xFF31201B),
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        bottomNavigationBarTheme:
+            BottomNavigationBarThemeData(backgroundColor: Color(0xffF9EEDF)),
       );
 
   TextTheme buildTextTheme() {

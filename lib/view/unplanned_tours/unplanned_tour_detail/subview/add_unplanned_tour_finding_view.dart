@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
+import '../../../_product/_model/finding_file.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';

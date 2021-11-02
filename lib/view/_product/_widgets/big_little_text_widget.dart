@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
+import '../../../core/components/text/auto_locale.text.dart';
 
 Widget buildLittleTextWidget(String? title) {
   if (title == null) {

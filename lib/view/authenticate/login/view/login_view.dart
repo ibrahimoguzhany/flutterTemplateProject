@@ -1,3 +1,4 @@
+import '../../../../core/constants/image/image_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -41,8 +42,8 @@ class _LoginViewState extends State<LoginView> {
                       padding: EdgeInsets.symmetric(horizontal: 84),
                       child: Hero(
                         tag: "socarLogo",
-                        child:
-                            Image.asset('assets/image/800pxlogo_of_socar1.png'),
+                        child: Image.asset(ImageConstants.instance!
+                            .toPng("800pxlogo_of_socar1")),
                       ),
                     ),
                     SizedBox(
@@ -209,7 +210,7 @@ class _LoginViewState extends State<LoginView> {
                         .navigateToPage(NavigationConstants.LoginViaAzureView);
                   },
                   child: Image.asset(
-                    'assets/image/Rectangle10.png',
+                    ImageConstants.instance!.toPng("microsoftLogo"),
                     width: 100,
                   ),
                 )

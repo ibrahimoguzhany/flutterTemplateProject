@@ -1,5 +1,7 @@
-import 'package:esd_mobil/view/_product/_widgets/tours_home_view.dart';
-import 'package:esd_mobil/view/inbox/view/inbox_view.dart';
+import 'package:esd_mobil/view/confirmation_inbox/view/confirmation_inbox_view.dart';
+import 'package:esd_mobil/view/home/view/home_view.dart';
+
+import '../../../view/_product/_widgets/tours_home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -35,6 +37,9 @@ class NavigationRoute {
     switch (args.name) {
       case NavigationConstants.TEST_VIEW:
         return normalNavigate(TestView());
+
+      case NavigationConstants.HOME_VIEW:
+        return normalNavigate(HomeView());
 
       case NavigationConstants.TOURS_HOME_VIEW:
         return normalNavigate(ToursHomeView());
@@ -72,7 +77,7 @@ class NavigationRoute {
         return normalNavigate(AddUnPlannedTourView());
 
       case NavigationConstants.INBOX_VIEW:
-        return normalNavigate(InboxView());
+        return normalNavigate(ConfirmationInboxView());
 
       case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
         return navigateWithData(EditUnPlannedTourView(), args.arguments);

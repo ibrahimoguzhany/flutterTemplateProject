@@ -69,6 +69,7 @@ class SettingsView extends StatelessWidget {
 
   Card buildCardNavigationTour(SettingsViewModel viewModel) {
     return Card(
+      color: Color(0xffF9EEDF),
       child: TextButton(
         onPressed: () {},
         child: ListTile(
@@ -109,6 +110,7 @@ class SettingsView extends StatelessWidget {
         title: LocaleKeys.home_setting_appSettings.tr(),
         children: [
           ListTile(
+            tileColor: Color(0xffF9EEDF),
             title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
             trailing: IconButton(
               icon: context.watch<ThemeNotifier>().currentThemeEnum ==
@@ -120,6 +122,7 @@ class SettingsView extends StatelessWidget {
             subtitle: Text(LocaleKeys.home_setting_core_themeDesc.tr()),
           ),
           ListTile(
+            tileColor: Color(0xffF9EEDF),
             title: Text(LocaleKeys.home_setting_core_langTitle.tr()),
             trailing: Observer(builder: (_) {
               return DropdownButton<Locale>(
@@ -145,6 +148,7 @@ class SettingsView extends StatelessWidget {
   Widget buildCardHeader(BuildContext context, SettingsViewModel viewModel,
       {required String title, required List<Widget> children}) {
     return Card(
+      color: Color(0xffF9EEDF),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -187,6 +191,7 @@ class SettingsView extends StatelessWidget {
 
   Card buildCardUser(BuildContext context, SettingsViewModel viewModel) {
     return Card(
+      color: Color(0xffF9EEDF),
       child: Padding(
         padding: context.paddingLowAll,
         child: InkWell(
@@ -230,7 +235,7 @@ class SettingsView extends StatelessWidget {
     return SliverAppBar(
       elevation: 0,
       pinned: true,
-      backgroundColor: context.colors.background,
+      backgroundColor: Color(0xffF9EEDF),
       expandedHeight: 100,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(

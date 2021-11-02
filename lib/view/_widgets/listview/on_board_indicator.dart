@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/components/list-view/indicator_list_view.dart';
 
 class OnBoardIndicator extends StatelessWidget {

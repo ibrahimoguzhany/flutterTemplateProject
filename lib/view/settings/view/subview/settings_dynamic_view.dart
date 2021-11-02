@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/constants/app/app_contansts.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/view/settings/model/settings_dynamic_model.dart';
+import '../../../../core/constants/app/app_contansts.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../model/settings_dynamic_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SettingsDynamicView extends StatelessWidget {

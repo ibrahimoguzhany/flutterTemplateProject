@@ -1,4 +1,4 @@
-import 'package:esd_mobil/core/extensions/string_extension.dart';
+import '../../../core/extensions/string_extension.dart';
 
 class SVGImagePaths {
   static SVGImagePaths? _instance;

@@ -26,4 +26,5 @@ class NavigationConstants {
       "/unplanned_tour_finding_detail_view";
 
   static const INBOX_VIEW = "/inbox_view";
+  static const HOME_VIEW = "/home_view";
 }

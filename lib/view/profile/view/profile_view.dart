@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
+import '../../../core/extensions/context_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';

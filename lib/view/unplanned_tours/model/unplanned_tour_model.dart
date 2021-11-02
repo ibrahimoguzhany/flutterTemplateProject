@@ -1,5 +1,5 @@
-import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
+import 'category_dd_model.dart';
+import 'user_dd_model.dart';
 
 class UnplannedTourModel {
   int? fieldOrganizationOrderScore;

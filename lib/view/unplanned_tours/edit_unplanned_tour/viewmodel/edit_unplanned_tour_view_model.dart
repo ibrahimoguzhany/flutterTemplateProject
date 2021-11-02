@@ -1,6 +1,4 @@
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import '../../unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';

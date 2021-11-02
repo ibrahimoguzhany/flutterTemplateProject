@@ -1,13 +1,12 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:esd_mobil/view/home/view/home_view.dart';
-import 'package:esd_mobil/view/inbox/view/inbox_view.dart';
+import 'package:esd_mobil/view/_product/_widgets/tours_home_view.dart';
+import '../../../confirmation_inbox/view/subview/confirmation_detail_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_via_azure_view.dart';
-import 'login_view.dart';
 
-class SplashWidget extends StatelessWidget {
-  const SplashWidget({Key? key}) : super(key: key);
+class SplashView extends StatelessWidget {
+  const SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,22 +53,22 @@ class SplashWidget extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          // Text(
-          //   'Emniyet Turu Uygulaması',
-          //   textAlign: TextAlign.left,
-          //   style: TextStyle(
-          //     color: Color.fromRGBO(0, 0, 0, 1),
-          //     fontFamily: 'Source Sans Pro',
-          //     fontSize: 24,
-          //     fontWeight: FontWeight.bold,
-          //     // height: 0.4,
-          //   ),
-          // ),
+          Text(
+            'Hub Application',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Color.fromRGBO(0, 0, 0, 1),
+              fontFamily: 'Source Sans Pro',
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              // height: 0.4,
+            ),
+          ),
         ],
       ),
       animationDuration: Duration(milliseconds: 1800),
       curve: Curves.easeIn,
-      nextScreen: HomeView(),
+      nextScreen: ToursHomeView(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,

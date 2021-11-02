@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
-
 class FindingFile {
   Uint8List? fileBytes;
   String? contentType;

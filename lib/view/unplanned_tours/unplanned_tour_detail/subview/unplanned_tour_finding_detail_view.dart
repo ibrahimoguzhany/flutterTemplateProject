@@ -1,8 +1,7 @@
-import 'package:esd_mobil/core/components/text/locale_text.dart';
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
-import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/subview/single_file_view.dart';
+import '../../../_product/_model/finding_file.dart';
+import '../../model/unplanned_tour_model.dart';
+import '../service/unplanned_tour_detail_service.dart';
+import 'single_file_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../_product/_model/finding_file.dart';
+import '../../model/unplanned_tour_model.dart';
 
 class UnPlannedTourDetailService {
   static UnPlannedTourDetailService? _instance;

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import '../../../unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 

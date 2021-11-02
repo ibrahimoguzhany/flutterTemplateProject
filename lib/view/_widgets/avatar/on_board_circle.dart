@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
+
+import '../../../core/extensions/context_extension.dart';
 
 class OnBoardCircle extends StatelessWidget {
   const OnBoardCircle(

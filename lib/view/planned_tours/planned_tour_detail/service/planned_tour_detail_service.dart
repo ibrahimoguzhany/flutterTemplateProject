@@ -4,8 +4,6 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../../../core/init/auth/authentication_provider.dart';
-
 class PlannedTourDetailService {
   static PlannedTourDetailService? _instance;
   static PlannedTourDetailService? get instance {
