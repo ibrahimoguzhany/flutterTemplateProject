@@ -199,10 +199,7 @@ class ConfirmationInboxView extends StatelessWidget {
                     flex: 1,
                   ),
                   InkWell(
-                    onTap: () {
-                      NavigationService.instance
-                          .navigateToPage(NavigationConstants.INBOX_VIEW);
-                    },
+                    onTap: () {},
                     child: Column(
                       children: [
                         Stack(
@@ -214,7 +211,7 @@ class ConfirmationInboxView extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 12,
-                              backgroundColor: Color(0xffF9EEDF),
+                              backgroundColor: Color(0xffF9EEDF), 
                               foregroundColor: Colors.black,
                               child: Text("9"),
                             )

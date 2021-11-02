@@ -12,9 +12,10 @@ class ColorSchemeLight {
   final Color brown = Color(0xffa87e6f);
   final Color red = Color(0xffc10e0e);
   final Color white = Color(0xffffff);
-  final Color gray = Color(0xffa5a6ae);
+  final Color gray = Color(0xffa5a6ae); // xx
   final Color lightGray = Color(0xfff7f7f7);
-  final Color darkGray = Color(0xff676870);
+  // final Color darkGray = Color(0xff676870);
+  final scaffoldBackgroundColor = Color(0xffF9EEDF);
   final Color black = Color(0xff020306);
   final Color socarBlue = Color(0xfff029EDF);
   final Color socarRed = Color(0xfffE40428);
