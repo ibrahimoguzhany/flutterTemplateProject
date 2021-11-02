@@ -27,4 +27,5 @@ class NavigationConstants {
 
   static const INBOX_VIEW = "/inbox_view";
   static const HOME_VIEW = "/home_view";
+  static const CONFIRMATION_DETAIL_VIEW = "/confirmation_detail_view";
 }

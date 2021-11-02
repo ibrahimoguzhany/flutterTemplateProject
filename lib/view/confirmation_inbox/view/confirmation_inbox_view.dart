@@ -1,3 +1,5 @@
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationInboxView extends StatelessWidget {
@@ -50,13 +52,13 @@ class ConfirmationInboxView extends StatelessWidget {
                               width: 10,
                             ),
                             Text('Onayla',
-                                style: TextStyle(color: Colors.white)),
+                                style: TextStyle(color: Colors.white70)),
                           ],
                         ),
                       ),
                     ),
                     secondaryBackground: Container(
-                      color: Colors.red,
+                      color: Colors.blueGrey,
                       child: Padding(
                         padding: const EdgeInsets.all(15),
                         child: Row(
@@ -64,14 +66,14 @@ class ConfirmationInboxView extends StatelessWidget {
                           children: <Widget>[
                             Icon(
                               Icons.delete,
-                              color: Colors.white,
+                              color: Colors.redAccent,
                               size: 32,
                             ),
                             SizedBox(
                               width: 10,
                             ),
                             Text('Reddet',
-                                style: TextStyle(color: Colors.white)),
+                                style: TextStyle(color: Colors.white70)),
                           ],
                         ),
                       ),
@@ -127,7 +129,7 @@ class ConfirmationInboxView extends StatelessWidget {
                     },
                     key: Key(index.toString()),
                     child: Card(
-                      color: Color(0xffFF6333),
+                      color: Color(0xffFF6333).withOpacity(0.9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -136,7 +138,10 @@ class ConfirmationInboxView extends StatelessWidget {
                           horizontal: 10.0, vertical: 6.0),
                       child: Container(
                         child: ListTile(
-                          onTap: () {},
+                          onTap: () async {
+                            await NavigationService.instance.navigateToPage(
+                                NavigationConstants.CONFIRMATION_DETAIL_VIEW);
+                          },
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 20.0, vertical: 10.0),
                           leading: Text("ESBP"),

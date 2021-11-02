@@ -1,4 +1,5 @@
 import 'package:esd_mobil/view/confirmation_inbox/view/confirmation_inbox_view.dart';
+import 'package:esd_mobil/view/confirmation_inbox/view/subview/confirmation_detail_view.dart';
 import 'package:esd_mobil/view/home/view/home_view.dart';
 
 import '../../../view/_product/_widgets/tours_home_view.dart';
@@ -78,6 +79,9 @@ class NavigationRoute {
 
       case NavigationConstants.INBOX_VIEW:
         return normalNavigate(ConfirmationInboxView());
+
+      case NavigationConstants.CONFIRMATION_DETAIL_VIEW:
+        return normalNavigate(ConfirmationDetailView());
 
       case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
         return navigateWithData(EditUnPlannedTourView(), args.arguments);

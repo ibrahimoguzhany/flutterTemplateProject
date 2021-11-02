@@ -32,6 +32,7 @@ class _ToursHomeViewState extends State<ToursHomeView> {
     return BottomNavigationBar(
       onTap: onTabTapped,
       currentIndex: _currentIndex,
+      elevation: 0,
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.list_alt),
