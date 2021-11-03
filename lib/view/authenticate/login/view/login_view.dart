@@ -206,8 +206,8 @@ class _LoginViewState extends State<LoginView> {
                 Text("Diğer Giriş Seçenekleri"),
                 InkWell(
                   onTap: () {
-                    NavigationService.instance
-                        .navigateToPage(NavigationConstants.LoginViaAzureView);
+                    NavigationService.instance.navigateToPage(
+                        NavigationConstants.LOGIN_VIA_AZURE_VIEW);
                   },
                   child: Image.asset(
                     ImageConstants.instance!.toPng("microsoftLogo"),

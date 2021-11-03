@@ -1,17 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
-import '../../../core/constants/enums/app_theme_enums.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/extensions/widget_extension.dart';
 import '../../../core/init/lang/language_manager.dart';
 import '../../../core/init/lang/locale_keys.g.dart';
-import '../../../core/init/notifier/theme_notifier.dart';
-import '../../../product/enum/lottie_path_enum.dart';
-import '../../../product/extension/lottie_path_extension.dart';
 import '../viewmodel/settings_view_model.dart';
 
 class SettingsView extends StatelessWidget {
@@ -46,8 +41,10 @@ class SettingsView extends StatelessWidget {
             //   height: 6,
             // ).toSliver,
             buildTextButtonLogout(context, viewModel).toSliver,
-
-            // Card(child: ).toSliver,
+            SizedBox(
+              height: 24,
+            ).toSliver,
+            buildTextButtonGoToHomeView(context, viewModel).toSliver
           ],
         ),
       )),
@@ -64,6 +61,18 @@ class SettingsView extends StatelessWidget {
         onPressed: viewModel.logoutApp,
         icon: Icon(Icons.exit_to_app),
         label: Text(LocaleKeys.home_setting_exit.tr()));
+  }
+
+  TextButton buildTextButtonGoToHomeView(
+      BuildContext context, SettingsViewModel viewModel) {
+    return TextButton.icon(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all(StadiumBorder()),
+            padding: MaterialStateProperty.all(context.paddingNormalAll),
+            backgroundColor: MaterialStateProperty.all(context.colors.onError)),
+        onPressed: viewModel.navigateToHomeView,
+        icon: Icon(Icons.home_outlined),
+        label: Text("Uygulamalar Sayfasına Dön"));
   }
 
   Card buildCardNavigationTour(SettingsViewModel viewModel) {

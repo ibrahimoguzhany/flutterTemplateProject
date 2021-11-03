@@ -47,14 +47,15 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                 child: Observer(builder: (_) {
                   return FutureBuilder(
                     future: viewModel.getUnplannedTours(),
-                    builder: (context, snapshot) {
+                    builder: (context,
+                        AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
                       if (snapshot.hasError)
                         return Text("Error = ${snapshot.error}");
 
                       if (snapshot.hasData) {
-                        // print(snapshot.data);
+                        print(snapshot.data);
                         // final List<UnplannedTourModel>? tours = snapshot.data;
-                        return buildListView(viewModel.tours, viewModel);
+                        return buildListView(snapshot.data!, viewModel);
                       }
                       return Center(
                         child: CircularProgressIndicator(),

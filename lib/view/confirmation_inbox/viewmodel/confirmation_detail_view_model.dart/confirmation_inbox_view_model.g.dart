@@ -25,6 +25,21 @@ mixin _$ConfirmationDetailViewModel on _ConfirmationDetailViewModelBase, Store {
     });
   }
 
+  final _$_ConfirmationDetailViewModelBaseActionController =
+      ActionController(name: '_ConfirmationDetailViewModelBase');
+
+  @override
+  dynamic approve() {
+    final _$actionInfo = _$_ConfirmationDetailViewModelBaseActionController
+        .startAction(name: '_ConfirmationDetailViewModelBase.approve');
+    try {
+      return super.approve();
+    } finally {
+      _$_ConfirmationDetailViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

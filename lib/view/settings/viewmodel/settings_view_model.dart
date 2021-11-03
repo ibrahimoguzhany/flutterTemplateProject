@@ -40,7 +40,12 @@ abstract class _SettingsViewModelBase with Store, BaseViewModel {
   Future<void> logoutApp() async {
     await localeManager.clearAllSaveFirst();
     await NavigationService.instance
-        .navigateToPageClear(NavigationConstants.LoginViaAzureView);
+        .navigateToPageClear(NavigationConstants.LOGIN_VIA_AZURE_VIEW);
+  }
+
+  Future<void> navigateToHomeView() async {
+    await NavigationService.instance
+        .navigateToPageClear(NavigationConstants.HOME_VIEW);
   }
 
   void navigateToOnBoard() {

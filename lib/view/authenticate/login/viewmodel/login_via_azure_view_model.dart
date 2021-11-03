@@ -38,10 +38,10 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
   );
 
   final createUserInMobileURL =
-      "http://10.0.2.2:8009/api/services/app/User/CreateUserInMobile";
+      "http://esdmobil.demos.arfitect.net/api/services/app/User/CreateUserInMobile";
 
   final authenticateMobile =
-      "http://10.0.2.2:8009/api/TokenAuth/AuthenticateMobile";
+      "http://esdmobil.demos.arfitect.net/api/TokenAuth/AuthenticateMobile";
 
   Future<String?> signIn(String email, String password) async {
     config.loginHint = email;

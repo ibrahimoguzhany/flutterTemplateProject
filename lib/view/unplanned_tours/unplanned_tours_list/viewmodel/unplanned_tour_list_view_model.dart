@@ -17,7 +17,7 @@ class UnPlannedTourListViewModel = _UnPlannedTourListViewModelBase
 abstract class _UnPlannedTourListViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   Future<void> init() async {
-    tours = (await getUnplannedTours())!;
+    // tours = (await getUnplannedTours())!;
   }
 
   @observable

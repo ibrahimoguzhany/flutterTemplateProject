@@ -50,7 +50,7 @@ class NavigationRoute {
       case NavigationConstants.LOGIN_VIEW:
         return normalNavigate(LoginView());
 
-      case NavigationConstants.LoginViaAzureView:
+      case NavigationConstants.LOGIN_VIA_AZURE_VIEW:
         return normalNavigate(LoginViaAzureView());
 
       case NavigationConstants.SETTINGS_VIEW:

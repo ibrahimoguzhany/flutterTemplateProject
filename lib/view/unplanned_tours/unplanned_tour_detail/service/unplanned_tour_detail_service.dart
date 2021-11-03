@@ -16,16 +16,16 @@ class UnPlannedTourDetailService {
   UnPlannedTourDetailService._init();
 
   final _addFindingURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/CreateFindingForTour";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateFindingForTour";
 
   final _deleteFindingURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/CreateFindingForTour";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateFindingForTour";
 
   final _findingFilesURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/GetFindingFiles";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetFindingFiles";
 
   final _uploadFileToFindingURL =
-      "http://localhost:8009/api/services/app/Tours/UploadFiles";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/UploadFiles";
 
   Future<UnplannedTourModel?> addFinding(
     FindingModel finding,

@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+
 import '../../../_product/_model/finding_file.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
@@ -135,6 +138,8 @@ class _AddUnPlannedTourFindingViewState
                         final refreshedTour = await viewModel.addFinding(
                             finding, context, tour.id.toString());
                         if (refreshedTour != null) {
+                          Navigator.of(context).pop();
+
                           // final refreshedTour = await UnPlannedTourService
                           //     .instance!
                           //     .getTourById(tour.id!);
@@ -143,18 +148,13 @@ class _AddUnPlannedTourFindingViewState
                             backgroundColor: Colors.green,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.of(context).pop();
 
                           Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  settings:
-                                      RouteSettings(arguments: refreshedTour),
-                                  builder: (_) => UnPlannedTourDetailView()),
-                              result: UnPlannedTourDetailView);
-
-                          // NavigationService.instance.navigateToPageClear(
-                          //     NavigationConstants.UNPLANNED_TOUR_DETAIL_VIEW,
-
+                            MaterialPageRoute(
+                                settings:
+                                    RouteSettings(arguments: refreshedTour),
+                                builder: (_) => UnPlannedTourDetailView()),
+                          );
                         } else {
                           final snackBar = SnackBar(
                             content: Text("Hata!!!"),

@@ -19,24 +19,26 @@ class UnPlannedTourService {
 
   UnPlannedTourService._init();
 
-  final _toursUrl = "http://10.0.2.2:8009/api/services/app/Tours/GetAllTours";
+  final _toursUrl =
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetAllTours";
   final _categoryUrl =
-      "http://10.0.2.2:8009/api/services/app/Categories/GetAllCategories";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Categories/GetAllCategories";
   final _locationUrl =
-      "http://10.0.2.2:8009/api/services/app/Locations/GetAllLocations";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Locations/GetAllLocations";
   final _fieldsUrl =
-      "http://10.0.2.2:8009/api/services/app/Fields/GetAllFields";
-  final _usersUrl = "http://10.0.2.2:8009/api/services/app/User/GetUsers";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Fields/GetAllFields";
+  final _usersUrl =
+      "http://esdmobil.demos.arfitect.net/api/services/app/User/GetUsers";
   final _createUnplannedTourUrl =
-      "http://10.0.2.2:8009/api/services/app/Tours/CreateUnplannedTour";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateUnplannedTourMobile";
   final _updateUnplannedTourURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/UpdateTour";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/UpdateTourMobile";
 
   final _getTourByIdURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/GetTourById";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetTourById";
 
   final _deleteTourURL =
-      "http://10.0.2.2:8009/api/services/app/Tours/DeleteTour/";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/DeleteTour/";
 
   Future<UnplannedTourModel?> addUnPlannedTour(
       UnplannedTourModel tour, BuildContext context) async {
@@ -87,10 +89,11 @@ class UnPlannedTourService {
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     final response = await http.post(Uri.parse(_toursUrl),
         headers: {"Content-Type": "application/json", "Content-Length": "0"});
+    print(response.body);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await json.decode(response.body)["result"];
-        // print(responseBody);
+        print(responseBody);
 
         if (responseBody is List) {
           return responseBody
