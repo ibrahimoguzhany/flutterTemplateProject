@@ -96,6 +96,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
       itemCount: findings.length,
       padding: EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (BuildContext context, int index) {
+        findings[index].tourId = tourId;
         if (findings[index].id == null)
           return Text(LocaleKeys.planned_tours_finding_noFinding.tr());
         return Padding(

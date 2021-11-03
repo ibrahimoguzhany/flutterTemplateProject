@@ -1,3 +1,5 @@
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -21,7 +23,7 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   @observable
   List<FindingFile>? findingFiles = [];
 
-  Future<void> showDeleteDialog(int findingId) async {
+  Future<void> showDeleteDialog(int findingId, int tourId) async {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -31,9 +33,17 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
           TextButton(
               child: Text("Evet"),
               onPressed: () async {
-                UnPlannedTourDetailService.instance!.deleteFinding(findingId);
+                final refreshedTour = await UnPlannedTourDetailService.instance!
+                    .deleteFinding(findingId, tourId);
+                // final refreshedTour =
+                //     await UnPlannedTourService.instance!.getTourById(tourId);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => UnPlannedTourDetailView(),
+                        settings: RouteSettings(arguments: refreshedTour)),
+                    (route) => route.isFirst);
                 final snackBar = SnackBar(
                   content: Text("Bulgu Başarıyla Silindi."),
                   backgroundColor: Colors.blueGrey.shade700,

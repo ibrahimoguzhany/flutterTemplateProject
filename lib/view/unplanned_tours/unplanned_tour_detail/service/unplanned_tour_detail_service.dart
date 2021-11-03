@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../_product/_model/finding_file.dart';
@@ -19,7 +20,7 @@ class UnPlannedTourDetailService {
       "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateFindingForTour";
 
   final _deleteFindingURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateFindingForTour";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/RemoveFindingFromTour";
 
   final _findingFilesURL =
       "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetFindingFiles";
@@ -48,15 +49,16 @@ class UnPlannedTourDetailService {
     }
   }
 
-  Future<bool> deleteFinding(int findingId) async {
+  Future<UnplannedTourModel?> deleteFinding(int findingId, int tourId) async {
+    print(findingId);
     final response = await http.post(
-      Uri.parse(_deleteFindingURL),
-      body: json.encode(findingId),
+      Uri.parse(_deleteFindingURL + "?findingId=$findingId"),
     );
     if (response.statusCode == HttpStatus.ok) {
-      return true;
+      final refreshedTour = UnPlannedTourService.instance!.getTourById(tourId);
+      return refreshedTour;
     }
-    return false;
+    return null;
   }
 
   // UploadTask? uploadFile(String destination, File file) {

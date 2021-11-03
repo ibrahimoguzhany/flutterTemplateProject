@@ -99,6 +99,7 @@ class FindingModel {
   String? actionsShouldBeTaken;
   String? fieldResponsibleExplanation;
   int? id;
+  int? tourId;
 
   FindingModel(
       {this.findingCategory,

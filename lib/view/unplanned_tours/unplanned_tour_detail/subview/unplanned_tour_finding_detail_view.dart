@@ -42,7 +42,8 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
           title: Text("Bulgu Detayı"),
           actions: [
             IconButton(
-              onPressed: () => viewModel.showDeleteDialog(finding.id!),
+              onPressed: () =>
+                  viewModel.showDeleteDialog(finding.id!, finding.tourId!),
               icon: Icon(Icons.delete_forever_rounded),
             )
           ],

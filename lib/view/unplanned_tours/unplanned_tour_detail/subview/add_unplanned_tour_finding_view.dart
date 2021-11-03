@@ -1,9 +1,5 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
-
-import '../../../_product/_model/finding_file.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
+import '../../../_product/_model/finding_file.dart';
 import '../../../_widgets/button/button_widget.dart';
 import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
@@ -85,7 +82,7 @@ class _AddUnPlannedTourFindingViewState
         appBar: AppBar(
           title: AutoLocaleText(
             style: TextStyle(fontSize: 18),
-            value: "Plansız Tur Bulgu Ekleme Sayfası ",
+            value: "Plansız Tur Bulgu Ekleme Sayfası",
           ),
         ),
         body: Form(
@@ -139,10 +136,6 @@ class _AddUnPlannedTourFindingViewState
                             finding, context, tour.id.toString());
                         if (refreshedTour != null) {
                           Navigator.of(context).pop();
-
-                          // final refreshedTour = await UnPlannedTourService
-                          //     .instance!
-                          //     .getTourById(tour.id!);
                           final snackBar = SnackBar(
                             content: Text("Bulgu başarıyla eklendi."),
                             backgroundColor: Colors.green,

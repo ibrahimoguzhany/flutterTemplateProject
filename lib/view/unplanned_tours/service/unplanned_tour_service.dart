@@ -35,7 +35,7 @@ class UnPlannedTourService {
       "http://esdmobil.demos.arfitect.net/api/services/app/Tours/UpdateTourMobile";
 
   final _getTourByIdURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetTourById";
+      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetTourByIdMobile";
 
   final _deleteTourURL =
       "http://esdmobil.demos.arfitect.net/api/services/app/Tours/DeleteTour/";
@@ -111,6 +111,7 @@ class UnPlannedTourService {
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await json.decode(response.body)["result"];
+        print(responseBody);
         if (responseBody is Map<String, dynamic>) {
           return UnplannedTourModel.fromJson(responseBody);
         }
