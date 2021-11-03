@@ -169,7 +169,10 @@ class HomeView extends StatelessWidget {
                     flex: 1,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      NavigationService.instance
+                          .navigateToPage(NavigationConstants.SETTINGS_VIEW);
+                    },
                     child: Column(
                       children: [
                         Icon(Icons.settings_outlined, size: 52),

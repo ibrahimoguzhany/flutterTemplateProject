@@ -60,8 +60,7 @@ class SettingsView extends StatelessWidget {
         style: ButtonStyle(
             shape: MaterialStateProperty.all(StadiumBorder()),
             padding: MaterialStateProperty.all(context.paddingNormalAll),
-            backgroundColor: MaterialStateProperty.all(
-                context.colors.onError.withOpacity(0.7))),
+            backgroundColor: MaterialStateProperty.all(context.colors.onError)),
         onPressed: viewModel.logoutApp,
         icon: Icon(Icons.exit_to_app),
         label: Text(LocaleKeys.home_setting_exit.tr()));
@@ -109,18 +108,18 @@ class SettingsView extends StatelessWidget {
     return buildCardHeader(context, viewModel,
         title: LocaleKeys.home_setting_appSettings.tr(),
         children: [
-          ListTile(
-            tileColor: Color(0xffF9EEDF),
-            title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
-            trailing: IconButton(
-              icon: context.watch<ThemeNotifier>().currentThemeEnum ==
-                      AppThemes.LIGHT
-                  ? LottiePathEnum.MOON.toWidget
-                  : LottiePathEnum.SUNNY.toWidget,
-              onPressed: viewModel.changeAppTheme,
-            ),
-            subtitle: Text(LocaleKeys.home_setting_core_themeDesc.tr()),
-          ),
+          // ListTile(
+          //   tileColor: Color(0xffF9EEDF),
+          //   title: Text(LocaleKeys.home_setting_core_themeTitle.tr()),
+          //   trailing: IconButton(
+          //     icon: context.watch<ThemeNotifier>().currentThemeEnum ==
+          //             AppThemes.LIGHT
+          //         ? LottiePathEnum.MOON.toWidget
+          //         : LottiePathEnum.SUNNY.toWidget,
+          //     onPressed: viewModel.changeAppTheme,
+          //   ),
+          //   subtitle: Text(LocaleKeys.home_setting_core_themeDesc.tr()),
+          // ),
           ListTile(
             tileColor: Color(0xffF9EEDF),
             title: Text(LocaleKeys.home_setting_core_langTitle.tr()),

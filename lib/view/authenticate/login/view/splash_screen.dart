@@ -1,7 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:esd_mobil/view/_product/_widgets/tours_home_view.dart';
 import 'package:esd_mobil/view/home/view/home_view.dart';
-import '../../../confirmation_inbox/view/subview/confirmation_detail_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_via_azure_view.dart';
@@ -55,13 +53,12 @@ class SplashView extends StatelessWidget {
             height: 16,
           ),
           Text(
-            'Hub Application',
+            'HUB',
             textAlign: TextAlign.left,
             style: TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 1),
               fontFamily: 'Source Sans Pro',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
               // height: 0.4,
             ),
           ),
@@ -73,7 +70,6 @@ class SplashView extends StatelessWidget {
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,
-      duration: 5,
     );
   }
 }

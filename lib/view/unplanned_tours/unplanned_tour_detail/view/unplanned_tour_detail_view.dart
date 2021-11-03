@@ -35,11 +35,19 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
       onPageBuilder:
           (BuildContext context, UnPlannedTourDetailViewModel viewModel) =>
               Scaffold(
-        floatingActionButton: FloatingActionButton(
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () async =>
+        //       await viewModel.navigateToAddUnplannedTourFinding(tour),
+        //   child: Icon(Icons.add),
+        // ),
+        floatingActionButton: FloatingActionButton.extended(
+          icon: Icon(Icons.add_outlined),
+          elevation: 5,
           onPressed: () async =>
               await viewModel.navigateToAddUnplannedTourFinding(tour),
-          child: Icon(Icons.add),
+          label: Text("Bulgu Ekle"),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         appBar: AppBar(
           title: Text(LocaleKeys.unplanned_tours_detail_appBarTitle.tr()),
           actions: [

@@ -21,42 +21,42 @@ class AppThemeLight extends AppTheme with ILightTheme {
             borderSide: BorderSide(color: colorSchemeLight.onError, width: 1.0),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+            borderSide: BorderSide(
+                color: colorSchemeLight.outlineInputBorderColor, width: 1.0),
           ),
           border: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+            borderSide: BorderSide(
+                color: colorSchemeLight.outlineInputBorderColor, width: 1.0),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: colorSchemeLight.socarBlue, width: 1.0),
+            borderSide: BorderSide(
+                color: colorSchemeLight.outlineInputBorderColor, width: 1.0),
           ),
         ),
-        scaffoldBackgroundColor: Color(0xffF9EEDF),
+        scaffoldBackgroundColor: colorSchemeLight.scaffoldBackgroundColor,
         fontFamily: ApplicationConstants.FONT_FAMILY,
         floatingActionButtonTheme: ThemeData.light()
             .floatingActionButtonTheme
-            .copyWith(backgroundColor: Color(0xffFF6333)),
+            .copyWith(backgroundColor: colorSchemeLight.fabButtonColorLight),
         tabBarTheme: TabBarTheme(
           labelPadding: insets.lowPaddingAll,
           unselectedLabelStyle:
               textThemeLight.headline4.copyWith(color: colorSchemeLight.gray),
         ),
         appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: Color(0xffFF6333)),
-          color: Color(0xffF9EEDF),
+          iconTheme: IconThemeData(color: colorSchemeLight.darkAppColor),
+          color: colorSchemeLight.scaffoldBackgroundColor,
           elevation: 0,
           textTheme: TextTheme(
             headline6: TextStyle(
-              color: Color(0xFF31201B),
+              color: colorSchemeLight.appBarTitleColor,
               fontSize: 20,
               fontWeight: FontWeight.w400,
             ),
           ),
         ),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(backgroundColor: Color(0xffF9EEDF)),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: colorSchemeLight.scaffoldBackgroundColor),
       );
 
   TextTheme buildTextTheme() {

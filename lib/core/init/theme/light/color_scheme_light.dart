@@ -14,13 +14,17 @@ class ColorSchemeLight {
   final Color white = Color(0xffffff);
   final Color gray = Color(0xffa5a6ae); // xx
   final Color lightGray = Color(0xfff7f7f7);
-  // final Color darkGray = Color(0xff676870);
+  final Color darkGray = Color(0xff676870);
   final scaffoldBackgroundColor = Color(0xffF9EEDF);
   final Color black = Color(0xff020306);
   final Color socarBlue = Color(0xfff029EDF);
+  final Color darkAppColor = Color(0xffFF6333);
   final Color socarRed = Color(0xfffE40428);
   final Color socarGreen = Color(0xfff76B82B);
   final Color onError = Color(0xffffc93c);
+  final Color outlineInputBorderColor = Colors.black87;
+  final Color fabButtonColorLight = Color(0xffffc93c).withOpacity(0.9);
+  final Color appBarTitleColor = Color(0xFF31201B);
 
   final Color boldGreen = Color(0xff27928d);
 }

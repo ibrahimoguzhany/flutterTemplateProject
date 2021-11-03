@@ -18,7 +18,6 @@ class ChangePasswordView extends StatefulWidget {
 }
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
-  // late TextEditingController _oldPasswordController;
   late TextEditingController _newPasswordController;
   late TextEditingController _newPasswordAgainController;
   late TextEditingController _oldPasswordController;

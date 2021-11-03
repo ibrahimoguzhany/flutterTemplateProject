@@ -1,4 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/core/extensions/context_extension.dart';
+import 'package:esd_mobil/core/init/theme/light/color_scheme_light.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +33,11 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
               appBar: buildAppBar(context),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.miniEndFloat,
-              floatingActionButton: FloatingActionButton(
+              floatingActionButton: FloatingActionButton.extended(
+                icon: Icon(Icons.add_outlined),
+                elevation: 10,
                 onPressed: viewModel.navigateToAddUnplannedTourView,
-                child: Icon(Icons.add),
+                label: Text("Tur Oluştur"),
               ),
               body: RefreshIndicator(
                 onRefresh: () async {

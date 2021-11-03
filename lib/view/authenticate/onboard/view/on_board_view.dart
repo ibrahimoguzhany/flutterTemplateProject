@@ -89,7 +89,6 @@ class OnBoardView extends StatelessWidget {
   FloatingActionButton buildSkipButton(
       BuildContext context, OnBoardViewModel viewModel) {
     return FloatingActionButton(
-      backgroundColor: context.colors.secondaryVariant,
       onPressed: () {
         viewModel.completeToOnBoard();
       },

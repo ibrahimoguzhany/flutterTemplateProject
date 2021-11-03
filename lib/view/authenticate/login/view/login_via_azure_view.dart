@@ -1,3 +1,6 @@
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+
 import '../../../../core/constants/image/image_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -51,7 +54,7 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
                           Container(
                             margin: const EdgeInsets.all(10.0),
                             padding: const EdgeInsets.only(
-                                bottom: 30.0, top: 30, right: 10, left: 10),
+                                bottom: 25.0, top: 30, right: 10, left: 10),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: context.colors.onSurface,
@@ -82,6 +85,10 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
                                           ),
                                         ),
                                         loginButton(viewModel),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        buildWrap(viewModel),
                                       ],
                                     ),
                                   ),
@@ -251,6 +258,56 @@ class _LoginViaAzureViewState extends State<LoginViaAzureView> {
         icon,
         // color: context.colors.primaryVariant,
       ),
+    );
+  }
+
+  Wrap buildWrap(LoginViaAzureViewModel viewModel) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Column(
+          children: [
+            Row(
+              children: [
+                Observer(builder: (_) {
+                  return Checkbox(
+                    value: viewModel.rememberMeIsCheckhed,
+                    onChanged: viewModel.changeIsChecked,
+                  );
+                }),
+                Text("Beni Hatırla"),
+                Spacer(
+                  flex: 2,
+                ),
+                // TextButton(
+                //   onPressed: () {},
+                //   child: Text(
+                //     "Şifremi Unuttum",
+                //     style: TextStyle(
+                //       color: Colors.blue,
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
+            // Row(
+            //   children: [
+            //     Text("Diğer Giriş Seçenekleri"),
+            //     InkWell(
+            //       onTap: () {
+            //         NavigationService.instance
+            //             .navigateToPage(NavigationConstants.LoginViaAzureView);
+            //       },
+            //       child: Image.asset(
+            //         ImageConstants.instance!.toPng("microsoftLogo"),
+            //         width: 100,
+            //       ),
+            //     )
+            //   ],
+            // )
+          ],
+        ),
+      ],
     );
   }
 }

@@ -57,6 +57,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
+          elevation: 1,
           title: Text("Plansız Tur Güncelle"),
         ),
         body: Form(
