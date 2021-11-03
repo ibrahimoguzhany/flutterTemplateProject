@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
@@ -154,9 +156,20 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
               buildBiggerDataTextWidget(tour.tourDate.toString()),
               SizedBox(height: 10),
               buildLittleTextWidget("Saha Organinasyon Skoru"),
-              buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null
-                  ? "-"
-                  : tour.fieldOrganizationOrderScore.toString()),
+              tour.fieldOrganizationOrderScore == null
+                  ? Container()
+                  : Slider(
+                      divisions: 10,
+                      label: "${tour.fieldOrganizationOrderScore}",
+                      activeColor: context.colors.secondary,
+                      min: 0,
+                      max: 10,
+                      value: tour.fieldOrganizationOrderScore!.toDouble(),
+                      onChanged: (double value) {},
+                    ),
+              // buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null
+              //     ? "-"
+              //     : tour.fieldOrganizationOrderScore.toString()),
               SizedBox(height: 10),
               buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
               buildBiggerDataTextWidget(
