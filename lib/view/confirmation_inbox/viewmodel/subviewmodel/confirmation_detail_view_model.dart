@@ -15,10 +15,32 @@ abstract class _ConfirmationDetailViewModelBase with Store, BaseViewModel {
   void init() {}
 
   @observable
-  bool isApproved = false;
+  bool isApproveClicked = false;
+
+  @observable
+  bool showCPI = false;
+
+  @observable
+  bool showApprovedText = false;
+
+  @observable
+  bool showRejectedText = false;
+
+  @observable
+  bool isRejectClicked = false;
 
   @action
-  approve() {
-    isApproved = true;
-  }
+  void changeShowRejectedText() => showRejectedText = !showRejectedText;
+
+  @action
+  void changeIsRejectClicked() => isRejectClicked = !isRejectClicked;
+
+  @action
+  void changeShowCPI() => showCPI = !showCPI;
+
+  @action
+  void changeShowApprovedText() => showApprovedText = !showApprovedText;
+
+  @action
+  void changeIsApproveClicked() => isApproveClicked = !isApproveClicked;
 }

@@ -93,7 +93,7 @@ class _AddUnPlannedTourFindingViewState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildLittleTextWidget("Bulgu Türü"),
+                  buildLittleTextWidget("Bulgu Tipi"),
                   SizedBox(height: 5),
                   buildFindingTypeDropdown,
                   SizedBox(height: 20),

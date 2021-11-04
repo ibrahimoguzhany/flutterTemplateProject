@@ -1,4 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -79,6 +80,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
                   buildTourTeamMembersMultiDropdownField(viewModel),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Tarihi"),
+                  SizedBox(height: 5),
                   buildTourDatePicker,
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha Tertip Skoru"),
@@ -122,6 +124,10 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         },
         type: DateTimePickerType.date,
         dateMask: 'dd/MM/yyyy',
+        decoration: InputDecoration(
+          suffixIcon: Icon(Icons.calendar_today_outlined),
+          border: OutlineInputBorder(),
+        ),
         controller: _datePickerController,
         firstDate: DateTime(2000),
         calendarTitle: "Tur Tarihi",
@@ -166,6 +172,11 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
         child: NumberPicker(
             value: _currentOrgScoreValue,
             axis: Axis.horizontal,
+            textStyle: TextStyle(fontSize: 12),
+            selectedTextStyle: TextStyle(
+                fontSize: 24,
+                color: context.colors.secondary,
+                fontWeight: FontWeight.w500),
             itemWidth: 50,
             itemHeight: 40,
             minValue: 0,

@@ -167,38 +167,6 @@ class ConfirmationInboxView extends StatelessWidget {
                     flex: 1,
                   ),
                   InkWell(
-                    onTap: () {
-                      NavigationService.instance
-                          .navigateToPage(NavigationConstants.INBOX_VIEW);
-                    },
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Icon(
-                              Icons.inbox_outlined,
-                              size: 42,
-                            ),
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: Color(0xffF9EEDF),
-                              foregroundColor: Colors.black,
-                              child: Text("2"),
-                            )
-                          ],
-                        ),
-                        Text(
-                          "Inbox",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  InkWell(
                     onTap: () {},
                     child: Column(
                       children: [
@@ -211,7 +179,7 @@ class ConfirmationInboxView extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 12,
-                              backgroundColor: Color(0xffF9EEDF), 
+                              backgroundColor: Color(0xffF9EEDF),
                               foregroundColor: Colors.black,
                               child: Text("9"),
                             )
@@ -228,7 +196,10 @@ class ConfirmationInboxView extends StatelessWidget {
                     flex: 1,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      await NavigationService.instance
+                          .navigateToPage(NavigationConstants.SETTINGS_VIEW);
+                    },
                     child: Column(
                       children: [
                         Icon(

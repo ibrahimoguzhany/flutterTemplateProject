@@ -14,7 +14,7 @@ class UnplannedTourModel {
   String? locationName;
   String? tourTeamMembers;
   List<int>? tourTeamMembersIds;
-  List<FindingModel>? findings;
+  List<FindingModel>? findings = [];
   List<UserDDModel>? tourTeamMemberUsers;
 
   UnplannedTourModel(

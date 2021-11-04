@@ -60,6 +60,7 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
     // print(graphResponse.body);
     switch (graphResponse.statusCode) {
       case HttpStatus.ok:
+        print(graphResponse.body);
         // final graphResponseBody =
         //     UserAdResult.fromJson(json.decode(graphResponse.body));
 
