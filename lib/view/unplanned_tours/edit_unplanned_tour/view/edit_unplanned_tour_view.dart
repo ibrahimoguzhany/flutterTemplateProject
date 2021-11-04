@@ -1,15 +1,15 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../model/field_dd_model.dart';
 import '../../model/location_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
@@ -47,7 +47,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
         tour.observatedSecureCasesPositiveFindings!;
     _controllerTourAccompaniers.text = tour.tourAccompaniers!;
 
-    print(tour.tourTeamMemberUsers);
+    // print(tour.tourTeamMemberUsers);
 
     return BaseView<EditUnPlannedTourViewModel>(
       viewModel: EditUnPlannedTourViewModel(),
@@ -59,7 +59,8 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
-          elevation: 1,
+          centerTitle: false,
+          elevation: 0,
           title: Text("Plansız Tur Güncelle"),
         ),
         body: Form(
@@ -158,18 +159,18 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
       controller: _controllerPositiveFindings,
       keyboardType: TextInputType.multiline,
       maxLines: 5,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        // fillColor: Colors.white,
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 1.0),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 1.0),
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
+      // decoration: InputDecoration(
+      //   border: OutlineInputBorder(),
+      //   // fillColor: Colors.white,
+      //   focusedBorder: OutlineInputBorder(
+      //     borderSide: const BorderSide(width: 1.0),
+      //     borderRadius: BorderRadius.circular(5),
+      //   ),
+      //   enabledBorder: OutlineInputBorder(
+      //     borderSide: const BorderSide(width: 1.0),
+      //     borderRadius: BorderRadius.circular(5),
+      //   ),
+      // ),
       onSaved: (val) {
         tour.observatedSecureCasesPositiveFindings =
             _controllerPositiveFindings.text;
@@ -189,12 +190,11 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           value: tour.fieldOrganizationOrderScore!,
           axis: Axis.horizontal,
           itemWidth: 50,
+          textStyle: TextStyle(fontSize: 12),
           selectedTextStyle: TextStyle(
-            color: context.randomColor,
-            fontSize: 26,
-            fontWeight: FontWeight.w700,
-          ),
-          textStyle: TextStyle(color: context.colors.secondary, fontSize: 13),
+              fontSize: 24,
+              color: context.colors.secondary,
+              fontWeight: FontWeight.w500),
           itemHeight: 40,
           minValue: 0,
           maxValue: 10,
@@ -230,6 +230,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
             Radius.circular(5),
           ),
           border: Border.all(
+            color: Colors.black87,
             width: 1,
           ),
         ),
@@ -262,18 +263,6 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
       controller: _controllerTourAccompaniers,
       keyboardType: TextInputType.multiline,
       maxLines: 2,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        // fillColor: Colors.white,
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 1.0),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 1.0),
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
       onSaved: (val) {
         tour.tourAccompaniers = _controllerTourAccompaniers.text;
       },
@@ -347,7 +336,7 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                 return "Bu alan boş bırakılamaz";
               }
             },
-            hint: Text('Lokasyon Seçiniz'),
+            hint: const Text('Lokasyon Seçiniz'),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             value: tour.locationId,
             icon: const Icon(

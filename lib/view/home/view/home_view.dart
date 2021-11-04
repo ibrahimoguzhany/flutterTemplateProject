@@ -159,7 +159,7 @@ class HomeView extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "Inbox",
+                          "Gelen Kutusu",
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -177,7 +177,7 @@ class HomeView extends StatelessWidget {
                       children: [
                         Icon(Icons.settings_outlined, size: 52),
                         Text(
-                          "Settings",
+                          "Ayarlar",
                           style: TextStyle(fontSize: 18),
                         ),
                       ],

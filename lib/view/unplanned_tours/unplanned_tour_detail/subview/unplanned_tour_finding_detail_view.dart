@@ -91,15 +91,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Text(
-                    "Bulgu: Detayı",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 1),
-                  ),
-                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -132,7 +123,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                         finding.fieldResponsibleExplanation != null
                             ? finding.fieldResponsibleExplanation
                             : ""),
-
                 SizedBox(height: 10),
                 buildLittleTextWidget("Dosya"),
                 SizedBox(height: 5),
@@ -200,18 +190,12 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                           );
                       }
                     }),
-                // Observer(
-                //   builder: (_) {
-                //     return Column(
-                //         children: initFileWidgets(viewModel.findingFiles));
-                //   },
-                // ),
-
-                // finding.imageUrl!.isEmpty
-                //     ? Text("Henüz eklenmiş bir dosya bulunmamaktadır")
-                //     : Column(
-                //         children: addedFileWidgets,
-                //       )
+                Observer(
+                  builder: (_) {
+                    return Column(
+                        children: initFileWidgets(viewModel.findingFiles));
+                  },
+                ),
               ],
             ),
           ),

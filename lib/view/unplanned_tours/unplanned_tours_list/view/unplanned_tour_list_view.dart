@@ -1,6 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/core/init/theme/light/color_scheme_light.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
@@ -97,16 +95,17 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       color: Color(0xffFF6333).withOpacity(0.75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8.0,
-      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           leading: Container(
             padding: EdgeInsets.only(right: 12.0),
-            decoration: new BoxDecoration(
-                border: new Border(
-                    right: new BorderSide(width: 1.0, color: Colors.white24))),
+            decoration: const BoxDecoration(
+                border: const Border(
+                    right:
+                        const BorderSide(width: 1.0, color: Colors.white24))),
             child: CircleAvatar(
               child: Text(tour.id.toString()),
               backgroundColor: Color.fromRGBO(64, 75, 96, .5),
@@ -114,7 +113,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
           ),
           title: Text(
             "Tarih: " + formattedTourDate,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
           ),
           subtitle: Row(
             children: <Widget>[
@@ -133,8 +132,8 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
               )
             ],
           ),
-          trailing:
-              Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+          trailing: Icon(Icons.keyboard_arrow_right,
+              color: Colors.white70, size: 30.0),
           onTap: () async {
             await viewModel.navigateToUnplannedTourDetailView(tour);
           },
@@ -142,39 +141,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
       ),
     );
   }
-  // ListTile buildListTile(
-  //     UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
-  //   var formattedTourDate =
-  //       DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
-  //   // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(tour);
-  //   return ListTile(
-  //     enableFeedback: true,
-  //     contentPadding: EdgeInsets.all(8.0),
-  //     onTap: () async =>
-  //         await viewModel.navigateToUnplannedTourDetailView(tour),
-  //     selectedTileColor: Colors.black12,
-  //     hoverColor: Colors.black12,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-  //     leading: CircleAvatar(
-  //       child: Text(tour.id.toString()),
-  //       backgroundColor: Colors.white,
-  //     ),
-  //     subtitle: Text(
-  //       tour.locationName!,
-  //       textAlign: TextAlign.left,
-  //       style: TextStyle(fontSize: 14),
-  //     ),
-  //     title: Text(
-  //       tour.fieldName!,
-  //       style: TextStyle(fontSize: 14),
-  //     ),
-  //     trailing: Text(
-  //       formattedTourDate,
-  //       textAlign: TextAlign.right,
-  //       style: TextStyle(fontSize: 14),
-  //     ),
-  //   );
-  // }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(

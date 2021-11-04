@@ -18,6 +18,7 @@ import '../../model/category_dd_model.dart';
 import '../../model/unplanned_tour_model.dart';
 import '../view/unplanned_tour_detail_view.dart';
 import '../viewmodel/subview_model/add_unplanned_tour_finding_view_model.dart';
+import 'package:http/http.dart' as http;
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
   const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
@@ -80,6 +81,7 @@ class _AddUnPlannedTourFindingViewState
           (BuildContext context, AddUnPlannedTourFindingViewModel viewModel) =>
               Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           title: AutoLocaleText(
             style: TextStyle(fontSize: 18),
             value: "Plansız Tur Bulgu Ekleme Sayfası",
@@ -134,7 +136,13 @@ class _AddUnPlannedTourFindingViewState
                         _formKey.currentState!.save();
                         final refreshedTour = await viewModel.addFinding(
                             finding, context, tour.id.toString());
+
                         if (refreshedTour != null) {
+                          // Dosya ekleme kismi
+
+                          // print(res);
+
+                          // Dosya ekleme kismi
                           Navigator.of(context).pop();
                           final snackBar = SnackBar(
                             content: Text("Bulgu başarıyla eklendi."),
@@ -224,19 +232,24 @@ class _AddUnPlannedTourFindingViewState
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            // finding.image = finding.toMap(await uploadFiles(files!));
-            // if (files!.isNotEmpty && finding.imageUrl!.isNotEmpty) {
-            //   viewModel.changeIsUploaded();
-            //   final snackBar = SnackBar(
-            //     backgroundColor: Colors.green[600],
-            //     content: Text("Seçilen Dosyalar Başarıyla Yüklendi"),
-            //   );
-            //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            // }
+            var request = http.MultipartRequest(
+                'POST',
+                Uri.parse(
+                    "http://mobil.demos.arfitect.net/api/services/app/Tours/UploadFiles"));
+            for (var item in files!) {
+              print(File(item.path).readAsBytes().asStream());
+              request.files.add(http.MultipartFile(
+                  'file',
+                  File(item.path).readAsBytes().asStream(),
+                  File(item.path).lengthSync(),
+                  filename: item.path.split("/").last));
+            }
+            request.fields['body'] = finding.id.toString();
+
+            var res = await request.send();
           },
         ),
         SizedBox(height: 20),
-        // task != null ? buildUploadStatus(task!) : Container(),
         files!.isNotEmpty
             ? SingleChildScrollView(
                 child: Column(
@@ -267,14 +280,14 @@ class _AddUnPlannedTourFindingViewState
                 files!.removeWhere((element) => element.path == files![i].path);
                 files!.join(",");
               });
-              print(widgets);
+              // print(widgets);
             },
             label: Text(
               basename(files![i].path),
               textAlign: TextAlign.center,
             )));
       }
-      print(widgets);
+      // print(widgets);
     }
     return widgets;
   }
@@ -312,58 +325,14 @@ class _AddUnPlannedTourFindingViewState
 
     for (var i = 0; i < result.files.length; i++) {
       final path = result.files[i].path!;
-      final fileBytes = result.files[i].bytes;
       final filename = result.files[i].name;
       files!.add(File(path));
+      final fileBytes = await File(path).readAsBytes();
       findingFiles.add(FindingFile(fileBytes: fileBytes, filename: filename));
     }
     setState(() {});
   }
 
-  // Future<String> uploadFile(File _image) async {
-  //   Reference storageReference =
-  //       FirebaseStorage.instance.ref().child('files/${_image.path}');
-  //   UploadTask uploadTask = storageReference.putFile(_image);
-  //   await uploadTask.whenComplete(() => null);
-
-  //   return await storageReference.getDownloadURL();
-  // }
-
-  // Future<List<String>> uploadFiles(List<File> _images) async {
-  //   var imageUrls =
-  //       await Future.wait(_images.map((_image) => uploadFile(_image)));
-  //   print(imageUrls);
-  //   return imageUrls;
-  // }
-
-  // void _launchURL(AddUnPlannedTourFindingViewModel vm) async =>
-  //     await canLaunch(vm.imageUrl!)
-  //         ? await launch(vm.imageUrl!)
-  //         : throw '${vm.imageUrl!} başlatılamadı.';
-
-  // Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
-  //       stream: task.snapshotEvents,
-  //       builder: (context, snapshot) {
-  //         if (snapshot.hasData) {
-  //           final snap = snapshot.data!;
-  //           final progress = snap.bytesTransferred / snap.totalBytes;
-  //           final percentage = (progress * 100).toStringAsFixed(2);
-
-  //           if (percentage != "100.00") {
-  //             return Text(
-  //               '$percentage %',
-  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //             );
-  //           }
-  //           return Text(
-  //             'Yüklendi',
-  //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //           );
-  //         } else {
-  //           return Container();
-  //         }
-  //       },
-  //     );
   Widget buildFindingCategoryMultiSelectDropdown(
       AddUnPlannedTourFindingViewModel viewModel) {
     return Observer(builder: (_) {

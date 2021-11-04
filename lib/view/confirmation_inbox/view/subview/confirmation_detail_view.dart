@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:esd_mobil/core/extensions/context_extension.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -66,144 +67,7 @@ class ConfirmationDetailView extends StatelessWidget {
                                   height:
                                       MediaQuery.of(context).size.height * 0.1,
                                 ),
-                                Table(
-                                  border: TableBorder.all(
-                                      color: Colors.white10,
-                                      style: BorderStyle.solid),
-                                  defaultVerticalAlignment:
-                                      TableCellVerticalAlignment.middle,
-                                  defaultColumnWidth: FixedColumnWidth(
-                                      MediaQuery.of(context).size.width / 2.2),
-                                  children: [
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('Formu Oluşturan:',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                            textAlign: TextAlign.start)
-                                      ]),
-                                      Column(children: [
-                                        Text('Dilek Kara',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                            textAlign: TextAlign.start)
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text(
-                                          'Şirket:',
-                                          style: TextStyle(color: Colors.white),
-                                          textAlign: TextAlign.start,
-                                        )
-                                      ]),
-                                      Column(children: [
-                                        Text('STAD',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('Ünite:',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('Terminal A',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text(
-                                          'Emniyet Sistemi Açıklaması',
-                                          style: TextStyle(color: Colors.white),
-                                          textAlign: TextAlign.start,
-                                        )
-                                      ]),
-                                      Column(children: [
-                                        Text('Lorem Ipsum',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('By-pass Nedeni',
-                                            textAlign: TextAlign.start,
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('Lorem Ipsum',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('Emniyet Sistemi Tipi',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('Yangın ve Gaz',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('Trip Parametre Tag No',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('Algılama',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text('Emniyet Sistemi Alt Tipi',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('TEST S.S ALT TİPİ 3.1',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text("Tahmini By-Pass Süresi",
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('2 saat',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                    TableRow(children: [
-                                      Column(children: [
-                                        Text("By-Pass'a Alan Kişiler",
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                      Column(children: [
-                                        Text('Dilek Kara; Gülden Kelez',
-                                            style:
-                                                TextStyle(color: Colors.white))
-                                      ]),
-                                    ]),
-                                  ],
-                                ),
+                                buildTable(),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.15,
@@ -245,10 +109,12 @@ class ConfirmationDetailView extends StatelessWidget {
                                                   .then((value) => viewModel
                                                       .changeShowApprovedText())
                                                   .then((value) => viewModel
-                                                      .changeIsApproveClicked()));
+                                                      .changeIsApproveClicked()))
+                                              .then((value) =>
+                                                  Navigator.pop(context));
                                         },
                                         icon: Icon(Icons.check_circle_outline),
-                                        label: Text("Accept")),
+                                        label: Text("Onayla")),
                                     TextButton.icon(
                                         style: ButtonStyle(
                                             fixedSize:
@@ -279,10 +145,12 @@ class ConfirmationDetailView extends StatelessWidget {
                                                   .then((value) => viewModel
                                                       .changeShowRejectedText())
                                                   .then((value) => viewModel
-                                                      .changeIsRejectClicked()));
+                                                      .changeIsRejectClicked()))
+                                              .then((value) =>
+                                                  Navigator.pop(context));
                                         },
                                         icon: Icon(Icons.close),
-                                        label: Text("Deny"))
+                                        label: Text("Reddet"))
                                   ],
                                 ),
                                 SizedBox(
@@ -381,4 +249,120 @@ class ConfirmationDetailView extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
         child: child,
       );
+}
+
+class buildTable extends StatelessWidget {
+  const buildTable({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      border: TableBorder.all(color: Colors.white10, style: BorderStyle.solid),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      defaultColumnWidth:
+          FixedColumnWidth(MediaQuery.of(context).size.width / 2.2),
+      children: [
+        TableRow(children: [
+          Column(children: [
+            Text('Formu Oluşturan:',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.start)
+          ]),
+          Column(children: [
+            Text('Dilek Kara',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.start)
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text(
+              'Şirket:',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.start,
+            )
+          ]),
+          Column(
+              children: [Text('STAD', style: TextStyle(color: Colors.white))]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text('Ünite:', style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('Terminal A', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text(
+              'Emniyet Sistemi Açıklaması',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.start,
+            )
+          ]),
+          Column(children: [
+            Text('Lorem Ipsum', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text('By-pass Nedeni',
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('Lorem Ipsum', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text('Emniyet Sistemi Tipi', style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('Yangın ve Gaz', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text('Trip Parametre Tag No', style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('Algılama', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text('Emniyet Sistemi Alt Tipi',
+                style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('TEST S.S ALT TİPİ 3.1',
+                style: TextStyle(color: Colors.white)),
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text("Tahmini By-Pass Süresi",
+                style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('2 saat', style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+        TableRow(children: [
+          Column(children: [
+            Text("By-Pass'a Alan Kişiler",
+                style: TextStyle(color: Colors.white))
+          ]),
+          Column(children: [
+            Text('Dilek Kara; Gülden Kelez',
+                style: TextStyle(color: Colors.white))
+          ]),
+        ]),
+      ],
+    );
+  }
 }

@@ -47,6 +47,11 @@ class AppThemeLight extends AppTheme with ILightTheme {
           iconTheme: IconThemeData(color: colorSchemeLight.darkAppColor),
           color: colorSchemeLight.scaffoldBackgroundColor,
           elevation: 0,
+          titleTextStyle: TextStyle(
+            color: colorSchemeLight.appBarTitleColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
           textTheme: TextTheme(
             headline6: TextStyle(
               color: colorSchemeLight.appBarTitleColor,

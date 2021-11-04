@@ -25,8 +25,8 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
         .map((category) =>
             MultiSelectItem<CategoryDDModel>(category, category.name!))
         .toList();
-    print(categories);
-    print(categoryList);
+    // print(categories);
+    // print(categoryList);
   }
 
   @observable

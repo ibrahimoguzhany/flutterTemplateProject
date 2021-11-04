@@ -107,7 +107,7 @@ class ConfirmationInboxView extends StatelessWidget {
                                   actions: <Widget>[
                                     TextButton(
                                         onPressed: () =>
-                                            Navigator.of(context).pop(true),
+                                          Navigator.of(context).pop(true),
                                         child: const Text("Evet")),
                                     TextButton(
                                       onPressed: () =>
@@ -181,12 +181,12 @@ class ConfirmationInboxView extends StatelessWidget {
                               radius: 12,
                               backgroundColor: Color(0xffF9EEDF),
                               foregroundColor: Colors.black,
-                              child: Text("9"),
+                              child: Text("8"),
                             )
                           ],
                         ),
                         Text(
-                          "Notifications",
+                          "Bildirimler",
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -207,7 +207,7 @@ class ConfirmationInboxView extends StatelessWidget {
                           size: 42,
                         ),
                         Text(
-                          "Settings",
+                          "Ayarlar",
                           style: TextStyle(fontSize: 18),
                         ),
                       ],

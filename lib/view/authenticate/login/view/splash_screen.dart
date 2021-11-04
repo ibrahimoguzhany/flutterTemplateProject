@@ -66,7 +66,7 @@ class SplashView extends StatelessWidget {
       ),
       animationDuration: Duration(milliseconds: 1800),
       curve: Curves.easeIn,
-      nextScreen: HomeView(),
+      nextScreen: LoginViaAzureView(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: MediaQuery.of(context).size.width,
       centered: true,
