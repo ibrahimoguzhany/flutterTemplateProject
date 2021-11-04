@@ -1,9 +1,10 @@
 import 'dart:ui';
 
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/constants/image/image_constants.dart';
-import 'package:esd_mobil/view/confirmation_inbox/viewmodel/confirmation_detail_view_model.dart/confirmation_inbox_view_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/base/view/base_view.dart';
+import '../../../../core/constants/image/image_constants.dart';
+import '../../viewmodel/subviewmodel/confirmation_detail_view_model.dart';
 
 class ConfirmationDetailView extends StatelessWidget {
   const ConfirmationDetailView({Key? key}) : super(key: key);
@@ -243,10 +244,3 @@ class ConfirmationDetailView extends StatelessWidget {
     );
   }
 }
-
-// Center(
-//                   child: AnimatedContainer(
-//                       duration: Duration(milliseconds: 2000),
-//                       child: Text("Approved!",style: TextStyle(fontSize: 24),),
-//                     ),
-//                 ),

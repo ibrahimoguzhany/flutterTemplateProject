@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'confirmation_inbox_view_model.dart';
+part of 'confirmation_detail_view_model.dart';
 
 // **************************************************************************
 // StoreGenerator
