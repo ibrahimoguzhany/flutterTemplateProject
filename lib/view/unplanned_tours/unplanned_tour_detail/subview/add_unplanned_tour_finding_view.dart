@@ -237,16 +237,16 @@ class _AddUnPlannedTourFindingViewState
                 Uri.parse(
                     "http://mobil.demos.arfitect.net/api/services/app/Tours/UploadFiles"));
             for (var item in files!) {
-              print(File(item.path).readAsBytes().asStream());
               request.files.add(http.MultipartFile(
                   'file',
                   File(item.path).readAsBytes().asStream(),
                   File(item.path).lengthSync(),
                   filename: item.path.split("/").last));
             }
-            request.fields['body'] = finding.id.toString();
+            request.fields.addAll({"findingId": finding.id.toString()});
 
             var res = await request.send();
+            print(res);
           },
         ),
         SizedBox(height: 20),

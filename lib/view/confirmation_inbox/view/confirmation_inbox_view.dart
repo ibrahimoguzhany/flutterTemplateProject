@@ -30,9 +30,8 @@ class ConfirmationInboxView extends StatelessWidget {
             child: SingleChildScrollView(
                 child: Container(
               child: ListView.builder(
-                scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(8),
-                itemCount: 100,
+                itemCount: 10,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return Dismissible(
@@ -107,7 +106,7 @@ class ConfirmationInboxView extends StatelessWidget {
                                   actions: <Widget>[
                                     TextButton(
                                         onPressed: () =>
-                                          Navigator.of(context).pop(true),
+                                            Navigator.of(context).pop(true),
                                         child: const Text("Evet")),
                                     TextButton(
                                       onPressed: () =>
