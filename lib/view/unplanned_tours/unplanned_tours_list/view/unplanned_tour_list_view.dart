@@ -25,43 +25,40 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
         model.setContext(context);
         model.init();
       },
-      onPageBuilder: (BuildContext context,
-              UnPlannedTourListViewModel viewModel) =>
-          Scaffold(
-              appBar: buildAppBar(context),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.miniEndFloat,
-              floatingActionButton: FloatingActionButton.extended(
-                icon: Icon(Icons.add_outlined),
-                elevation: 10,
-                onPressed: viewModel.navigateToAddUnplannedTourView,
-                label: Text("Tur Oluştur"),
-              ),
-              body: RefreshIndicator(
-                onRefresh: () async {
-                  await NavigationService.instance
-                      .navigateToPageClear(NavigationConstants.TOURS_HOME_VIEW);
-                },
-                child: Observer(builder: (_) {
-                  return FutureBuilder(
-                    future: viewModel.getUnplannedTours(),
-                    builder: (context,
-                        AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
-                      if (snapshot.hasError)
-                        return Text("Error = ${snapshot.error}");
+      onPageBuilder:
+          (BuildContext context, UnPlannedTourListViewModel viewModel) =>
+              Scaffold(
+                  appBar: buildAppBar(context),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.miniEndFloat,
+                  floatingActionButton: FloatingActionButton.extended(
+                    icon: Icon(Icons.add_outlined),
+                    elevation: 10,
+                    onPressed: viewModel.navigateToAddUnplannedTourView,
+                    label: Text("Tur Oluştur"),
+                  ),
+                  body: RefreshIndicator(
+                      onRefresh: () async {
+                        await NavigationService.instance.navigateToPageClear(
+                            NavigationConstants.TOURS_HOME_VIEW);
+                      },
+                      child: FutureBuilder(
+                        future: viewModel.getUnplannedTours(),
+                        builder: (context,
+                            AsyncSnapshot<List<UnplannedTourModel>?> snapshot) {
+                          if (snapshot.hasError)
+                            return Text("Error = ${snapshot.error}");
 
-                      if (snapshot.hasData) {
-                        print(snapshot.data);
-                        // final List<UnplannedTourModel>? tours = snapshot.data;
-                        return buildListView(snapshot.data!, viewModel);
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  );
-                }),
-              )),
+                          if (snapshot.hasData) {
+                            print(snapshot.data);
+                            // final List<UnplannedTourModel>? tours = snapshot.data;
+                            return buildListView(snapshot.data!, viewModel);
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ))),
     );
   }
 
