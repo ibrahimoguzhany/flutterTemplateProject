@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
-import '../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/base/view/base_view.dart';
+import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/init/lang/locale_keys.g.dart';
-import '../../../_product/_constants/image_path_svg.dart';
-import '../../model/unplanned_tour_model.dart';
+import '../../../../core/init/navigation/navigation_service.dart';
+import '../../_product/_constants/image_path_svg.dart';
+import '../model/unplanned_tour_model.dart';
 import '../viewmodel/unplanned_tour_list_view_model.dart';
 
 class UnPlannedTourListView extends StatefulWidget {

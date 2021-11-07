@@ -1,16 +1,16 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/location_dd_model.dart';
+import '../../../../../core/base/view/base_view.dart';
+import '../../../../../core/components/text/auto_locale.text.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../model/field_dd_model.dart';
+import '../../../model/unplanned_tour_model.dart';
+import '../../../model/user_dd_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../../core/base/view/base_view.dart';
-import '../../../../core/components/text/auto_locale.text.dart';
-import '../../model/field_dd_model.dart';
-import '../../model/location_dd_model.dart';
-import '../../model/unplanned_tour_model.dart';
-import '../../model/user_dd_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
 
 class AddUnPlannedTourView extends StatefulWidget {
@@ -264,54 +264,6 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       },
     );
   }
-
-  // Widget buildTourAccompaniesMultiDropdownField(
-  //     AddUnPlannedTourViewModel viewModel) {
-  //   return Observer(builder: (_) {
-  //     return MultiSelectDialogField(
-  //       autovalidateMode: AutovalidateMode.onUserInteraction,
-  //       validator: (val) {
-  //         if (val == null) {
-  //           return "Bu alan boş bırakılamaz.";
-  //         }
-  //       },
-  //       items: viewModel.userList,
-  //       title: Text("Tura Eşlik Edenler"),
-  //       searchable: true,
-  //       searchHint: "Kullanıcı ara...",
-  //       selectedColor: Colors.blue,
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.all(
-  //           Radius.circular(5),
-  //         ),
-  //         border: Border.all(
-  //           width: 1,
-  //         ),
-  //       ),
-  //       buttonIcon: Icon(
-  //         Icons.work_outline_outlined,
-  //       ),
-  //       buttonText: Text(
-  //         "Tura Eşlik Edenler",
-  //         style: TextStyle(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.values[4],
-  //         ),
-  //       ),
-  //       onConfirm: (List<UserDDModel?>? results) {
-  //         List<String> result = <String>[];
-  //         results!.forEach((item) {
-  //           result.add(item!.fullName!);
-  //         });
-  //         setState(() {
-  //           tour.tourAccompaniers = result.join(",");
-  //         });
-  //         // print(results);
-  //         // print(tourAccompanies);
-  //       },
-  //     );
-  //   });
-  // }
 
   Padding buildFieldDropDownFormField(AddUnPlannedTourViewModel viewModel) {
     return Padding(

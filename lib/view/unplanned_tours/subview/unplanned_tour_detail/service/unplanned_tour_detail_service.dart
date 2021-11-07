@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import '../../../../../core/constants/app/network_constants.dart';
+import '../../../../../product/enum/unplannedtours_url_enum.dart';
+import '../../../../_product/_model/finding_file.dart';
+import '../../../model/unplanned_tour_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
-import 'package:http/http.dart' as http;
-
-import '../../../_product/_model/finding_file.dart';
-import '../../model/unplanned_tour_model.dart';
 
 class UnPlannedTourDetailService {
   static UnPlannedTourDetailService? _instance;
@@ -16,33 +17,22 @@ class UnPlannedTourDetailService {
 
   UnPlannedTourDetailService._init();
 
-  final _addFindingURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateFindingForTour";
-
-  final _deleteFindingURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/RemoveFindingFromTour";
-
-  final _findingFilesURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetFindingFiles";
-
-  final _uploadFileToFindingURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/UploadFiles";
+  final dio = Dio(BaseOptions(
+      baseUrl: NetworkConstants.BASE_URL,
+      headers: {"Content-Type": "application/json-patch+json"}));
 
   Future<UnplannedTourModel?> addFinding(
     FindingModel finding,
     String tourId,
   ) async {
-    final response = await http.post(
-      Uri.parse(_addFindingURL + "?tourId=" + tourId),
-      body: json.encode(finding),
-      headers: {
-        "Content-Type": "application/json-patch+json",
-      },
-    );
-    print(response.body);
+    final response = await dio.post(
+        UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
+        data: json.encode(finding),
+        queryParameters: {"tourId": "$tourId"});
+    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
         return UnplannedTourModel.fromJson(responseBody);
       default:
         return null;
@@ -50,10 +40,9 @@ class UnPlannedTourDetailService {
   }
 
   Future<UnplannedTourModel?> deleteFinding(int findingId, int tourId) async {
-    print(findingId);
-    final response = await http.post(
-      Uri.parse(_deleteFindingURL + "?findingId=$findingId"),
-    );
+    final response = await dio.post(
+        UnplannedTourDetailURLs.RemoveFindingFromTour.rawValue,
+        queryParameters: {"findingId": "$findingId"});
     if (response.statusCode == HttpStatus.ok) {
       final refreshedTour = UnPlannedTourService.instance!.getTourById(tourId);
       return refreshedTour;
@@ -61,34 +50,14 @@ class UnPlannedTourDetailService {
     return null;
   }
 
-  // UploadTask? uploadFile(String destination, File file) {
-  //   try {
-  //     final ref = FirebaseStorage.instance.ref(destination);
-
-  //     return ref.putFile(file);
-  //   } on FirebaseException catch (e) {
-  //     return null;
-  //   }
-  // }
-
-  // UploadTask? uploadBytes(String destination, Uint8List data) {
-  //   try {
-  //     final ref = FirebaseStorage.instance.ref(destination);
-
-  //     return ref.putData(data);
-  //   } on FirebaseException catch (e) {
-  //     return null;
-  //   }
-  // }
-
   Future<List<FindingFile>?> getFindingFiles(int findingId) async {
-    final response = await http.post(
-        Uri.parse(_findingFilesURL + "?findingId=$findingId"),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(findingId));
+    final response = await dio.post(
+        UnplannedTourDetailURLs.GetFindingFiles.rawValue,
+        data: json.encode(findingId),
+        queryParameters: {"findingId": "$findingId"});
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
         print(responseBody);
 
         if (responseBody is List) {

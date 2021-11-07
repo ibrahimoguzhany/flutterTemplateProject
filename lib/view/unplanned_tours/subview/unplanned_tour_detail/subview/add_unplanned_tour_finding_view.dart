@@ -1,5 +1,11 @@
 import 'dart:io';
 
+import 'package:esd_mobil/core/base/view/base_view.dart';
+import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
+import 'package:esd_mobil/view/_product/_model/finding_file.dart';
+import 'package:esd_mobil/view/_widgets/button/button_widget.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,12 +16,6 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/base/view/base_view.dart';
-import '../../../../core/components/text/auto_locale.text.dart';
-import '../../../_product/_model/finding_file.dart';
-import '../../../_widgets/button/button_widget.dart';
-import '../../model/category_dd_model.dart';
-import '../../model/unplanned_tour_model.dart';
 import '../view/unplanned_tour_detail_view.dart';
 import '../viewmodel/subview_model/add_unplanned_tour_finding_view_model.dart';
 import 'package:http/http.dart' as http;
@@ -65,7 +65,7 @@ class _AddUnPlannedTourFindingViewState
         model.setContext(context);
         await model.init();
 
-        findingTypes = (await model.getCategories());
+        findingTypes = (await model.getCategories())?.cast<CategoryDDModel>();
         // print(findingTypes);
         setState(() {
           findingTypes!.forEach((element) {
@@ -291,31 +291,6 @@ class _AddUnPlannedTourFindingViewState
     }
     return widgets;
   }
-
-  // List<Widget>? addedFilesListView(AddUnPlannedTourFindingViewModel viewModel) {
-  //   // List<Observer> widgets = <Observer>[];
-  //   if (files!.isNotEmpty) {
-  //     ListView.builder(
-  //         itemCount: files!.length,
-  //         itemBuilder: (context, index) {
-  //           return InputWidgets(
-  //             isUploaded: viewModel.isUploaded,
-  //             onDelete: () {
-  //               setState(() {
-  //                 files!.removeWhere(
-  //                     (element) => element.path == files![index].path);
-  //                 files!.join(",");
-  //               });
-  //             },
-  //             text: Text(
-  //               basename(files![index].path),
-  //               textAlign: TextAlign.center,
-  //             ),
-  //           );
-  //         });
-  //   }
-  //   return <Container>[];
-  // }
 
   Future selectFile() async {
     FilePickerResult? result =
@@ -554,29 +529,3 @@ Widget buildLittleTextWidget(String? title) {
         fontWeight: FontWeight.w800),
   );
 }
-// class InputWidgets extends StatefulWidget {
-//   final Text text;
-//   final VoidCallback onDelete;
-//   final bool isUploaded;
-
-//   const InputWidgets(
-//       {Key? key,
-//       required this.text,
-//       required this.onDelete,
-//       required this.isUploaded})
-//       : super(key: key);
-
-//   @override
-//   _InputWidgetsState createState() => _InputWidgetsState();
-// }
-
-// class _InputWidgetsState extends State<InputWidgets> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return InputChip(
-//       label: widget.text,
-//       onDeleted: widget.onDelete,
-//       backgroundColor: widget.isUploaded ? Colors.greenAccent : Colors.black26,
-//     );
-//   }
-// }

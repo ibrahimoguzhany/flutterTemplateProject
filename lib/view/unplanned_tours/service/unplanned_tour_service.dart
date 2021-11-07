@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:esd_mobil/core/constants/app/network_constants.dart';
+import 'package:esd_mobil/product/enum/unplannedtours_url_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../model/category_dd_model.dart';
 import '../model/field_dd_model.dart';
@@ -19,49 +21,31 @@ class UnPlannedTourService {
 
   UnPlannedTourService._init();
 
-  final _toursUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetAllTours";
-  final _categoryUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Categories/GetAllCategories";
-  final _locationUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Locations/GetAllLocations";
-  final _fieldsUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Fields/GetAllFields";
-  final _usersUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/User/GetUsers";
-  final _createUnplannedTourUrl =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/CreateUnplannedTourMobile";
-  final _updateUnplannedTourURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/UpdateTourMobile";
+  final dio = Dio(BaseOptions(
+    baseUrl: NetworkConstants.BASE_URL,
+    headers: {"Content-Type": "application/json"},
+  ));
 
-  final _getTourByIdURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/GetTourByIdMobile";
-
-  final _deleteTourURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/Tours/DeleteTour/";
-
-  Future<UnplannedTourModel?> addUnPlannedTour(
+  Future<UnplannedTourModel?> createUnplannedTourMobile(
       UnplannedTourModel tour, BuildContext context) async {
-    final response = await http.post(Uri.parse(_createUnplannedTourUrl),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(tour.toJson()));
-    print(response.body);
+    final response = await dio.post(
+      UnplannedTourURLs.CreateUnplannedTourMobile.rawValue,
+      data: json.encode(tour.toJson()),
+    );
+    // print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
-
+        final responseBody = await response.data["result"];
         return UnplannedTourModel.fromJson(responseBody);
-
       default:
         return null;
     }
   }
 
   Future<bool> deleteTour(int id) async {
-    final response = await http.post(
-      Uri.parse(_deleteTourURL + "?id=$id"),
-    );
-    print(response.body);
+    final response = await dio.post(UnplannedTourURLs.DeleteTour.rawValue,
+        queryParameters: {"id": "$id"});
+    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         return true;
@@ -72,14 +56,16 @@ class UnPlannedTourService {
 
   Future<UnplannedTourModel?> updateUnplannedTour(
       UnplannedTourModel tour) async {
-    final response = await http.post(Uri.parse(_updateUnplannedTourURL),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(tour.toJson()));
-    print(response);
+    final response = await dio.post(UnplannedTourURLs.UpdateTourMobile.rawValue,
+        data: json.encode(
+          tour.toJson(),
+        ));
+
+    // print(response);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
-        print(response.body);
+        final responseBody = await response.data["result"];
+        // print(response.data);
         return UnplannedTourModel.fromJson(responseBody);
       default:
         return null;
@@ -87,13 +73,13 @@ class UnPlannedTourService {
   }
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
-    final response = await http.post(Uri.parse(_toursUrl),
-        headers: {"Content-Type": "application/json", "Content-Length": "0"});
-    print(response.body);
+    final response = await dio.post(UnplannedTourURLs.GetAllTours.rawValue);
+    // print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
-        print(responseBody);
+        print(response.data["result"]);
+        final responseBody = await response.data["result"];
+        // print(responseBody);
 
         if (responseBody is List) {
           return responseBody
@@ -106,11 +92,13 @@ class UnPlannedTourService {
   }
 
   Future<UnplannedTourModel?> getTourById(int id) async {
-    final response = await http.post(Uri.parse(_getTourByIdURL + "?id=$id"),
-        headers: {"Content-Type": "application/json", "Content-Length": "0"});
+    final response = await dio.post(
+      UnplannedTourURLs.GetTourByIdMobile.rawValue,
+      queryParameters: {"id": "$id"},
+    );
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
         print(responseBody);
         if (responseBody is Map<String, dynamic>) {
           return UnplannedTourModel.fromJson(responseBody);
@@ -122,11 +110,10 @@ class UnPlannedTourService {
   }
 
   Future<List<UnplannedTourModel>?> getUnplannedTourFindings() async {
-    final response = await http.post(Uri.parse(_toursUrl),
-        headers: {"Content-Type": "application/json"});
+    final response = await dio.post(UnplannedTourURLs.GetAllTours.rawValue);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
         // print(responseBody);
 
         if (responseBody is List) {
@@ -140,11 +127,11 @@ class UnPlannedTourService {
   }
 
   Future<List<CategoryDDModel>?> getCategories() async {
-    final response = await http.post(Uri.parse(_categoryUrl),
-        headers: {"Content-Type": "application/json"});
+    final response =
+        await dio.post(UnplannedTourURLs.GetAllCategories.rawValue);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
 
         if (responseBody is List) {
           return responseBody.map((e) => CategoryDDModel.fromJson(e)).toList();
@@ -154,11 +141,10 @@ class UnPlannedTourService {
   }
 
   Future<List<LocationDDModel>?> getLocations() async {
-    final response = await http.post(Uri.parse(_locationUrl),
-        headers: {"Content-Type": "application/json"});
+    final response = await dio.post(UnplannedTourURLs.GetAllLocations.rawValue);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
         // print(responseBody);
 
         if (responseBody is List) {
@@ -169,12 +155,11 @@ class UnPlannedTourService {
   }
 
   Future<List<FieldDDModel>?> getFields() async {
-    final response = await http.post(Uri.parse(_fieldsUrl),
-        headers: {"Content-Type": "application/json"});
+    final response = await dio.post(UnplannedTourURLs.GetAllFields.rawValue);
 
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody = await json.decode(response.body)["result"];
+        final responseBody = await response.data["result"];
 
         if (responseBody is List) {
           return responseBody.map((e) => FieldDDModel.fromJson(e)).toList();
@@ -184,13 +169,11 @@ class UnPlannedTourService {
   }
 
   Future<List<UserDDModel>?> getUsers() async {
-    final response = await http.post(Uri.parse(_usersUrl),
-        headers: {"Content-Type": "application/json"});
+    final response = await dio.post(UnplannedTourURLs.GetUsers.rawValue);
 
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final responseBody =
-            await json.decode(response.body)["result"]["items"];
+        final responseBody = await response.data["result"]["items"];
         if (responseBody is List) {
           return responseBody.map((e) => UserDDModel.fromJson(e)).toList();
         }

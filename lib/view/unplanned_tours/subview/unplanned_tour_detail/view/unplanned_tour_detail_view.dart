@@ -1,15 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/core/base/view/base_view.dart';
+import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
 import 'package:esd_mobil/core/extensions/context_extension.dart';
+import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-import '../../../../core/base/view/base_view.dart';
-import '../../../../core/components/text/auto_locale.text.dart';
-import '../../../../core/init/lang/locale_keys.g.dart';
-import '../../model/unplanned_tour_model.dart';
 import '../viewmodel/subview_model/unplanned_tour_detail_view_model.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
