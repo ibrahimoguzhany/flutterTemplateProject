@@ -1,11 +1,5 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/_widgets/button/button_widget.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,9 +10,14 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/base/view/base_view.dart';
+import '../../../../../core/components/text/auto_locale.text.dart';
+import '../../../../_product/_model/finding_file.dart';
+import '../../../../_widgets/button/button_widget.dart';
+import '../../../model/category_dd_model.dart';
+import '../../../model/unplanned_tour_model.dart';
 import '../view/unplanned_tour_detail_view.dart';
 import '../viewmodel/subview_model/add_unplanned_tour_finding_view_model.dart';
-import 'package:http/http.dart' as http;
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
   const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
@@ -232,21 +231,7 @@ class _AddUnPlannedTourFindingViewState
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            var request = http.MultipartRequest(
-                'POST',
-                Uri.parse(
-                    "http://mobil.demos.arfitect.net/api/services/app/Tours/UploadFiles"));
-            for (var item in files!) {
-              request.files.add(http.MultipartFile(
-                  'file',
-                  File(item.path).readAsBytes().asStream(),
-                  File(item.path).lengthSync(),
-                  filename: item.path.split("/").last));
-            }
-            request.fields.addAll({"findingId": finding.id.toString()});
-
-            var res = await request.send();
-            print(res);
+            viewModel.uploadFiles(findingFiles);
           },
         ),
         SizedBox(height: 20),

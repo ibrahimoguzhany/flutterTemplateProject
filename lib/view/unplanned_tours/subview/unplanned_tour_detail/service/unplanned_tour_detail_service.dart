@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+
 import '../../../../../core/constants/app/network_constants.dart';
 import '../../../../../product/enum/unplannedtours_url_enum.dart';
 import '../../../../_product/_model/finding_file.dart';
 import '../../../model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import '../../../service/unplanned_tour_service.dart';
 
 class UnPlannedTourDetailService {
   static UnPlannedTourDetailService? _instance;
@@ -17,18 +18,22 @@ class UnPlannedTourDetailService {
 
   UnPlannedTourDetailService._init();
 
-  final dio = Dio(BaseOptions(
+  final dio = Dio(
+    BaseOptions(
       baseUrl: NetworkConstants.BASE_URL,
-      headers: {"Content-Type": "application/json-patch+json"}));
+      headers: {"Content-Type": "application/json-patch+json"},
+    ),
+  );
 
   Future<UnplannedTourModel?> addFinding(
     FindingModel finding,
     String tourId,
   ) async {
     final response = await dio.post(
-        UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
-        data: json.encode(finding),
-        queryParameters: {"tourId": "$tourId"});
+      UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
+      data: json.encode(finding),
+      queryParameters: {"tourId": "$tourId"},
+    );
     print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -36,6 +41,21 @@ class UnPlannedTourDetailService {
         return UnplannedTourModel.fromJson(responseBody);
       default:
         return null;
+    }
+  }
+
+  Future<FindingFile?> uploadFiles(List<FindingFile?> items) async {
+    var formData = FormData();
+    for (var file in items) {
+      List<int> fileBytesList = List.from(file!.fileBytes!);
+      formData.files
+          .add(MapEntry("file", MultipartFile.fromBytes(fileBytesList)));
+    }
+
+    final response = await dio
+        .post(UnplannedTourDetailURLs.UploadFiles.rawValue, data: formData);
+    if (response.statusCode == HttpStatus.ok) {
+      print("basariyla yuklendi");
     }
   }
 

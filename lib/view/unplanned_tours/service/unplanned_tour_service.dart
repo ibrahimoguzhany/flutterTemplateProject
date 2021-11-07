@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:esd_mobil/core/constants/app/network_constants.dart';
-import 'package:esd_mobil/product/enum/unplannedtours_url_enum.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/app/network_constants.dart';
+import '../../../product/enum/unplannedtours_url_enum.dart';
 import '../model/category_dd_model.dart';
 import '../model/field_dd_model.dart';
 import '../model/location_dd_model.dart';

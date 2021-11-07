@@ -88,6 +88,18 @@ mixin _$AddUnPlannedTourFindingViewModel
       ActionController(name: '_AddUnPlannedTourFindingViewModelBase');
 
   @override
+  void uploadFiles(List<FindingFile?> items) {
+    final _$actionInfo = _$_AddUnPlannedTourFindingViewModelBaseActionController
+        .startAction(name: '_AddUnPlannedTourFindingViewModelBase.uploadFiles');
+    try {
+      return super.uploadFiles(items);
+    } finally {
+      _$_AddUnPlannedTourFindingViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeIsUploaded() {
     final _$actionInfo =
         _$_AddUnPlannedTourFindingViewModelBaseActionController.startAction(

@@ -1,9 +1,9 @@
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/view/_product/_widgets/big_little_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../../../core/base/view/base_view.dart';
 import '../../../../_product/_model/finding_file.dart';
+import '../../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../model/unplanned_tour_model.dart';
 import '../service/unplanned_tour_detail_service.dart';
 import '../viewmodel/finding_detail_view_model.dart';

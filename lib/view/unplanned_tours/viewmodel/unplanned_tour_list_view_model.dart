@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import '../model/unplanned_tour_model.dart';
+import '../service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 

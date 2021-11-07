@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
+import 'package:esd_mobil/view/_product/_model/finding_file.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
@@ -58,6 +59,28 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
     } on PlatformException catch (e) {
       print("Resim secme islemi basarisiz oldu $e");
     }
+  }
+
+  @action
+  void uploadFiles(List<FindingFile?> items) {
+    var request = UnPlannedTourDetailService.instance!.uploadFiles(items);
+    for (var item in items) {}
+
+    // var request = http.MultipartRequest(
+    //     'POST',
+    //     Uri.parse(
+    //         "http://mobil.demos.arfitect.net/api/services/app/Tours/UploadFiles"));
+    // for (var item in files!) {
+    //   request.files.add(http.MultipartFile(
+    //       'file',
+    //       File(item.path).readAsBytes().asStream(),
+    //       File(item.path).lengthSync(),
+    //       filename: item.path.split("/").last));
+    // }
+    // request.fields.addAll({"findingId": finding.id.toString()});
+
+    // var res = await request.send();
+    // print(res);
   }
 
   @observable
