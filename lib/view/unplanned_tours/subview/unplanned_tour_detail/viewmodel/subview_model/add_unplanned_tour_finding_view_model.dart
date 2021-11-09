@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/category_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/service/unplanned_tour_service.dart';
+import '../../../../../../core/base/model/base_viewmodel.dart';
+import '../../../../../_product/_model/finding_file.dart';
+import '../../../../model/category_dd_model.dart';
+import '../../../../model/unplanned_tour_model.dart';
+import '../../../../service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,6 +31,9 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   }
 
   @observable
+  bool isUploaded = true;
+
+  @observable
   List<CategoryDDModel>? categories = <CategoryDDModel>[];
 
   @observable
@@ -40,10 +43,10 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @action
-  Future<UnplannedTourModel?> addFinding(
+  Future<UnplannedTourModel?> createFindingFourTour(
       FindingModel model, BuildContext context, String tourId) async {
-    final resultTour =
-        await UnPlannedTourDetailService.instance!.addFinding(model, tourId);
+    final resultTour = await UnPlannedTourDetailService.instance!
+        .createFindingForTour(model, tourId);
     if (resultTour != null) return resultTour;
     return null;
   }
@@ -62,9 +65,9 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   }
 
   @action
-  void uploadFiles(List<FindingFile?> items) {
-    var request = UnPlannedTourDetailService.instance!.uploadFiles(items);
-    for (var item in items) {}
+  Future<void> uploadFiles(List<FindingFile?> items, int findingId) async {
+    var request = await UnPlannedTourDetailService.instance!
+        .uploadFindingFiles(items, findingId);
 
     // var request = http.MultipartRequest(
     //     'POST',
@@ -77,14 +80,10 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
     //       File(item.path).lengthSync(),
     //       filename: item.path.split("/").last));
     // }
-    // request.fields.addAll({"findingId": finding.id.toString()});
 
     // var res = await request.send();
     // print(res);
   }
-
-  @observable
-  bool isUploaded = true;
 
   @action
   void changeIsUploaded() {

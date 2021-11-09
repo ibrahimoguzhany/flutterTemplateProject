@@ -10,6 +10,22 @@ part of 'add_unplanned_tour_finding_view_model.dart';
 
 mixin _$AddUnPlannedTourFindingViewModel
     on _AddUnPlannedTourFindingViewModelBase, Store {
+  final _$isUploadedAtom =
+      Atom(name: '_AddUnPlannedTourFindingViewModelBase.isUploaded');
+
+  @override
+  bool get isUploaded {
+    _$isUploadedAtom.reportRead();
+    return super.isUploaded;
+  }
+
+  @override
+  set isUploaded(bool value) {
+    _$isUploadedAtom.reportWrite(value, super.isUploaded, () {
+      super.isUploaded = value;
+    });
+  }
+
   final _$categoriesAtom =
       Atom(name: '_AddUnPlannedTourFindingViewModelBase.categories');
 
@@ -42,30 +58,14 @@ mixin _$AddUnPlannedTourFindingViewModel
     });
   }
 
-  final _$isUploadedAtom =
-      Atom(name: '_AddUnPlannedTourFindingViewModelBase.isUploaded');
+  final _$createFindingFourTourAsyncAction = AsyncAction(
+      '_AddUnPlannedTourFindingViewModelBase.createFindingFourTour');
 
   @override
-  bool get isUploaded {
-    _$isUploadedAtom.reportRead();
-    return super.isUploaded;
-  }
-
-  @override
-  set isUploaded(bool value) {
-    _$isUploadedAtom.reportWrite(value, super.isUploaded, () {
-      super.isUploaded = value;
-    });
-  }
-
-  final _$addFindingAsyncAction =
-      AsyncAction('_AddUnPlannedTourFindingViewModelBase.addFinding');
-
-  @override
-  Future<UnplannedTourModel?> addFinding(
+  Future<UnplannedTourModel?> createFindingFourTour(
       FindingModel model, BuildContext context, String tourId) {
-    return _$addFindingAsyncAction
-        .run(() => super.addFinding(model, context, tourId));
+    return _$createFindingFourTourAsyncAction
+        .run(() => super.createFindingFourTour(model, context, tourId));
   }
 
   final _$pickImageAsyncAction =
@@ -74,6 +74,15 @@ mixin _$AddUnPlannedTourFindingViewModel
   @override
   Future<File?> pickImage(ImageSource imageSource) {
     return _$pickImageAsyncAction.run(() => super.pickImage(imageSource));
+  }
+
+  final _$uploadFilesAsyncAction =
+      AsyncAction('_AddUnPlannedTourFindingViewModelBase.uploadFiles');
+
+  @override
+  Future<void> uploadFiles(List<FindingFile?> items, int findingId) {
+    return _$uploadFilesAsyncAction
+        .run(() => super.uploadFiles(items, findingId));
   }
 
   final _$getCategoriesAsyncAction =
@@ -86,18 +95,6 @@ mixin _$AddUnPlannedTourFindingViewModel
 
   final _$_AddUnPlannedTourFindingViewModelBaseActionController =
       ActionController(name: '_AddUnPlannedTourFindingViewModelBase');
-
-  @override
-  void uploadFiles(List<FindingFile?> items) {
-    final _$actionInfo = _$_AddUnPlannedTourFindingViewModelBaseActionController
-        .startAction(name: '_AddUnPlannedTourFindingViewModelBase.uploadFiles');
-    try {
-      return super.uploadFiles(items);
-    } finally {
-      _$_AddUnPlannedTourFindingViewModelBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
 
   @override
   void changeIsUploaded() {
@@ -115,9 +112,9 @@ mixin _$AddUnPlannedTourFindingViewModel
   @override
   String toString() {
     return '''
+isUploaded: ${isUploaded},
 categories: ${categories},
-categoryList: ${categoryList},
-isUploaded: ${isUploaded}
+categoryList: ${categoryList}
     ''';
   }
 }

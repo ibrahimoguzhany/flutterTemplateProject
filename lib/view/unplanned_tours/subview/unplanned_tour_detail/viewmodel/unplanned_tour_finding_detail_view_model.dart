@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
 import 'package:esd_mobil/view/_product/_model/finding_file.dart';
 import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
 import '../service/unplanned_tour_detail_service.dart';
 
-part 'finding_detail_view_model.g.dart';
+part 'unplanned_tour_finding_detail_view_model.g.dart';
 
 class FindingDetailViewModel = _FindingDetailViewModelBase
     with _$FindingDetailViewModel;
@@ -18,6 +23,9 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   // Future<void> launchImage(String url) async {
   //   await launch(url);
   // }
+
+  @observable
+  List<FindingFile> files = [];
 
   @observable
   List<FindingFile>? findingFiles = [];
@@ -63,5 +71,53 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   Future<List<FindingFile>?> getFindingFiles(int findingId) async {
     findingFiles =
         await UnPlannedTourDetailService.instance!.getFindingFiles(findingId);
+  }
+
+  @action
+  Future<void> uploadFindingFiles(int findingId) async {
+    await UnPlannedTourDetailService.instance!
+        .uploadFindingFiles(findingFiles!, findingId);
+  }
+
+  @action
+  Future<File?> pickImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return null;
+
+      final imageTemporary = File(image.path);
+      return imageTemporary;
+    } on PlatformException catch (e) {
+      print("Resim secme islemi basarisiz oldu $e");
+    }
+  }
+
+  Future selectFile() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result == null) return;
+
+    for (var i = 0; i < result.files.length; i++) {
+      final path = result.files[i].path!;
+      // files!.add(File(path));
+      final filename = result.files[i].name;
+      final fileBytes = await File(path).readAsBytes();
+      addFindingFiles(FindingFile(fileBytes: fileBytes, filename: filename));
+      // findingFiles!.add(FindingFile(fileBytes: fileBytes, filename: filename));
+      print(findingFiles![i].fileBytes);
+      print(findingFiles![i].filename);
+    }
+    return result;
+  }
+
+  @action
+  void addFindingFiles(FindingFile file) {
+    findingFiles!.add(file);
+  }
+
+  @action
+  void clearFindingFiles() {
+    findingFiles!.clear();
   }
 }

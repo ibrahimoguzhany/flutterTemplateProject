@@ -25,7 +25,7 @@ class UnPlannedTourDetailService {
     ),
   );
 
-  Future<UnplannedTourModel?> addFinding(
+  Future<UnplannedTourModel?> createFindingForTour(
     FindingModel finding,
     String tourId,
   ) async {
@@ -44,18 +44,25 @@ class UnPlannedTourDetailService {
     }
   }
 
-  Future<FindingFile?> uploadFiles(List<FindingFile?> items) async {
+  Future<FindingFile?> uploadFindingFiles(
+      List<FindingFile?> items, int findingId) async {
     var formData = FormData();
     for (var file in items) {
       List<int> fileBytesList = List.from(file!.fileBytes!);
-      formData.files
-          .add(MapEntry("file", MultipartFile.fromBytes(fileBytesList)));
+      formData.files.add(
+          MapEntry("${file.filename}", MultipartFile.fromBytes(fileBytesList)));
     }
 
-    final response = await dio
-        .post(UnplannedTourDetailURLs.UploadFiles.rawValue, data: formData);
+    final response = await dio.post(
+        UnplannedTourDetailURLs.UploadFiles.rawValue,
+        data: formData,
+        queryParameters: {"findingId": "$findingId"});
     if (response.statusCode == HttpStatus.ok) {
+      print(response.data);
+      print(response.statusCode);
       print("basariyla yuklendi");
+    } else {
+      print("hata!!");
     }
   }
 

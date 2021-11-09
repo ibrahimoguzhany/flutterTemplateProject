@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -119,41 +120,38 @@ class _AddUnPlannedTourFindingViewState
                   buildFieldManagerStatements,
                   SizedBox(height: 20),
                   buildLittleTextWidget("Dosya"),
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: 20, right: 20, left: 20, bottom: 0),
-                    decoration: buildFileBoxDecoration(),
-                    margin: EdgeInsets.all(10),
-                    child: buildButtonWidgets(viewModel, context),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.only(
+                  //       top: 20, right: 20, left: 20, bottom: 0),
+                  //   decoration: buildFileBoxDecoration(),
+                  //   margin: EdgeInsets.all(10),
+                  //   child: buildButtonWidgets(viewModel, context),
+                  // ),
                   FloatingActionButton.extended(
+                    label: Text("Kaydet"),
                     onPressed: () async {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
-                        // TODO : CreatorUserId alani authentication eklendikten sonra eklenecek. Session daki user id kullanilabilir.
                         tour.findings!.add(finding);
                         _formKey.currentState!.save();
-                        final refreshedTour = await viewModel.addFinding(
-                            finding, context, tour.id.toString());
+                        final refreshedTour =
+                            await viewModel.createFindingFourTour(
+                                finding, context, tour.id.toString());
 
                         if (refreshedTour != null) {
-                          // Dosya ekleme kismi
-
-                          // print(res);
-
-                          // Dosya ekleme kismi
                           Navigator.of(context).pop();
                           final snackBar = SnackBar(
-                            content: Text("Bulgu başarıyla eklendi."),
+                            content: Text(
+                                "Bulgu başarıyla oluşturuldu. Dosyalarınızı ekleyebilirsiniz."),
                             backgroundColor: Colors.green,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                                settings:
-                                    RouteSettings(arguments: refreshedTour),
-                                builder: (_) => UnPlannedTourDetailView()),
+                                settings: RouteSettings(arguments: finding),
+                                builder: (_) =>
+                                    UnplannedTourFindingDetailView()),
                           );
                         } else {
                           final snackBar = SnackBar(
@@ -164,7 +162,6 @@ class _AddUnPlannedTourFindingViewState
                         }
                       }
                     },
-                    label: Text("Kaydet"),
                   ),
                 ],
               ),
@@ -231,7 +228,7 @@ class _AddUnPlannedTourFindingViewState
           text: 'Yükle',
           icon: Icons.cloud_upload_outlined,
           onClicked: () async {
-            viewModel.uploadFiles(findingFiles);
+            viewModel.uploadFiles(findingFiles, finding.id!);
           },
         ),
         SizedBox(height: 20),
@@ -285,10 +282,12 @@ class _AddUnPlannedTourFindingViewState
 
     for (var i = 0; i < result.files.length; i++) {
       final path = result.files[i].path!;
+      // files!.add(File(path));
       final filename = result.files[i].name;
-      files!.add(File(path));
       final fileBytes = await File(path).readAsBytes();
       findingFiles.add(FindingFile(fileBytes: fileBytes, filename: filename));
+      print(findingFiles[i].fileBytes);
+      print(findingFiles[i].filename);
     }
     setState(() {});
   }

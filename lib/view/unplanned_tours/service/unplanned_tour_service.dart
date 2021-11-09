@@ -74,12 +74,12 @@ class UnPlannedTourService {
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     final response = await dio.post(UnplannedTourURLs.GetAllTours.rawValue);
-    // print(response.data);
+    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         print(response.data["result"]);
         final responseBody = await response.data["result"];
-        // print(responseBody);
+        print(responseBody);
 
         if (responseBody is List) {
           return responseBody

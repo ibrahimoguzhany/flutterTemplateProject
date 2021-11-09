@@ -1,12 +1,18 @@
+import 'dart:io';
+
+import 'package:esd_mobil/core/components/button/action_button.dart';
+import 'package:esd_mobil/core/components/button/expandable_fab.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/base/view/base_view.dart';
 import '../../../../_product/_model/finding_file.dart';
 import '../../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../model/unplanned_tour_model.dart';
 import '../service/unplanned_tour_detail_service.dart';
-import '../viewmodel/finding_detail_view_model.dart';
+import '../viewmodel/unplanned_tour_finding_detail_view_model.dart';
 import 'single_file_view.dart';
 
 class UnplannedTourFindingDetailView extends StatefulWidget {
@@ -18,7 +24,7 @@ class UnplannedTourFindingDetailView extends StatefulWidget {
 
 class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
   List<Widget> fileWidgets = <Widget>[];
-  List<FindingFile>? files = [];
+  List<FindingFile>? findingFiles = [];
 
   @override
   void initState() {
@@ -38,6 +44,37 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
       },
       onPageBuilder: (BuildContext context, FindingDetailViewModel viewModel) =>
           Scaffold(
+        floatingActionButton: ExpandableFab(
+          distance: 112.0,
+          children: [
+            ActionButton(
+              icon: const Icon(Icons.upload_file_outlined),
+              onPressed: () async {
+                await viewModel.selectFile().then((value) async {
+                  if (viewModel.findingFiles?.isNotEmpty ?? false) {
+                    // print(viewModel.findingFiles);
+                    await viewModel
+                        .uploadFindingFiles(finding.id!)
+                        .then((value) => viewModel.clearFindingFiles());
+                  }
+                });
+              },
+            ),
+            ActionButton(
+              onPressed: () async {
+                File takenPhoto =
+                    (await viewModel.pickImage(ImageSource.camera))!;
+                viewModel.findingFiles!.add(FindingFile(
+                    fileBytes: takenPhoto.readAsBytesSync(),
+                    filename: takenPhoto.path.split('/').last));
+                await viewModel
+                    .uploadFindingFiles(finding.id!)
+                    .then((value) => viewModel.clearFindingFiles());
+              },
+              icon: const Icon(Icons.camera_alt_outlined),
+            ),
+          ],
+        ),
         appBar: AppBar(
           title: Text("Bulgu Detayı"),
           actions: [
@@ -55,8 +92,8 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
 
   List<Widget> initFileWidgets(List<FindingFile>? findingFiles) {
     List<Widget> textWidgets = <Widget>[];
-    if (findingFiles != null) {
-      findingFiles.forEach((element) {
+    if (findingFiles?.isNotEmpty ?? false) {
+      findingFiles!.forEach((element) {
         textWidgets.add(TextButton.icon(
             onPressed: () {
               Navigator.push(
@@ -190,12 +227,12 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                           );
                       }
                     }),
-                Observer(
-                  builder: (_) {
-                    return Column(
-                        children: initFileWidgets(viewModel.findingFiles));
-                  },
-                ),
+                // Observer(
+                //   builder: (_) {
+                //     return Column(
+                //         children: initFileWidgets(viewModel.findingFiles));
+                // },
+                // ),
               ],
             ),
           ),

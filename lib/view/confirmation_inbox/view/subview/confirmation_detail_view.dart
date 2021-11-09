@@ -189,9 +189,10 @@ class ConfirmationDetailView extends StatelessWidget {
                                     child: Text(
                                       "Onaylandı!",
                                       style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                           )),
