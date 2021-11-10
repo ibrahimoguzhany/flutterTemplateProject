@@ -81,20 +81,9 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
 
   @action
   Future<void> uploadFindingFiles(
-      List<File> file, int findingId, int tourId) async {
-    FindingModel? refreshedFinding = FindingModel();
+      List<File> files, int findingId, int tourId) async {
     await UnPlannedTourDetailService.instance!
-        .uploadFindingFiles(file, findingId)
-        .then((value) async {
-      refreshedFinding = await UnPlannedTourService.instance!
-          .getFindingById(tourId, findingId);
-    }).then((value) async {
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-            settings: RouteSettings(arguments: refreshedFinding),
-            builder: (_) => UnplannedTourFindingDetailView()),
-      );
-    });
+        .uploadFindingFiles(files, findingId);
   }
 
   @action

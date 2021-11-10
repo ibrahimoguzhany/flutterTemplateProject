@@ -68,9 +68,18 @@ mixin _$FindingDetailViewModel on _FindingDetailViewModelBase, Store {
       AsyncAction('_FindingDetailViewModelBase.uploadFindingFiles');
 
   @override
-  Future<void> uploadFindingFiles(List<File> file, int findingId, int tourId) {
+  Future<void> uploadFindingFiles(List<File> files, int findingId, int tourId) {
     return _$uploadFindingFilesAsyncAction
-        .run(() => super.uploadFindingFiles(file, findingId, tourId));
+        .run(() => super.uploadFindingFiles(files, findingId, tourId));
+  }
+
+  final _$deleteFindingFileAsyncAction =
+      AsyncAction('_FindingDetailViewModelBase.deleteFindingFile');
+
+  @override
+  Future<bool> deleteFindingFile(int findingId, String fileName) {
+    return _$deleteFindingFileAsyncAction
+        .run(() => super.deleteFindingFile(findingId, fileName));
   }
 
   final _$pickImageAsyncAction =

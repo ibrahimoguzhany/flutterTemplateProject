@@ -44,15 +44,23 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
       onPageBuilder: (BuildContext context, FindingDetailViewModel viewModel) =>
           Scaffold(
         floatingActionButton: ExpandableFab(
-          distance: 112.0,
+          distance: 102.0,
           children: [
             ActionButton(
               icon: const Icon(Icons.upload_file_outlined),
               onPressed: () async {
-                final inputFile = await viewModel.selectFile();
-                if (inputFile != null && inputFile.isNotEmpty) {
+                final inputFiles = await viewModel.selectFile();
+                if (inputFiles != null && inputFiles.isNotEmpty) {
                   await viewModel.uploadFindingFiles(
-                      inputFile, finding.id!, finding.tourId!);
+                      inputFiles, finding.id!, finding.tourId!);
+                }
+                setState(() {});
+                if (inputFiles != null && inputFiles.isNotEmpty) {
+                  final snackBar = SnackBar(
+                    content: Text('Dosya başarıyla yüklendi.'),
+                    duration: const Duration(seconds: 2),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               },
             ),
@@ -63,6 +71,14 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                     (await viewModel.pickImage(ImageSource.camera))!;
                 await viewModel.uploadFindingFiles(
                     [takenPhoto], finding.id!, finding.tourId!);
+                setState(() {});
+                if (takenPhoto != null) {
+                  final snackBar = SnackBar(
+                    content: Text('Dosya başarıyla yüklendi.'),
+                    duration: const Duration(seconds: 2),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               },
             ),
           ],
@@ -227,6 +243,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                                                     finding.id!,
                                                     snapshot.data![index]
                                                         .filename!);
+                                            setState(() {});
                                             if (isSuccess) {
                                               final snackBar = SnackBar(
                                                 content: Text("Dosya Silindi"),
@@ -234,12 +251,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
-                                              await Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          super.widget));
                                             } else {
                                               final snackBar = SnackBar(
                                                 content: Text(
