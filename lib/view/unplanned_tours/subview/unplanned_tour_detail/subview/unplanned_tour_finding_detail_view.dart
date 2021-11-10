@@ -53,13 +53,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                 if (inputFile != null && inputFile.isNotEmpty) {
                   await viewModel.uploadFindingFiles(
                       inputFile, finding.id!, finding.tourId!);
-                  await Future.delayed(Duration(milliseconds: 10), () {
-                    final snackBar = SnackBar(
-                      content: Text("Dosya başarıyla yüklendi."),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  });
                 }
               },
             ),
@@ -70,13 +63,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                     (await viewModel.pickImage(ImageSource.camera))!;
                 await viewModel.uploadFindingFiles(
                     [takenPhoto], finding.id!, finding.tourId!);
-                await Future.delayed(Duration(milliseconds: 10), () {
-                  final snackBar = SnackBar(
-                    content: Text("Dosya başarıyla yüklendi."),
-                    backgroundColor: Colors.green,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                });
               },
             ),
           ],
@@ -191,12 +177,21 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                             child: Text("ConnectionState.active"),
                           );
                         case ConnectionState.done:
+                          if (snapshot.data!.isEmpty) {
+                            return Center(
+                              child: Text(
+                                "Henüz eklenmiş bir dosya bulunmamaktadır.",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            );
+                          }
                           if (snapshot.hasData) {
                             return ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
-                                  // print(snapshot.data!.length);
+                                  print(snapshot.data!.length);
+
                                   return Column(
                                     children: [
                                       InkWell(
@@ -233,6 +228,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                                   );
                                 });
                           }
+
                           return Center(
                             child: CircularProgressIndicator(),
                           );
