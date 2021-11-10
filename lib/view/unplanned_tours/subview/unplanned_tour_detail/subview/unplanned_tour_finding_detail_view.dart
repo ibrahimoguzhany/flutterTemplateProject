@@ -221,7 +221,35 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                                               "Dosya Sil",
                                           useDeleteButtonTooltip: true,
                                           deleteIconColor: Colors.red,
-                                          onDeleted: () async {},
+                                          onDeleted: () async {
+                                            final isSuccess = await viewModel
+                                                .deleteFindingFile(
+                                                    finding.id!,
+                                                    snapshot.data![index]
+                                                        .filename!);
+                                            if (isSuccess) {
+                                              final snackBar = SnackBar(
+                                                content: Text("Dosya Silindi"),
+                                                duration: Duration(seconds: 1),
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          super.widget));
+                                            } else {
+                                              final snackBar = SnackBar(
+                                                content: Text(
+                                                    "Dosya Silinirken bir hata oluştu"),
+                                                duration: Duration(seconds: 1),
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                          },
                                         ),
                                       )
                                     ],

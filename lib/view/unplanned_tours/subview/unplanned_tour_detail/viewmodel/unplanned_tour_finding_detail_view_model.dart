@@ -98,6 +98,13 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   }
 
   @action
+  Future<bool> deleteFindingFile(int findingId, String fileName) async {
+    bool response = await UnPlannedTourDetailService.instance!
+        .deleteFindingFile(findingId, fileName);
+    return response;
+  }
+
+  @action
   Future<File?> pickImage(ImageSource imageSource) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);

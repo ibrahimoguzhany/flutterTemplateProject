@@ -123,4 +123,15 @@ class UnPlannedTourDetailService {
     }
     return null;
   }
+
+  Future<bool> deleteFindingFile(int findingId, String fileName) async {
+    final response = await dio.post(
+        UnplannedTourDetailURLs.RemoveFindingFile.rawValue,
+        queryParameters: {"findingId": "$findingId", "fileName": fileName});
+
+    if (response.statusCode == HttpStatus.ok) {
+      return true;
+    }
+    return false;
+  }
 }

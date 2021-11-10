@@ -17,7 +17,8 @@ enum UnplannedTourDetailURLs {
   CreateFindingForTour,
   RemoveFindingFromTour,
   GetFindingFiles,
-  UploadFiles
+  UploadFiles,
+  RemoveFindingFile,
 }
 
 extension UnplannedTourURLsExtension on UnplannedTourURLs {
@@ -58,6 +59,8 @@ extension UnplannedTourDetailURLsExtension on UnplannedTourDetailURLs {
         return "/Tours/RemoveFindingFromTour";
       case UnplannedTourDetailURLs.UploadFiles:
         return "/Tours/UploadFiles";
+      case UnplannedTourDetailURLs.RemoveFindingFile:
+        return "/Tours/RemoveFindingFile";
     }
   }
 }
