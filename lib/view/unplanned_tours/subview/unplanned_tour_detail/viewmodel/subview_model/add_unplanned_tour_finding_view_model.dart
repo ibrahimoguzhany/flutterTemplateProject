@@ -1,16 +1,15 @@
 import 'dart:io';
 
-import '../../../../../../core/base/model/base_viewmodel.dart';
-import '../../../../../_product/_model/finding_file.dart';
-import '../../../../model/category_dd_model.dart';
-import '../../../../model/unplanned_tour_model.dart';
-import '../../../../service/unplanned_tour_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
+import '../../../../../../core/base/model/base_viewmodel.dart';
+import '../../../../model/category_dd_model.dart';
+import '../../../../model/unplanned_tour_model.dart';
+import '../../../../service/unplanned_tour_service.dart';
 import '../../service/unplanned_tour_detail_service.dart';
 
 part 'add_unplanned_tour_finding_view_model.g.dart';
@@ -26,8 +25,6 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
         .map((category) =>
             MultiSelectItem<CategoryDDModel>(category, category.name!))
         .toList();
-    // print(categories);
-    // print(categoryList);
   }
 
   @observable
@@ -43,11 +40,11 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @action
-  Future<UnplannedTourModel?> createFindingFourTour(
+  Future<FindingModel?> createFindingFourTour(
       FindingModel model, BuildContext context, String tourId) async {
-    final resultTour = await UnPlannedTourDetailService.instance!
+    final resultFinding = await UnPlannedTourDetailService.instance!
         .createFindingForTour(model, tourId);
-    if (resultTour != null) return resultTour;
+    if (resultFinding != null) return resultFinding;
     return null;
   }
 
@@ -62,27 +59,6 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
     } on PlatformException catch (e) {
       print("Resim secme islemi basarisiz oldu $e");
     }
-  }
-
-  @action
-  Future<void> uploadFiles(List<FindingFile?> items, int findingId) async {
-    var request = await UnPlannedTourDetailService.instance!
-        .uploadFindingFiles(items, findingId);
-
-    // var request = http.MultipartRequest(
-    //     'POST',
-    //     Uri.parse(
-    //         "http://mobil.demos.arfitect.net/api/services/app/Tours/UploadFiles"));
-    // for (var item in files!) {
-    //   request.files.add(http.MultipartFile(
-    //       'file',
-    //       File(item.path).readAsBytes().asStream(),
-    //       File(item.path).lengthSync(),
-    //       filename: item.path.split("/").last));
-    // }
-
-    // var res = await request.send();
-    // print(res);
   }
 
   @action

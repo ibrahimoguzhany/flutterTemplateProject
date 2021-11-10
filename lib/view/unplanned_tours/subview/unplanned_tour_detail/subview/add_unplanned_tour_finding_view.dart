@@ -119,7 +119,7 @@ class _AddUnPlannedTourFindingViewState
                   SizedBox(height: 5),
                   buildFieldManagerStatements,
                   SizedBox(height: 20),
-                  buildLittleTextWidget("Dosya"),
+                  // buildLittleTextWidget("Dosya"),
                   // Container(
                   //   padding: EdgeInsets.only(
                   //       top: 20, right: 20, left: 20, bottom: 0),
@@ -134,12 +134,12 @@ class _AddUnPlannedTourFindingViewState
                       if (isValid) {
                         tour.findings!.add(finding);
                         _formKey.currentState!.save();
-                        final refreshedTour =
+                        final refreshedFinding =
                             await viewModel.createFindingFourTour(
                                 finding, context, tour.id.toString());
 
-                        if (refreshedTour != null) {
-                          Navigator.of(context).pop();
+                        if (refreshedFinding != null) {
+                          // Navigator.of(context).pop();
                           final snackBar = SnackBar(
                             content: Text(
                                 "Bulgu başarıyla oluşturuldu. Dosyalarınızı ekleyebilirsiniz."),
@@ -149,7 +149,8 @@ class _AddUnPlannedTourFindingViewState
 
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                                settings: RouteSettings(arguments: finding),
+                                settings:
+                                    RouteSettings(arguments: refreshedFinding),
                                 builder: (_) =>
                                     UnplannedTourFindingDetailView()),
                           );
@@ -223,23 +224,23 @@ class _AddUnPlannedTourFindingViewState
         //   fileName,
         //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         // ),
-        SizedBox(height: 24),
-        ButtonWidget(
-          text: 'Yükle',
-          icon: Icons.cloud_upload_outlined,
-          onClicked: () async {
-            viewModel.uploadFiles(findingFiles, finding.id!);
-          },
-        ),
-        SizedBox(height: 20),
-        files!.isNotEmpty
-            ? SingleChildScrollView(
-                child: Column(
-                  children: addedFilesWidgets(viewModel),
-                ),
-              )
-            : Container(),
-        SizedBox(height: 10),
+        // SizedBox(height: 24),
+        // ButtonWidget(
+        //   text: 'Yükle',
+        //   icon: Icons.cloud_upload_outlined,
+        //   onClicked: () async {
+        //     // viewModel.uploadFiles(findingFiles, finding.id!);
+        //   },
+        // ),
+        // SizedBox(height: 20),
+        // files!.isNotEmpty
+        //     ? SingleChildScrollView(
+        //         child: Column(
+        //           children: addedFilesWidgets(viewModel),
+        //         ),
+        //       )
+        //     : Container(),
+        // SizedBox(height: 10),
       ],
     );
   }
@@ -251,8 +252,7 @@ class _AddUnPlannedTourFindingViewState
       for (var i = 0; i < files!.length; i++) {
         widgets.add(InputChip(
             onPressed: () async {
-              await launch(findingFiles[i].filename.toString(),
-                  forceWebView: false);
+              await launch(findingFiles[i].filename.toString());
             },
             onDeleted: () {
               setState(() {
@@ -339,38 +339,37 @@ class _AddUnPlannedTourFindingViewState
     });
   }
 
-  Padding get buildFindingTypeDropdown => Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: DropdownButtonFormField<CategoryDDModel>(
-          validator: (val) {
-            if (val == null) {
-              return "Bulgu Türü alanı boş bırakılamaz.";
-            }
-          },
-          hint: Text('Bulgu Tipi'),
-          value: finding.findingCategory,
-          icon: const Icon(
-            Icons.arrow_downward,
-            color: Colors.black38,
-          ),
-          isExpanded: true,
-          iconSize: 24,
-          elevation: 20,
-          onChanged: (CategoryDDModel? newCategoryModel) {
-            setState(() {
-              finding.findingType = newCategoryModel!.findingType;
-              finding.findingCategory = newCategoryModel;
-              finding.findingTypeStr = newCategoryModel.findingTypeStr;
-            });
-          },
-          items: findingTypes?.map<DropdownMenuItem<CategoryDDModel>>(
-              (CategoryDDModel? value) {
-            return DropdownMenuItem<CategoryDDModel>(
-              value: value,
-              child: Text(value!.findingTypeStr!),
-            );
-          }).toList(),
+  Widget get buildFindingTypeDropdown =>
+      DropdownButtonFormField<CategoryDDModel>(
+        validator: (val) {
+          if (val == null) {
+            return "Bulgu Türü alanı boş bırakılamaz.";
+          }
+        },
+        itemHeight: 48,
+        hint: Text('Bulgu Tipi'),
+        value: finding.findingCategory,
+        icon: const Icon(
+          Icons.arrow_downward,
+          color: Colors.black38,
         ),
+        isExpanded: true,
+        iconSize: 24,
+        elevation: 20,
+        onChanged: (CategoryDDModel? newCategoryModel) {
+          setState(() {
+            finding.findingType = newCategoryModel!.findingType;
+            finding.findingCategory = newCategoryModel;
+            finding.findingTypeStr = newCategoryModel.findingTypeStr;
+          });
+        },
+        items: findingTypes
+            ?.map<DropdownMenuItem<CategoryDDModel>>((CategoryDDModel? value) {
+          return DropdownMenuItem<CategoryDDModel>(
+            value: value,
+            child: Text(value!.findingTypeStr!),
+          );
+        }).toList(),
       );
 
   TextFormField get buildActionsMustBeTaken => TextFormField(

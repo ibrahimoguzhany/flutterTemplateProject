@@ -12,15 +12,30 @@ mixin _$FindingDetailViewModel on _FindingDetailViewModelBase, Store {
   final _$filesAtom = Atom(name: '_FindingDetailViewModelBase.files');
 
   @override
-  List<FindingFile> get files {
+  List<File> get files {
     _$filesAtom.reportRead();
     return super.files;
   }
 
   @override
-  set files(List<FindingFile> value) {
+  set files(List<File> value) {
     _$filesAtom.reportWrite(value, super.files, () {
       super.files = value;
+    });
+  }
+
+  final _$fileAtom = Atom(name: '_FindingDetailViewModelBase.file');
+
+  @override
+  File get file {
+    _$fileAtom.reportRead();
+    return super.file;
+  }
+
+  @override
+  set file(File value) {
+    _$fileAtom.reportWrite(value, super.file, () {
+      super.file = value;
     });
   }
 
@@ -53,9 +68,9 @@ mixin _$FindingDetailViewModel on _FindingDetailViewModelBase, Store {
       AsyncAction('_FindingDetailViewModelBase.uploadFindingFiles');
 
   @override
-  Future<void> uploadFindingFiles(int findingId) {
+  Future<void> uploadFindingFiles(List<File> file, int findingId, int tourId) {
     return _$uploadFindingFilesAsyncAction
-        .run(() => super.uploadFindingFiles(findingId));
+        .run(() => super.uploadFindingFiles(file, findingId, tourId));
   }
 
   final _$pickImageAsyncAction =
@@ -66,35 +81,11 @@ mixin _$FindingDetailViewModel on _FindingDetailViewModelBase, Store {
     return _$pickImageAsyncAction.run(() => super.pickImage(imageSource));
   }
 
-  final _$_FindingDetailViewModelBaseActionController =
-      ActionController(name: '_FindingDetailViewModelBase');
-
-  @override
-  void addFindingFiles(FindingFile file) {
-    final _$actionInfo = _$_FindingDetailViewModelBaseActionController
-        .startAction(name: '_FindingDetailViewModelBase.addFindingFiles');
-    try {
-      return super.addFindingFiles(file);
-    } finally {
-      _$_FindingDetailViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearFindingFiles() {
-    final _$actionInfo = _$_FindingDetailViewModelBaseActionController
-        .startAction(name: '_FindingDetailViewModelBase.clearFindingFiles');
-    try {
-      return super.clearFindingFiles();
-    } finally {
-      _$_FindingDetailViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''
 files: ${files},
+file: ${file},
 findingFiles: ${findingFiles}
     ''';
   }

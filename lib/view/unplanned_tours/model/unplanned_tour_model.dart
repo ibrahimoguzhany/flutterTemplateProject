@@ -111,7 +111,8 @@ class FindingModel {
       this.actionsTakenRightInTheField,
       this.actionsShouldBeTaken,
       this.fieldResponsibleExplanation,
-      this.id});
+      this.id,
+      this.tourId});
 
   FindingModel.fromJson(Map<String, dynamic> json) {
     findingType = json['findingType'];
@@ -123,6 +124,7 @@ class FindingModel {
     actionsShouldBeTaken = json['actionsShouldBeTaken'];
     fieldResponsibleExplanation = json['fieldResponsibleExplanation'];
     id = json['id'];
+    tourId = json['tourId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -136,6 +138,7 @@ class FindingModel {
     data['actionsShouldBeTaken'] = this.actionsShouldBeTaken;
     data['fieldResponsibleExplanation'] = this.fieldResponsibleExplanation;
     data['id'] = this.id;
+    data['tourId'] = this.tourId;
     return data;
   }
 
@@ -149,5 +152,6 @@ class FindingModel {
       o.findingType == findingType &&
       o.findingTypeStr == findingTypeStr &&
       o.id == id &&
+      o.tourId == tourId &&
       o.observations == observations;
 }

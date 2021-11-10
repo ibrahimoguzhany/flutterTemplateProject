@@ -32,7 +32,6 @@ class UnPlannedTourService {
       UnplannedTourURLs.CreateUnplannedTourMobile.rawValue,
       data: json.encode(tour.toJson()),
     );
-    // print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
@@ -61,12 +60,11 @@ class UnPlannedTourService {
           tour.toJson(),
         ));
 
-    // print(response);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
-        // print(response.data);
         return UnplannedTourModel.fromJson(responseBody);
+
       default:
         return null;
     }
@@ -104,8 +102,6 @@ class UnPlannedTourService {
           return UnplannedTourModel.fromJson(responseBody);
         }
         return null;
-      // print(responseBody);
-
     }
   }
 
@@ -114,7 +110,6 @@ class UnPlannedTourService {
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
-        // print(responseBody);
 
         if (responseBody is List) {
           return responseBody
@@ -123,6 +118,24 @@ class UnPlannedTourService {
               .toList();
         }
         return Future.error(responseBody);
+    }
+  }
+
+  Future<FindingModel?> getFindingById(int tourId, int findingId) async {
+    final response = await dio.post(
+        UnplannedTourURLs.GetTourByIdMobile.rawValue,
+        queryParameters: {"id": "$tourId"});
+
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await response.data["result"];
+        if (responseBody is Map<String, dynamic>) {
+          final tour = UnplannedTourModel.fromJson(responseBody);
+          return (tour.findings
+                  ?.firstWhere((element) => element.id == findingId)) ??
+              null;
+        }
+        return null;
     }
   }
 
@@ -145,7 +158,6 @@ class UnPlannedTourService {
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
-        // print(responseBody);
 
         if (responseBody is List) {
           return responseBody.map((e) => LocationDDModel.fromJson(e)).toList();

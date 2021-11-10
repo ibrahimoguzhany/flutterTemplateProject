@@ -34,6 +34,8 @@ dependencies:
   json_serializable: ^5.0.0
   kartal: ^2.1.0
   lottie: ^1.2.1
+  mime: ^1.0.1
+  mime_type: ^1.0.0
   mobx: ^2.0.4
   mobx_codegen: ^2.0.3
   multi_select_flutter: ^4.0.0

@@ -62,7 +62,7 @@ mixin _$AddUnPlannedTourFindingViewModel
       '_AddUnPlannedTourFindingViewModelBase.createFindingFourTour');
 
   @override
-  Future<UnplannedTourModel?> createFindingFourTour(
+  Future<FindingModel?> createFindingFourTour(
       FindingModel model, BuildContext context, String tourId) {
     return _$createFindingFourTourAsyncAction
         .run(() => super.createFindingFourTour(model, context, tourId));
@@ -74,15 +74,6 @@ mixin _$AddUnPlannedTourFindingViewModel
   @override
   Future<File?> pickImage(ImageSource imageSource) {
     return _$pickImageAsyncAction.run(() => super.pickImage(imageSource));
-  }
-
-  final _$uploadFilesAsyncAction =
-      AsyncAction('_AddUnPlannedTourFindingViewModelBase.uploadFiles');
-
-  @override
-  Future<void> uploadFiles(List<FindingFile?> items, int findingId) {
-    return _$uploadFilesAsyncAction
-        .run(() => super.uploadFiles(items, findingId));
   }
 
   final _$getCategoriesAsyncAction =

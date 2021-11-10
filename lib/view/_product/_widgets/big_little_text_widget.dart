@@ -34,7 +34,7 @@ buildBiggerDataTextWidget(dynamic data) {
     child: AutoLocaleText(
       value: data is List ? finalResult : data,
       style: TextStyle(
-        fontSize: 18,
+        fontSize: 16,
       ),
     ),
   );

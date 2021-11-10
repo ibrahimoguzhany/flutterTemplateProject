@@ -1,4 +1,7 @@
+import 'package:esd_mobil/core/constants/app/network_constants.dart';
+
 enum UnplannedTourURLs {
+  BaseURL,
   GetAllTours,
   GetAllCategories,
   GetAllLocations,
@@ -20,6 +23,8 @@ enum UnplannedTourDetailURLs {
 extension UnplannedTourURLsExtension on UnplannedTourURLs {
   String get rawValue {
     switch (this) {
+      case UnplannedTourURLs.BaseURL:
+        return NetworkConstants.BASE_URL;
       case UnplannedTourURLs.GetAllTours:
         return "/Tours/GetAllTours";
       case UnplannedTourURLs.GetAllCategories:

@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/components/button/action_button.dart';
-import 'package:esd_mobil/core/components/button/expandable_fab.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/base/view/base_view.dart';
+import '../../../../../core/components/button/action_button.dart';
+import '../../../../../core/components/button/expandable_fab.dart';
 import '../../../../_product/_model/finding_file.dart';
 import '../../../../_product/_widgets/big_little_text_widget.dart';
 import '../../../model/unplanned_tour_model.dart';
@@ -50,28 +49,35 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
             ActionButton(
               icon: const Icon(Icons.upload_file_outlined),
               onPressed: () async {
-                await viewModel.selectFile().then((value) async {
-                  if (viewModel.findingFiles?.isNotEmpty ?? false) {
-                    // print(viewModel.findingFiles);
-                    await viewModel
-                        .uploadFindingFiles(finding.id!)
-                        .then((value) => viewModel.clearFindingFiles());
-                  }
-                });
+                final inputFile = await viewModel.selectFile();
+                if (inputFile != null && inputFile.isNotEmpty) {
+                  await viewModel.uploadFindingFiles(
+                      inputFile, finding.id!, finding.tourId!);
+                  await Future.delayed(Duration(milliseconds: 10), () {
+                    final snackBar = SnackBar(
+                      content: Text("Dosya başarıyla yüklendi."),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  });
+                }
               },
             ),
             ActionButton(
+              icon: const Icon(Icons.camera_alt_outlined),
               onPressed: () async {
                 File takenPhoto =
                     (await viewModel.pickImage(ImageSource.camera))!;
-                viewModel.findingFiles!.add(FindingFile(
-                    fileBytes: takenPhoto.readAsBytesSync(),
-                    filename: takenPhoto.path.split('/').last));
-                await viewModel
-                    .uploadFindingFiles(finding.id!)
-                    .then((value) => viewModel.clearFindingFiles());
+                await viewModel.uploadFindingFiles(
+                    [takenPhoto], finding.id!, finding.tourId!);
+                await Future.delayed(Duration(milliseconds: 10), () {
+                  final snackBar = SnackBar(
+                    content: Text("Dosya başarıyla yüklendi."),
+                    backgroundColor: Colors.green,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
               },
-              icon: const Icon(Icons.camera_alt_outlined),
             ),
           ],
         ),
@@ -79,9 +85,9 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
           title: Text("Bulgu Detayı"),
           actions: [
             IconButton(
+              icon: Icon(Icons.delete_forever_rounded),
               onPressed: () =>
                   viewModel.showDeleteDialog(finding.id!, finding.tourId!),
-              icon: Icon(Icons.delete_forever_rounded),
             )
           ],
         ),
@@ -165,7 +171,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                 SizedBox(height: 5),
                 FutureBuilder<List<FindingFile>?>(
                     future: UnPlannedTourDetailService.instance!
-                        .getFindingFiles(finding.id!),
+                        .getFindingFiles(finding.id ?? 0),
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
@@ -173,6 +179,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                             child: Text(" ConnectionState.none"),
                           );
                         case ConnectionState.waiting:
+                          print(snapshot.error);
                           return Center(
                             child: CircularProgressIndicator(
                               color: Colors.black54,
@@ -192,27 +199,35 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                                   // print(snapshot.data!.length);
                                   return Column(
                                     children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SingleFileView(
-                                                fileBytes: snapshot
-                                                    .data![index].fileBytes!,
-                                                filename: snapshot
-                                                    .data![index].filename!,
-                                                contentType: snapshot
-                                                    .data![index].contentType!,
-                                              ),
+                                      InkWell(
+                                        onTap: () async => await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SingleFileView(
+                                              fileBytes: snapshot
+                                                  .data![index].fileBytes!,
+                                              filename: snapshot
+                                                  .data![index].filename!,
+                                              contentType: snapshot
+                                                  .data![index].contentType!,
                                             ),
-                                          );
-                                        },
-                                        icon: Icon(Icons.document_scanner),
-                                        label: Text(
-                                            "${snapshot.data![index].filename}",
-                                            style: TextStyle(fontSize: 12)),
+                                          ),
+                                        ),
+                                        child: InputChip(
+                                          label: Text(
+                                              "${snapshot.data![index].filename}",
+                                              style: TextStyle(fontSize: 12)),
+                                          deleteIcon:
+                                              Icon(Icons.delete_outline),
+                                          avatar: Icon(
+                                              Icons.insert_drive_file_outlined),
+                                          deleteButtonTooltipMessage:
+                                              "Dosya Sil",
+                                          useDeleteButtonTooltip: true,
+                                          deleteIconColor: Colors.red,
+                                          onDeleted: () async {},
+                                        ),
                                       )
                                     ],
                                   );
@@ -227,12 +242,6 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                           );
                       }
                     }),
-                // Observer(
-                //   builder: (_) {
-                //     return Column(
-                //         children: initFileWidgets(viewModel.findingFiles));
-                // },
-                // ),
               ],
             ),
           ),

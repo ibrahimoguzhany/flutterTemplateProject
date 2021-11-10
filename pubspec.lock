@@ -610,9 +610,16 @@ packages:
     source: hosted
     version: "1.7.0"
   mime:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mime
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  mime_type:
+    dependency: "direct main"
+    description:
+      name: mime_type
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"

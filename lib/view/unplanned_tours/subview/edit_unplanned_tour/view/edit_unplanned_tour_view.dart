@@ -1,11 +1,11 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/field_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/location_dd_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/user_dd_model.dart';
+import '../../../../../core/base/view/base_view.dart';
+import '../../../../../core/components/text/auto_locale.text.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../model/field_dd_model.dart';
+import '../../../model/location_dd_model.dart';
+import '../../../model/unplanned_tour_model.dart';
+import '../../../model/user_dd_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -159,18 +159,6 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
       controller: _controllerPositiveFindings,
       keyboardType: TextInputType.multiline,
       maxLines: 5,
-      // decoration: InputDecoration(
-      //   border: OutlineInputBorder(),
-      //   // fillColor: Colors.white,
-      //   focusedBorder: OutlineInputBorder(
-      //     borderSide: const BorderSide(width: 1.0),
-      //     borderRadius: BorderRadius.circular(5),
-      //   ),
-      //   enabledBorder: OutlineInputBorder(
-      //     borderSide: const BorderSide(width: 1.0),
-      //     borderRadius: BorderRadius.circular(5),
-      //   ),
-      // ),
       onSaved: (val) {
         tour.observatedSecureCasesPositiveFindings =
             _controllerPositiveFindings.text;
@@ -276,91 +264,84 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
       EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
     return Container(
       height: 60,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        child: Observer(builder: (_) {
-          return DropdownButtonFormField<int>(
-            validator: (val) {
-              if (val == null) {
-                return "Bu alan boş bırakılamaz";
-              }
-            },
-            hint: Text('Saha Seçiniz.'),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            value: tour.fieldId,
-            icon: const Icon(
-              Icons.arrow_downward,
-              // color: Colors.black38,
-            ),
-            iconSize: 24,
-            elevation: 20,
-            onChanged: (int? newValue) {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              setState(() {
-                tour.fieldId = newValue!;
-              });
-            },
-            onSaved: (int? newValue) {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
-              setState(() {
-                tour.fieldId = newValue!;
-              });
-            },
-            items: viewModel.fields
-                .map<DropdownMenuItem<int>>((FieldDDModel value) {
-              return DropdownMenuItem<int>(
-                value: value.id,
-                child: Text(value.fieldName!),
-              );
-            }).toList(),
-          );
-        }),
-      ),
+      child: Observer(builder: (_) {
+        return DropdownButtonFormField<int>(
+          validator: (val) {
+            if (val == null) {
+              return "Bu alan boş bırakılamaz";
+            }
+          },
+          hint: Text('Saha Seçiniz.'),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          value: tour.fieldId,
+          icon: const Icon(
+            Icons.arrow_downward,
+            // color: Colors.black38,
+          ),
+          iconSize: 24,
+          elevation: 20,
+          onChanged: (int? newValue) {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            setState(() {
+              tour.fieldId = newValue!;
+            });
+          },
+          onSaved: (int? newValue) {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            setState(() {
+              tour.fieldId = newValue!;
+            });
+          },
+          items:
+              viewModel.fields.map<DropdownMenuItem<int>>((FieldDDModel value) {
+            return DropdownMenuItem<int>(
+              value: value.id,
+              child: Text(value.fieldName!),
+            );
+          }).toList(),
+        );
+      }),
     );
   }
 
-// XX
-  Padding buildLocationDropDownFormField(
+  Widget buildLocationDropDownFormField(
       EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-      child: Container(
-        height: 60,
-        child: Observer(builder: (_) {
-          return DropdownButtonFormField<int>(
-            validator: (val) {
-              if (val == null) {
-                return "Bu alan boş bırakılamaz";
-              }
-            },
-            hint: const Text('Lokasyon Seçiniz'),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            value: tour.locationId,
-            icon: const Icon(
-              Icons.arrow_downward,
-            ),
-            iconSize: 24,
-            elevation: 20,
-            onChanged: (int? newValue) {
-              setState(() {
-                tour.locationId = newValue!;
-              });
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            items: viewModel.locations
-                .map<DropdownMenuItem<int>>((LocationDDModel value) {
-              return DropdownMenuItem<int>(
-                value: value.id,
-                child:
-                    Text(value.locationName != null ? value.locationName! : ""),
-              );
-            }).toList(),
-          );
-        }),
-      ),
+    return Container(
+      height: 60,
+      child: Observer(builder: (_) {
+        return DropdownButtonFormField<int>(
+          validator: (val) {
+            if (val == null) {
+              return "Bu alan boş bırakılamaz";
+            }
+          },
+          hint: const Text('Lokasyon Seçiniz'),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          value: tour.locationId,
+          icon: const Icon(
+            Icons.arrow_downward,
+          ),
+          iconSize: 24,
+          elevation: 20,
+          onChanged: (int? newValue) {
+            setState(() {
+              tour.locationId = newValue!;
+            });
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          items: viewModel.locations
+              .map<DropdownMenuItem<int>>((LocationDDModel value) {
+            return DropdownMenuItem<int>(
+              value: value.id,
+              child:
+                  Text(value.locationName != null ? value.locationName! : ""),
+            );
+          }).toList(),
+        );
+      }),
     );
   }
 

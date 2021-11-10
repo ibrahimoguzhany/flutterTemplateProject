@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 import '../../../../../core/constants/app/network_constants.dart';
 import '../../../../../product/enum/unplannedtours_url_enum.dart';
 import '../../../../_product/_model/finding_file.dart';
 import '../../../model/unplanned_tour_model.dart';
 import '../../../service/unplanned_tour_service.dart';
+import 'package:http_parser/http_parser.dart';
 
 class UnPlannedTourDetailService {
   static UnPlannedTourDetailService? _instance;
@@ -25,45 +28,89 @@ class UnPlannedTourDetailService {
     ),
   );
 
-  Future<UnplannedTourModel?> createFindingForTour(
+  Future<FindingModel?> createFindingForTour(
     FindingModel finding,
     String tourId,
   ) async {
     final response = await dio.post(
       UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
-      data: json.encode(finding),
+      data: json.encode(finding.toJson()),
       queryParameters: {"tourId": "$tourId"},
     );
     print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
-        return UnplannedTourModel.fromJson(responseBody);
+        return FindingModel.fromJson(responseBody);
       default:
         return null;
     }
   }
 
-  Future<FindingFile?> uploadFindingFiles(
-      List<FindingFile?> items, int findingId) async {
-    var formData = FormData();
-    for (var file in items) {
-      List<int> fileBytesList = List.from(file!.fileBytes!);
-      formData.files.add(
-          MapEntry("${file.filename}", MultipartFile.fromBytes(fileBytesList)));
-    }
+  Future<void> uploadFindingFile(File fileInput, int findingId) async {
+    var formDio = Dio(
+      BaseOptions(
+        queryParameters: {"findingId": "$findingId"},
+        baseUrl: NetworkConstants.BASE_URL,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      ),
+    );
+    List<String> mimeType = lookupMimeType(fileInput.path)!.split("/").toList();
 
-    final response = await dio.post(
-        UnplannedTourDetailURLs.UploadFiles.rawValue,
-        data: formData,
-        queryParameters: {"findingId": "$findingId"});
-    if (response.statusCode == HttpStatus.ok) {
-      print(response.data);
-      print(response.statusCode);
-      print("basariyla yuklendi");
-    } else {
-      print("hata!!");
+    String type = mimeType[0];
+    String subType = mimeType[1];
+    String fileName = basename(fileInput.path);
+    // print(mimeType);
+    // print(fileName);
+    // print(type);
+    // print(subType);
+    // file formatini header formatini anlamak icin metodum.
+    //print(fileInput.readAsBytesSync().sublist(0, 4));
+
+    FormData formData = FormData.fromMap({
+      "files": [
+        await MultipartFile.fromFile(fileInput.path,
+            filename: fileName, contentType: MediaType(type, subType)),
+      ],
+    });
+
+    var response = await formDio.post(
+      UnplannedTourDetailURLs.UploadFiles.rawValue,
+      data: formData,
+    );
+    print(response.statusCode);
+    print(response.data);
+    print(response.statusMessage);
+
+    final result = json.decode(response.toString())['result'];
+    print(result);
+  }
+
+  Future<FindingFile?> uploadFindingFiles(
+      List<File?> items, int findingId) async {
+    for (var item in items) {
+      await uploadFindingFile(item ?? File(""), findingId);
     }
+  }
+
+  Future<List<FindingFile>?> getFindingFiles(int findingId) async {
+    final response = await dio.post(
+        UnplannedTourDetailURLs.GetFindingFiles.rawValue,
+        data: findingId,
+        queryParameters: {"findingId": "$findingId"});
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final responseBody = await response.data["result"];
+
+        if (responseBody is List) {
+          return responseBody.map((e) => FindingFile.fromJson(e)).toList();
+        }
+        return Future.error(responseBody);
+    }
+    print(response.data);
+    return Future.error(response);
   }
 
   Future<UnplannedTourModel?> deleteFinding(int findingId, int tourId) async {
@@ -76,42 +123,4 @@ class UnPlannedTourDetailService {
     }
     return null;
   }
-
-  Future<List<FindingFile>?> getFindingFiles(int findingId) async {
-    final response = await dio.post(
-        UnplannedTourDetailURLs.GetFindingFiles.rawValue,
-        data: json.encode(findingId),
-        queryParameters: {"findingId": "$findingId"});
-    switch (response.statusCode) {
-      case HttpStatus.ok:
-        final responseBody = await response.data["result"];
-        print(responseBody);
-
-        if (responseBody is List) {
-          return responseBody.map((e) => FindingFile.fromJson(e)).toList();
-        }
-        return Future.error(responseBody);
-    }
-    print(response);
-    return Future.error(response);
-  }
-
-//   uploadFiles(int findingId, List<FindingFile> findingFiles) async {
-//     var stream = http.ByteStream()
-//     //  ?findingId=7
-//     final response = await http.MultipartRequest(
-//         "POST", Uri.parse(_uploadFileToFindingURL + "?findingId=$findingId"))
-//         ...findingFiles.add(http.MultipartFile("UploadedFile", stream, lenght, ))
-//   }
-// }
-
-// Future<Uint8List> loadFilesBytes(int findingId) async {
-//   var bytesResponse = await http.post(Uri.parse(_findingFilesURL),
-//       body: json.encode(findingId));
-//   if (bytesResponse.statusCode != 200) {
-//     throw Exception("something went wrong");
-//   }
-//   var bytes = bytesResponse.bodyBytes;
-//   return bytes;
-// }
 }

@@ -1,15 +1,18 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
-import 'package:esd_mobil/view/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/view/unplanned_tour_detail_view.dart';
+import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../../core/base/model/base_viewmodel.dart';
+import '../../../../_product/_model/finding_file.dart';
+import '../../../service/unplanned_tour_service.dart';
 import '../service/unplanned_tour_detail_service.dart';
+import '../subview/unplanned_tour_finding_detail_view.dart';
+import '../view/unplanned_tour_detail_view.dart';
 
 part 'unplanned_tour_finding_detail_view_model.g.dart';
 
@@ -25,7 +28,10 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   // }
 
   @observable
-  List<FindingFile> files = [];
+  List<File> files = [];
+
+  @observable
+  File file = File('');
 
   @observable
   List<FindingFile>? findingFiles = [];
@@ -74,9 +80,21 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
   }
 
   @action
-  Future<void> uploadFindingFiles(int findingId) async {
+  Future<void> uploadFindingFiles(
+      List<File> file, int findingId, int tourId) async {
+    FindingModel? refreshedFinding = FindingModel();
     await UnPlannedTourDetailService.instance!
-        .uploadFindingFiles(findingFiles!, findingId);
+        .uploadFindingFiles(file, findingId)
+        .then((value) async {
+      refreshedFinding = await UnPlannedTourService.instance!
+          .getFindingById(tourId, findingId);
+    }).then((value) async {
+      await Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+            settings: RouteSettings(arguments: refreshedFinding),
+            builder: (_) => UnplannedTourFindingDetailView()),
+      );
+    });
   }
 
   @action
@@ -92,32 +110,16 @@ abstract class _FindingDetailViewModelBase with Store, BaseViewModel {
     }
   }
 
-  Future selectFile() async {
+  Future<List<File>?> selectFile() async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: true);
 
-    if (result == null) return;
+    if (result == null) return null;
 
     for (var i = 0; i < result.files.length; i++) {
       final path = result.files[i].path!;
-      // files!.add(File(path));
-      final filename = result.files[i].name;
-      final fileBytes = await File(path).readAsBytes();
-      addFindingFiles(FindingFile(fileBytes: fileBytes, filename: filename));
-      // findingFiles!.add(FindingFile(fileBytes: fileBytes, filename: filename));
-      print(findingFiles![i].fileBytes);
-      print(findingFiles![i].filename);
+      files.add(File(path));
     }
-    return result;
-  }
-
-  @action
-  void addFindingFiles(FindingFile file) {
-    findingFiles!.add(file);
-  }
-
-  @action
-  void clearFindingFiles() {
-    findingFiles!.clear();
+    return files;
   }
 }

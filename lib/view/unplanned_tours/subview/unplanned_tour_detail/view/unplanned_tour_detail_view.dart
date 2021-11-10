@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/core/init/lang/locale_keys.g.dart';
-import 'package:esd_mobil/view/unplanned_tours/model/unplanned_tour_model.dart';
+import '../../../../../core/base/view/base_view.dart';
+import '../../../../../core/components/text/auto_locale.text.dart';
+import '../../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/init/lang/locale_keys.g.dart';
+import '../../../../../core/init/navigation/navigation_service.dart';
+import '../../../model/unplanned_tour_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../viewmodel/subview_model/unplanned_tour_detail_view_model.dart';
 
@@ -25,8 +26,6 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
   Widget build(BuildContext context) {
     UnplannedTourModel tour =
         ModalRoute.of(context)!.settings.arguments as UnplannedTourModel;
-    print(tour.tourTeamMemberUsers);
-    // print(tour.tourAccompaniers);
 
     return BaseView<UnPlannedTourDetailViewModel>(
       viewModel: UnPlannedTourDetailViewModel(),
@@ -37,11 +36,6 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
       onPageBuilder:
           (BuildContext context, UnPlannedTourDetailViewModel viewModel) =>
               Scaffold(
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () async =>
-        //       await viewModel.navigateToAddUnplannedTourFinding(tour),
-        //   child: Icon(Icons.add),
-        // ),
         floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.add_outlined),
           elevation: 5,
@@ -51,6 +45,13 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         appBar: AppBar(
+          leading: NavigationService.instance.navigatorKey.currentState!
+                  .canPop()
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () => NavigationService.instance
+                      .navigateToPageClear(NavigationConstants.TOURS_HOME_VIEW))
+              : null,
           title: Text(LocaleKeys.unplanned_tours_detail_appBarTitle.tr()),
           actions: [
             IconButton(
