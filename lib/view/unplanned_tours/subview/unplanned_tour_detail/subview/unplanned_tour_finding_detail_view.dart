@@ -22,9 +22,6 @@ class UnplannedTourFindingDetailView extends StatefulWidget {
 }
 
 class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
-  List<Widget> fileWidgets = <Widget>[];
-  List<FindingFile>? findingFiles = [];
-
   @override
   void initState() {
     super.initState();
@@ -193,7 +190,7 @@ class _FindingDetailViewState extends State<UnplannedTourFindingDetailView> {
                             child: Text("ConnectionState.active"),
                           );
                         case ConnectionState.done:
-                          if (snapshot.data!.isEmpty) {
+                          if (snapshot.data?.isEmpty ?? true) {
                             return Center(
                               child: Text(
                                 "Henüz eklenmiş bir dosya bulunmamaktadır.",

@@ -55,6 +55,11 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
           title: Text(LocaleKeys.unplanned_tours_detail_appBarTitle.tr()),
           actions: [
             IconButton(
+              onPressed: () async => await viewModel
+                  .showDialogFinalizeTourCreation(context, tour.id!),
+              icon: Icon(Icons.save_outlined),
+            ),
+            IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () async =>
                     await viewModel.navigateToEditUnplannedTour(tour)),

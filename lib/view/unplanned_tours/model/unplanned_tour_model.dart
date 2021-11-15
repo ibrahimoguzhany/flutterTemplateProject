@@ -7,6 +7,7 @@ class UnplannedTourModel {
   String? tourAccompaniers;
   String? observatedSecureCasesPositiveFindings;
   bool? isPlanned;
+  bool? isApproved;
   DateTime? tourDate;
   int? fieldId;
   int? locationId;
@@ -14,7 +15,7 @@ class UnplannedTourModel {
   String? locationName;
   String? tourTeamMembers;
   List<int>? tourTeamMembersIds;
-  List<FindingModel>? findings = [];
+  List<FindingModel>? findings = <FindingModel>[];
   List<UserDDModel>? tourTeamMemberUsers;
 
   UnplannedTourModel(
@@ -23,6 +24,7 @@ class UnplannedTourModel {
       this.tourAccompaniers,
       this.observatedSecureCasesPositiveFindings,
       this.isPlanned,
+      this.isApproved,
       this.tourDate,
       this.fieldId,
       this.locationId,
@@ -40,6 +42,7 @@ class UnplannedTourModel {
     observatedSecureCasesPositiveFindings =
         json['observatedSecureCases_PositiveFindings'];
     isPlanned = json['isPlanned'];
+    isApproved = json['isApproved'];
     tourDate = DateTime.parse(json['tourDate']);
     fieldId = json['fieldId'];
     locationId = json['locationId'];
@@ -70,6 +73,7 @@ class UnplannedTourModel {
     data['observatedSecureCases_PositiveFindings'] =
         this.observatedSecureCasesPositiveFindings;
     data['isPlanned'] = this.isPlanned;
+    data['isApproved'] = this.isApproved;
     data['tourDate'] = this.tourDate.toString();
     data['fieldId'] = this.fieldId;
     data['locationId'] = this.locationId;

@@ -82,7 +82,8 @@ class UnPlannedTourService {
         if (responseBody is List) {
           return responseBody
               .map((e) => UnplannedTourModel.fromJson(e))
-              .where((element) => element.isPlanned == false)
+              .where((element) =>
+                  element.isPlanned == false && element.isApproved == false)
               .toList();
         }
         return Future.error(responseBody);
@@ -190,6 +191,19 @@ class UnPlannedTourService {
           return responseBody.map((e) => UserDDModel.fromJson(e)).toList();
         }
         return Future.error(responseBody);
+    }
+  }
+
+  Future<dynamic> approveTour(int tourId) async {
+    final response = await dio.post(
+        UnplannedTourURLs.ApproveTourMobile.rawValue,
+        data: json.encode(tourId));
+
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        return response.data;
+      default:
+        return Future.error(response.data);
     }
   }
 }

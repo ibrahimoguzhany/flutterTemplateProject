@@ -79,6 +79,37 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
             ));
   }
 
+  Future<dynamic> showDialogFinalizeTourCreation(
+      BuildContext context, int tourId) {
+    return showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+          title: Text("Plansız Tur Kaydet"),
+          content: Text("Plansız Turu kaydetmek istediğinize emin misiniz?"),
+          actions: [
+            TextButton(
+                child: Text("Evet"),
+                onPressed: () async {
+                  final result =
+                      await UnPlannedTourService.instance!.approveTour(tourId);
+                  if (result.statusCode == 200) {
+                    await NavigationService.instance.navigateToPageClear(
+                        NavigationConstants.TOURS_HOME_VIEW);
+                    final snackBar = SnackBar(
+                        content: Text(
+                            "$tourId numaralı plansız tur başarıyla kaydedildi"));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }),
+            TextButton(
+                child: Text("Hayır"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ]),
+    );
+  }
+
   Future<dynamic> navigateToEditUnplannedTour(UnplannedTourModel tour) {
     return NavigationService.instance
         .navigateToPage(NavigationConstants.EDIT_PLANNED_TOUR_VIEW, data: tour);

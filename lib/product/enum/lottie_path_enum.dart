@@ -1,3 +1,1 @@
-
 enum LottiePathEnum { SUNNY, MOON }
-

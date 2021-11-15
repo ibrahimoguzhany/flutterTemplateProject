@@ -119,14 +119,6 @@ class _AddUnPlannedTourFindingViewState
                   SizedBox(height: 5),
                   buildFieldManagerStatements,
                   SizedBox(height: 20),
-                  // buildLittleTextWidget("Dosya"),
-                  // Container(
-                  //   padding: EdgeInsets.only(
-                  //       top: 20, right: 20, left: 20, bottom: 0),
-                  //   decoration: buildFileBoxDecoration(),
-                  //   margin: EdgeInsets.all(10),
-                  //   child: buildButtonWidgets(viewModel, context),
-                  // ),
                   FloatingActionButton.extended(
                     label: Text("Kaydet"),
                     onPressed: () async {
