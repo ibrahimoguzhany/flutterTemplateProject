@@ -6,13 +6,13 @@ class UserDDModel {
 
   UserDDModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    fullName = json['name'];
+    fullName = json['fullName'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.fullName;
+    data['fullName'] = this.fullName;
     return data;
   }
 }

@@ -10,7 +10,7 @@ enum UnplannedTourURLs {
   CreateUnplannedTourMobile,
   UpdateTourMobile,
   GetTourByIdMobile,
-  ApproveTourMobile,
+  FinalizeTourCreation,
   DeleteTour
 }
 
@@ -35,8 +35,8 @@ extension UnplannedTourURLsExtension on UnplannedTourURLs {
         return "/Tours/UpdateTourMobile";
       case UnplannedTourURLs.GetTourByIdMobile:
         return "/Tours/GetTourByIdMobile";
-      case UnplannedTourURLs.ApproveTourMobile:
-        return "/Tours/ApproveTourMobile";
+      case UnplannedTourURLs.FinalizeTourCreation:
+        return "/Tours/FinalizeTourCreation";
       case UnplannedTourURLs.DeleteTour:
         return "/Tours/DeleteTourMobile";
     }

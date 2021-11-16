@@ -77,7 +77,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
       primary: colorSchemeLight.black,
       primaryVariant: Colors.white, //xx
       secondary: colorSchemeLight.darkAppColor,
-      secondaryVariant: colorSchemeLight.boldGreen, //xx
+      secondaryVariant: colorSchemeLight.scaffoldBackgroundColor, //xx
       surface: Colors.red[900]!,
       background: Colors.white, //xx // green accent idi
       error: colorSchemeLight.socarRed,

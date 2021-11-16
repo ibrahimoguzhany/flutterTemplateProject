@@ -44,7 +44,6 @@ class UnPlannedTourService {
   Future<bool> deleteTour(int id) async {
     final response = await dio.post(UnplannedTourURLs.DeleteTour.rawValue,
         queryParameters: {"id": "$id"});
-    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         return true;
@@ -59,12 +58,12 @@ class UnPlannedTourService {
         data: json.encode(
           tour.toJson(),
         ));
-
+    print(response);
+    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
         return UnplannedTourModel.fromJson(responseBody);
-
       default:
         return null;
     }
@@ -72,13 +71,9 @@ class UnPlannedTourService {
 
   Future<List<UnplannedTourModel>?> getUnplannedTours() async {
     final response = await dio.post(UnplannedTourURLs.GetAllTours.rawValue);
-    print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
-        print(response.data["result"]);
         final responseBody = await response.data["result"];
-        print(responseBody);
-
         if (responseBody is List) {
           return responseBody
               .map((e) => UnplannedTourModel.fromJson(e))
@@ -98,7 +93,6 @@ class UnPlannedTourService {
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];
-        print(responseBody);
         if (responseBody is Map<String, dynamic>) {
           return UnplannedTourModel.fromJson(responseBody);
         }
@@ -196,12 +190,13 @@ class UnPlannedTourService {
 
   Future<dynamic> approveTour(int tourId) async {
     final response = await dio.post(
-        UnplannedTourURLs.ApproveTourMobile.rawValue,
-        data: json.encode(tourId));
+      UnplannedTourURLs.FinalizeTourCreation.rawValue,
+      queryParameters: {"tourId": "$tourId"},
+    );
 
     switch (response.statusCode) {
       case HttpStatus.ok:
-        return response.data;
+        return response.data["result"];
       default:
         return Future.error(response.data);
     }

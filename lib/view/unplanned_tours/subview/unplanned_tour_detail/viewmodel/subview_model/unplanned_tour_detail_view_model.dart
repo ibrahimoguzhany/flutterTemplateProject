@@ -92,13 +92,15 @@ abstract class _UnPlannedTourDetailViewModelBase with Store, BaseViewModel {
                 onPressed: () async {
                   final result =
                       await UnPlannedTourService.instance!.approveTour(tourId);
-                  if (result.statusCode == 200) {
-                    await NavigationService.instance.navigateToPageClear(
-                        NavigationConstants.TOURS_HOME_VIEW);
+                  if (result) {
+                    Navigator.pop(context);
                     final snackBar = SnackBar(
                         content: Text(
                             "$tourId numaralı plansız tur başarıyla kaydedildi"));
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    await NavigationService.instance.navigateToPageClear(
+                      NavigationConstants.TOURS_HOME_VIEW,
+                    );
                   }
                 }),
             TextButton(

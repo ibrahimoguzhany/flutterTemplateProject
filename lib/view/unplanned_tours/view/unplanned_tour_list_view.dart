@@ -49,8 +49,6 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                             return Text("Error = ${snapshot.error}");
 
                           if (snapshot.hasData) {
-                            print(snapshot.data);
-                            // final List<UnplannedTourModel>? tours = snapshot.data;
                             return buildListView(snapshot.data!, viewModel);
                           }
                           return Center(
@@ -85,8 +83,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
 
   Widget buildListTile(
       UnplannedTourModel tour, UnPlannedTourListViewModel viewModel) {
-    var formattedTourDate =
-        DateFormat('dd-mm-yyyy - kk:mm').format(tour.tourDate!);
+    // var formattedTourDate = DateFormat("yyyy-mm-dd").format(tour.tourDate!);
     return Card(
       color: Color(0xffFF6333).withOpacity(0.75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -108,7 +105,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
             ),
           ),
           title: Text(
-            "Tarih: " + formattedTourDate,
+            DateFormat.yMMMMEEEEd("tr").format(tour.tourDate!),
             textAlign: TextAlign.start,
           ),
           subtitle: Row(

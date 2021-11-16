@@ -22,8 +22,7 @@ abstract class _EditUnPlannedTourViewModelBase with Store, BaseViewModel {
     fields = (await getFields())!;
     users = (await getUsers())!;
     userList = users!
-        .map((accompany) =>
-            MultiSelectItem<UserDDModel>(accompany, accompany.fullName!))
+        .map((member) => MultiSelectItem<UserDDModel>(member, member.fullName!))
         .toList();
   }
 
@@ -81,11 +80,12 @@ abstract class _EditUnPlannedTourViewModelBase with Store, BaseViewModel {
 
   @action
   Future<List<UserDDModel>?> getUsers() async {
-    return await UnPlannedTourService.instance!.getUsers();
+    final users = await UnPlannedTourService.instance!.getUsers();
+    return users;
   }
 
   @action
   updateTour(UnplannedTourModel tour, BuildContext context) async {
-    // await service.updateTour(tour, context);
+    await service.updateUnplannedTour(tour);
   }
 }
