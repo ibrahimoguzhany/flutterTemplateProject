@@ -1,4 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+
 import '../../../../../core/base/view/base_view.dart';
 import '../../../../../core/components/text/auto_locale.text.dart';
 import '../../../../../core/constants/navigation/navigation_constants.dart';
@@ -6,11 +12,7 @@ import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/init/lang/locale_keys.g.dart';
 import '../../../../../core/init/navigation/navigation_service.dart';
 import '../../../model/unplanned_tour_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-
+import '../service/unplanned_tour_detail_service.dart';
 import '../viewmodel/subview_model/unplanned_tour_detail_view_model.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
@@ -21,7 +23,25 @@ class UnPlannedTourDetailView extends StatefulWidget {
       _UnPlannedTourDetailViewState();
 }
 
-class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
+class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView>
+    with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    RouteObserverCall.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
+  void dispose() {
+    RouteObserverCall.routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  void didPopNext() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     UnplannedTourModel tour =
@@ -70,19 +90,54 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(
-              child: buildHorizontalChips(tour.findings, viewModel, tour.id!),
-            ),
-            Observer(builder: (_) {
-              return Expanded(
-                flex: 12,
-                child: buildExpandedTourDetails(tour),
-              );
-            }),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {});
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // Expanded(
+              //   child: buildHorizontalChips(tour.findings, viewModel, tour.id!),
+              // ),
+              Expanded(
+                child: FutureBuilder(
+                    future: UnPlannedTourDetailService.instance!
+                        .getFindings(tour.id!),
+                    builder:
+                        (context, AsyncSnapshot<List<FindingModel>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        return buildHorizontalChips(
+                            snapshot.data, viewModel, tour.id!);
+                      }
+                      // if (snapshot.hasData) {
+                      //   return buildHorizontalChips(
+                      //       snapshot.data, viewModel, tour.id!);
+                      // } else if (snapshot.hasError) {
+                      //   return Text(snapshot.error.toString());
+                      // }
+
+                      // return Center(
+                      //   child: CircularProgressIndicator(),
+                      // );
+                    }),
+              ),
+              Observer(builder: (_) {
+                return Expanded(
+                  flex: 12,
+                  child: buildExpandedTourDetails(tour, context),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -98,6 +153,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
             fontFamily: "Poppins", fontSize: 14, fontWeight: FontWeight.w400),
       ));
     }
+
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
@@ -110,8 +166,12 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: InkWell(
-              onTap: () async =>
-                  await viewModel.navigateToFindingDetail(findings[index]),
+              onTap: () async {
+                await viewModel.navigateToFindingDetail(findings[index]);
+                // await Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (_) => UnplannedTourFindingDetailView(),
+                //     settings: RouteSettings(arguments: findings[index])));
+              },
               child: Chip(
                 labelPadding: EdgeInsets.symmetric(horizontal: 10),
                 label: Text(
@@ -131,81 +191,82 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView> {
       },
     );
   }
-
-  Padding buildExpandedTourDetails(UnplannedTourModel? tour) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildLittleTextWidget("Tur ID"),
-              buildBiggerDataTextWidget(tour!.id.toString()),
-              buildLittleTextWidget("Lokasyon"),
-              buildBiggerDataTextWidget(tour.locationName),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Saha"),
-              buildBiggerDataTextWidget(tour.fieldName),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Ekip Üyeleri"),
-              buildBiggerDataTextWidget(
-                  tour.tourTeamMembers == null ? "-" : tour.tourTeamMembers),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Tura Eşlik Edenler"),
-              buildBiggerDataTextWidget(
-                  tour.tourAccompaniers == null ? "-" : tour.tourAccompaniers),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Tur Tarihi"),
-              buildBiggerDataTextWidget(tour.tourDate.toString()),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Saha Organinasyon Skoru"),
-              tour.fieldOrganizationOrderScore == null
-                  ? Container()
-                  : Slider(
-                      divisions: 10,
-                      label: "${tour.fieldOrganizationOrderScore}",
-                      activeColor: context.colors.secondary,
-                      min: 0,
-                      max: 10,
-                      value: tour.fieldOrganizationOrderScore!.toDouble(),
-                      onChanged: (double value) {},
-                    ),
-              // buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null
-              //     ? "-"
-              //     : tour.fieldOrganizationOrderScore.toString()),
-              SizedBox(height: 10),
-              buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-              buildBiggerDataTextWidget(
-                  tour.observatedSecureCasesPositiveFindings),
-              SizedBox(height: 10),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  BottomNavigationBar get buildBottomNavBar => BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Planlı Turlar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Plansız Turlar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Profil',
-          ),
-        ],
-      );
 }
+
+Padding buildExpandedTourDetails(
+    UnplannedTourModel? tour, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ListView(
+      shrinkWrap: true,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildLittleTextWidget("Tur ID"),
+            buildBiggerDataTextWidget(tour!.id.toString()),
+            buildLittleTextWidget("Lokasyon"),
+            buildBiggerDataTextWidget(tour.locationName),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Saha"),
+            buildBiggerDataTextWidget(tour.fieldName),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Ekip Üyeleri"),
+            buildBiggerDataTextWidget(
+                tour.tourTeamMembers == null ? "-" : tour.tourTeamMembers),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Tura Eşlik Edenler"),
+            buildBiggerDataTextWidget(
+                tour.tourAccompaniers == null ? "-" : tour.tourAccompaniers),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Tur Tarihi"),
+            buildBiggerDataTextWidget(tour.tourDate.toString()),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Saha Organinasyon Skoru"),
+            tour.fieldOrganizationOrderScore == null
+                ? Container()
+                : Slider(
+                    divisions: 10,
+                    label: "${tour.fieldOrganizationOrderScore}",
+                    activeColor: context.colors.secondary,
+                    min: 0,
+                    max: 10,
+                    value: tour.fieldOrganizationOrderScore!.toDouble(),
+                    onChanged: (double value) {},
+                  ),
+            // buildBiggerDataTextWidget(tour.fieldOrganizationOrderScore == null
+            //     ? "-"
+            //     : tour.fieldOrganizationOrderScore.toString()),
+            SizedBox(height: 10),
+            buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
+            buildBiggerDataTextWidget(
+                tour.observatedSecureCasesPositiveFindings),
+            SizedBox(height: 10),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+BottomNavigationBar get buildBottomNavBar => BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Planlı Turlar',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.business),
+          label: 'Plansız Turlar',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.school),
+          label: 'Profil',
+        ),
+      ],
+    );
 
 buildBiggerDataTextWidget(dynamic data) {
   var finalResult = "";

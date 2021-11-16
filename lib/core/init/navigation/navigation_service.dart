@@ -22,3 +22,17 @@ class NavigationService implements INavigationService {
         ?.pushNamedAndRemoveUntil(path, removeAllOldRoutes, arguments: data);
   }
 }
+
+class RouteObserverCall {
+  static RouteObserver<PageRoute> routeObserver =
+      new RouteObserver<PageRoute>();
+
+  static RouteObserverCall? _instance = RouteObserverCall._init();
+  static RouteObserverCall? get instance => _instance;
+
+  RouteObserver<PageRoute> getRouteObserver() {
+    return routeObserver;
+  }
+
+  RouteObserverCall._init();
+}

@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/model/finding_entry_model.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,8 +19,8 @@ import '../../../../_product/_model/finding_file.dart';
 import '../../../../_widgets/button/button_widget.dart';
 import '../../../model/category_dd_model.dart';
 import '../../../model/unplanned_tour_model.dart';
-import '../view/unplanned_tour_detail_view.dart';
 import '../viewmodel/subview_model/add_unplanned_tour_finding_view_model.dart';
+import 'unplanned_tour_finding_detail_view.dart';
 
 class AddUnPlannedTourFindingView extends StatefulWidget {
   const AddUnPlannedTourFindingView({Key? key}) : super(key: key);
@@ -73,8 +75,6 @@ class _AddUnPlannedTourFindingViewState
             findingTypeNames!.removeDuplicates();
             findingCategories!.add(element.name!);
           });
-          // print(findingTypeNames);
-          // print(findingCategories);
         });
       },
       onPageBuilder:
@@ -83,8 +83,9 @@ class _AddUnPlannedTourFindingViewState
         appBar: AppBar(
           centerTitle: false,
           title: AutoLocaleText(
-            style: TextStyle(fontSize: 18),
             value: "Plansız Tur Bulgu Ekleme Sayfası",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
           ),
         ),
         body: Form(
@@ -125,13 +126,20 @@ class _AddUnPlannedTourFindingViewState
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
                         tour.findings!.add(finding);
+                        FindingEntryModel findingEntry = FindingEntryModel();
+                        findingEntry.actionsShouldBeTaken =
+                            finding.actionsShouldBeTaken;
+                        findingEntry.actionsTakenRightInTheField =
+                            finding.actionsTakenRightInTheField;
+                        findingEntry.findingType = finding.findingType;
+                        findingEntry.observations = finding.observations;
+                        findingEntry.categoryIds = finding.categoryIds;
+
                         _formKey.currentState!.save();
-                        final refreshedFinding =
-                            await viewModel.createFindingFourTour(
-                                finding, context, tour.id.toString());
+                        final refreshedFinding = await viewModel
+                            .createFindingFourTour(findingEntry, tour.id!);
 
                         if (refreshedFinding != null) {
-                          // Navigator.of(context).pop();
                           final snackBar = SnackBar(
                             content: Text(
                                 "Bulgu başarıyla oluşturuldu. Dosyalarınızı ekleyebilirsiniz."),
@@ -139,7 +147,7 @@ class _AddUnPlannedTourFindingViewState
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-                          Navigator.of(context).pushReplacement(
+                          await Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                                 settings:
                                     RouteSettings(arguments: refreshedFinding),

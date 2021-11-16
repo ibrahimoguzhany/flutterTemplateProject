@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
       theme: Provider.of<ThemeNotifier>(context).currentTheme,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
+      navigatorObservers: <NavigatorObserver>[RouteObserverCall.routeObserver],
     );
   }
 }

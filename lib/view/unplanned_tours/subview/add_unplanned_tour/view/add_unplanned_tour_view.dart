@@ -1,6 +1,7 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -193,46 +194,49 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   Widget buildTourTeamMembersMultiDropdownField(
       AddUnPlannedTourViewModel viewModel) {
     return Observer(builder: (_) {
-      return MultiSelectDialogField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (val) {
-          if (val == null) {
-            return "Bu alan boş bırakılamaz.";
-          }
-        },
-        items: viewModel.userList,
-        title: Text("Tur Takım Üyeleri"),
-        selectedColor: Colors.blue,
-        searchable: true,
-        searchHint: "Kullanıcı ara...",
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          ),
-          border: Border.all(
-            width: 1,
-          ),
-        ),
-        buttonIcon: Icon(
-          Icons.person_outline_outlined,
-        ),
-        buttonText: Text(
-          "Tur Takım Üyeleri",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.values[4],
-            fontFamily: "Poppins",
-          ),
-        ),
-        onConfirm: (List<UserDDModel?>? results) {
-          List<int>? result = <int>[];
-          results!.forEach((item) {
-            result.add(item!.id!);
+      return MultiSelect(
+          buttonBarColor: Colors.red,
+          cancelButtonText: "Geri",
+          titleText: "Tur Ekip Üyeleri",
+          titleTextColor: Colors.black,
+          checkBoxColor: Colors.black,
+          selectedOptionsInfoText: "Seçilen Ekip Üyeleri (silmek için dokunun)",
+          selectedOptionsBoxColor: Colors.green,
+          searchBoxColor: context.colors.secondaryVariant,
+          maxLength: viewModel.users!.length,
+          validator: (dynamic value) {
+            if (value == null) {
+              return 'Lütfen en az bir tur ekip üyesi seçiniz.';
+            }
+            return null;
+          },
+          selectIconColor: Colors.black54,
+          maxLengthText: "",
+          inputBoxFillColor: context.colors.secondaryVariant,
+          searchBoxHintText: "Ara",
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          maxLengthIndicatorColor: context.colors.primary,
+          clearButtonText: "Temizle",
+          saveButtonText: "Kaydet",
+          errorText: 'Lütfen en az bir tur ekip üyesi seçiniz',
+          // initialValue: tour.tourTeamMemberUsers!.map((e) => e.id).toList(),
+          dataSource: viewModel.users!
+              .map((e) => {"id": e.id, "fullName": e.fullName})
+              .toList(),
+          textField: 'fullName',
+          valueField: 'id',
+          filterable: true,
+          onSaved: (value) {
+            if (value != null) {
+              tour.tourTeamMembersIds = value.cast<int?>();
+              print(tour.tourTeamMembersIds);
+            }
+          },
+          change: (value) {
+            if (value != null) {
+              tour.tourTeamMembersIds = value.cast<int?>();
+            }
           });
-          tour.tourTeamMembersIds =
-              result; // Tur Takım üyesinin veritabanında TourAccompanıers sütununda ismiyle yazılmasını bu alan sağlıyor.
-        },
-      );
     });
   }
 

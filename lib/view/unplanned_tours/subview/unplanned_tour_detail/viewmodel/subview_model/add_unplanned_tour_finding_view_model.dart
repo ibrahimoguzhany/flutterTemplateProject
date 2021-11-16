@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/model/finding_entry_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,7 +42,7 @@ abstract class _AddUnPlannedTourFindingViewModelBase with Store, BaseViewModel {
 
   @action
   Future<FindingModel?> createFindingFourTour(
-      FindingModel model, BuildContext context, String tourId) async {
+      FindingEntryModel model, int tourId) async {
     final resultFinding = await UnPlannedTourDetailService.instance!
         .createFindingForTour(model, tourId);
     if (resultFinding != null) return resultFinding;

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/model/finding_entry_model.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
@@ -29,14 +30,16 @@ class UnPlannedTourDetailService {
   );
 
   Future<FindingModel?> createFindingForTour(
-    FindingModel finding,
-    String tourId,
+    FindingEntryModel finding,
+    int tourId,
   ) async {
+    print(tourId);
+    print(finding.findingType);
     final response = await dio.post(
-      UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
-      data: json.encode(finding.toJson()),
-      queryParameters: {"tourId": "$tourId"},
-    );
+        UnplannedTourDetailURLs.CreateFindingForTour.rawValue,
+        data: json.encode(finding),
+        queryParameters: {"tourId": tourId});
+    print(response);
     print(response.data);
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -133,5 +136,20 @@ class UnPlannedTourDetailService {
       return true;
     }
     return false;
+  }
+
+  Future<List<FindingModel>>? getFindings(int tourId) async {
+    final response = await dio.post(
+      UnplannedTourDetailURLs.GetFindingsOfTourMobile.rawValue,
+      queryParameters: {"tourId": "$tourId"},
+    );
+    if (response.statusCode == HttpStatus.ok) {
+      final responseBody = await response.data["result"];
+      if (responseBody is List) {
+        return responseBody.map((e) => FindingModel.fromJson(e)).toList();
+      }
+      return Future.error(responseBody);
+    }
+    return Future.error(response);
   }
 }

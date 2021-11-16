@@ -63,9 +63,9 @@ mixin _$AddUnPlannedTourFindingViewModel
 
   @override
   Future<FindingModel?> createFindingFourTour(
-      FindingModel model, BuildContext context, String tourId) {
+      FindingEntryModel model, int tourId) {
     return _$createFindingFourTourAsyncAction
-        .run(() => super.createFindingFourTour(model, context, tourId));
+        .run(() => super.createFindingFourTour(model, tourId));
   }
 
   final _$pickImageAsyncAction =
