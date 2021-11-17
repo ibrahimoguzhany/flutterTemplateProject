@@ -1,19 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/subview/unplanned_tour_finding_detail_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:esd_mobil/view/_product/_widgets/big_little_text_widget.dart';
+import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/viewmodel/subview_model/unplanned_tour_detail_view_model/unplanned_tour_detail_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../../core/base/view/base_view.dart';
-import '../../../../../core/components/text/auto_locale.text.dart';
 import '../../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/init/lang/locale_keys.g.dart';
 import '../../../../../core/init/navigation/navigation_service.dart';
 import '../../../model/unplanned_tour_model.dart';
 import '../service/unplanned_tour_detail_service.dart';
-import '../viewmodel/subview_model/unplanned_tour_detail_view_model.dart';
 
 class UnPlannedTourDetailView extends StatefulWidget {
   UnPlannedTourDetailView({Key? key}) : super(key: key);
@@ -267,37 +265,3 @@ BottomNavigationBar get buildBottomNavBar => BottomNavigationBar(
         ),
       ],
     );
-
-buildBiggerDataTextWidget(dynamic data) {
-  var finalResult = "";
-  if (data is List) {
-    data.forEach((dynamic element) {
-      finalResult += element['name'] + ", ";
-    });
-  }
-
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: AutoLocaleText(
-      value: data is List ? finalResult : data,
-      style: TextStyle(
-        fontSize: 18,
-      ),
-    ),
-  );
-}
-
-Widget buildLittleTextWidget(String title) {
-  if (title.isEmpty) {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-  return AutoLocaleText(
-    value: title,
-    style: TextStyle(
-        fontSize: 10,
-        decoration: TextDecoration.underline,
-        fontWeight: FontWeight.w800),
-  );
-}

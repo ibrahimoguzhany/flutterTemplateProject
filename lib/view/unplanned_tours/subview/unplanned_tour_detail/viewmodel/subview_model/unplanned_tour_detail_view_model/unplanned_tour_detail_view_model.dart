@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:esd_mobil/view/unplanned_tours/subview/unplanned_tour_detail/service/unplanned_tour_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../../../../core/base/model/base_viewmodel.dart';
-import '../../../../../../core/constants/navigation/navigation_constants.dart';
-import '../../../../../../core/init/navigation/navigation_service.dart';
-import '../../../../model/unplanned_tour_model.dart';
-import '../../../../service/unplanned_tour_service.dart';
+import '../../../../../../../core/base/model/base_viewmodel.dart';
+import '../../../../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../../../../core/init/navigation/navigation_service.dart';
+import '../../../../../model/unplanned_tour_model.dart';
+import '../../../../../service/unplanned_tour_service.dart';
 
 part 'unplanned_tour_detail_view_model.g.dart';
 

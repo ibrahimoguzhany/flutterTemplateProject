@@ -1,14 +1,14 @@
-import '../../../../core/constants/image/image_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../core/base/view/base_view.dart';
-import '../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../core/constants/image/image_constants.dart';
 import '../../../../core/extensions/context_extension.dart';
-import '../../../../core/extensions/string_extension.dart';
-import '../../../../core/init/navigation/navigation_service.dart';
+import '../module/login_wrap.dart';
 import '../viewmodel/login_view_model.dart';
+
+part '../module/password_text_form_field.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -82,11 +82,11 @@ class _LoginViewState extends State<LoginView> {
                                           context, viewModel)),
                                   SizedBox(
                                     height: 64,
-                                    child: buildTextFormFieldPassword(
-                                        context, viewModel),
+                                    child: PasswordTextFormField(
+                                        context: context, viewModel: viewModel),
                                   ),
                                   loginButton(viewModel),
-                                  buildWrap(viewModel),
+                                  LoginWrap(viewModel: viewModel),
                                 ],
                               ),
                             ),
@@ -172,56 +172,6 @@ class _LoginViewState extends State<LoginView> {
     ));
   }
 
-  Wrap buildWrap(LoginViewModel viewModel) {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Column(
-          children: [
-            Row(
-              children: [
-                Observer(builder: (_) {
-                  return Checkbox(
-                    value: viewModel.rememberMeIsCheckhed,
-                    onChanged: viewModel.changeIsChecked,
-                  );
-                }),
-                Text("Beni Hatırla"),
-                Spacer(
-                  flex: 2,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Şifremi Unuttum",
-                    style: TextStyle(
-                      color: Colors.blue,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Text("Diğer Giriş Seçenekleri"),
-                InkWell(
-                  onTap: () {
-                    NavigationService.instance.navigateToPage(
-                        NavigationConstants.LOGIN_VIA_AZURE_VIEW);
-                  },
-                  child: Image.asset(
-                    ImageConstants.instance!.toPng("microsoftLogo"),
-                    width: 100,
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ],
-    );
-  }
-
   TextFormField buildTextFormFieldEmail(
       BuildContext context, LoginViewModel viewModel) {
     return TextFormField(
@@ -237,33 +187,6 @@ class _LoginViewState extends State<LoginView> {
           labelText: "Email",
           labelStyle: context.textTheme.subtitle1,
         ));
-  }
-
-  Widget buildTextFormFieldPassword(
-      BuildContext context, LoginViewModel viewModel) {
-    return Observer(builder: (_) {
-      return TextFormField(
-          controller: viewModel.passwordController,
-          obscureText: viewModel.isLockOpen,
-          validator: (value) =>
-              value!.isNotEmpty ? null : "Bu alan gereklidir.",
-          decoration: new InputDecoration(
-            contentPadding: EdgeInsets.all(10),
-            helperText: ' ',
-            prefixIcon: buildContainerPasswordField(context, Icons.password),
-            suffixIcon: Observer(builder: (_) {
-              return InkWell(
-                child: buildContainerPasswordField(context,
-                    viewModel.isLockOpen ? Icons.lock : Icons.lock_open_sharp),
-                onTap: () {
-                  viewModel.isLockStateChange();
-                },
-              );
-            }),
-            labelText: "Şifre",
-            labelStyle: context.textTheme.subtitle1,
-          ));
-    });
   }
 
   Container buildContainerIconField(BuildContext context, IconData icon) {

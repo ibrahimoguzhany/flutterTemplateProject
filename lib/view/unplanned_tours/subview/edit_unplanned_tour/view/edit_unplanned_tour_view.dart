@@ -1,21 +1,19 @@
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
+import 'package:esd_mobil/view/_product/_widgets/big_little_text_widget.dart';
+import 'package:esd_mobil/view/_widgets/datepicker/tour_datepicker.dart';
+import 'package:esd_mobil/view/_widgets/dropdown/field_dropdown_form_field.dart';
+import 'package:esd_mobil/view/_widgets/dropdown/location_dropdown_form_field.dart';
+import 'package:esd_mobil/view/_widgets/dropdown/tour_team_members_multi_dropdown_field.dart';
+import 'package:esd_mobil/view/_widgets/text_field/tour_accompanies_text_field.dart';
 import '../../../../../core/base/view/base_view.dart';
-import '../../../../../core/components/text/auto_locale.text.dart';
 import '../../../../../core/extensions/context_extension.dart';
-import '../../../model/field_dd_model.dart';
-import '../../../model/location_dd_model.dart';
 import '../../../model/unplanned_tour_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../viewmodel/edit_unplanned_tour_view_model.dart';
 
 class EditUnPlannedTourView extends StatefulWidget {
-  // final UnplannedTourModel tour;
   const EditUnPlannedTourView({Key? key}) : super(key: key);
 
   @override
@@ -70,22 +68,28 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildLittleTextWidget("Lokasyon"),
-                  buildLocationDropDownFormField(viewModel, tour),
+                  LocationDropdownFormField(
+                      context: context, viewModel: viewModel, tour: tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha"),
-                  buildFieldDropDownFormField(viewModel, tour),
+                  FieldDropdownField(
+                      context: context, viewModel: viewModel, tour: tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Takım Üyeleri"),
                   SizedBox(height: 5),
-                  buildTourTeamMembersMultiDropdownField(viewModel, tour),
+                  TourTeamMembersMultiDropdownField(
+                      context: context, viewModel: viewModel, tour: tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tura Eşlik Edenler"),
                   SizedBox(height: 5),
-                  buildTourAccompaniesTextField(tour),
+                  TourAccompaniesTextField(
+                      controllerTourAccompaniers: _controllerTourAccompaniers,
+                      tour: tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Tur Tarihi"),
                   SizedBox(height: 5),
-                  buildTourDatePicker(tour),
+                  TourDatePicker(
+                      datePickerController: _datePickerController, tour: tour),
                   SizedBox(height: 20),
                   buildLittleTextWidget("Saha Tertip Skoru"),
                   buildFieldOrganizationScoreField(tour),
@@ -117,36 +121,6 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           ),
         ),
       ),
-    );
-  }
-
-  DateTimePicker buildTourDatePicker(UnplannedTourModel tour) {
-    String formattedDate = DateFormat('yyyy-mm-dd').format(tour.tourDate!);
-    var initialDate = DateTime.parse(formattedDate);
-    return DateTimePicker(
-      validator: (val) {
-        if (val == null) {
-          return "Tur Tarihi Boş Bırakılamaz.";
-        }
-      },
-      cursorColor: Colors.blue,
-      decoration: InputDecoration(
-        suffixIcon: Icon(Icons.date_range_outlined),
-      ),
-      type: DateTimePickerType.date,
-      controller: _datePickerController,
-      initialDate: initialDate,
-      firstDate: DateTime(2000),
-      calendarTitle: "Tur Tarihi",
-      lastDate: DateTime(2100),
-      icon: Icon(Icons.event),
-      onChanged: (val) {
-        setState(() {
-          String formattedDate = DateFormat('yyyy-mm-dd')
-              .format(DateTime.parse(_datePickerController.text));
-          tour.tourDate = DateTime.parse(formattedDate);
-        });
-      },
     );
   }
 
@@ -186,170 +160,11 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
           step: 1,
           haptics: true,
           onChanged: (value) {
-            setState(() {
-              _currentOrgScoreValue = value;
-            });
+            // setState(() {
+            _currentOrgScoreValue = value;
+            // });
             tour.fieldOrganizationOrderScore = _currentOrgScoreValue;
           }),
-    );
-  }
-
-  Widget buildTourTeamMembersMultiDropdownField(
-      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
-    return Observer(builder: (_) {
-      return MultiSelect(
-          buttonBarColor: Colors.red,
-          cancelButtonText: "Geri",
-          titleText: "Tur Ekip Üyeleri",
-          titleTextColor: Colors.black,
-          checkBoxColor: Colors.black,
-          selectedOptionsInfoText: "Seçilen Ekip Üyeleri (silmek için dokunun)",
-          selectedOptionsBoxColor: Colors.green,
-          searchBoxColor: context.colors.secondaryVariant,
-          maxLength: viewModel.users!.length,
-          validator: (dynamic value) {
-            if (value == null) {
-              return 'Lütfen en az bir tur ekip üyesi seçiniz.';
-            }
-            return null;
-          },
-          selectIconColor: Colors.black54,
-          maxLengthText: "",
-          inputBoxFillColor: context.colors.secondaryVariant,
-          searchBoxHintText: "Ara",
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          maxLengthIndicatorColor: context.colors.primary,
-          clearButtonText: "Temizle",
-          saveButtonText: "Kaydet",
-          errorText: 'Lütfen en az bir tur ekip üyesi seçiniz',
-          initialValue: tour.tourTeamMemberUsers!.map((e) => e.id).toList(),
-          dataSource: viewModel.users!
-              .map((e) => {"id": e.id, "fullName": e.fullName})
-              .toList(),
-          textField: 'fullName',
-          valueField: 'id',
-          filterable: true,
-          onSaved: (value) {
-            if (value != null) {
-              tour.tourTeamMembersIds = value.cast<int?>();
-              print(tour.tourTeamMembersIds);
-            }
-          },
-          change: (value) {
-            if (value != null) {
-              tour.tourTeamMembersIds = value.cast<int?>();
-            }
-          });
-    });
-  }
-
-  TextFormField buildTourAccompaniesTextField(UnplannedTourModel tour) {
-    return TextFormField(
-      focusNode: FocusNode(canRequestFocus: false),
-      controller: _controllerTourAccompaniers,
-      keyboardType: TextInputType.multiline,
-      maxLines: 2,
-      onSaved: (val) {
-        tour.tourAccompaniers = _controllerTourAccompaniers.text;
-      },
-      onChanged: (val) {
-        tour.tourAccompaniers = _controllerTourAccompaniers.text;
-      },
-    );
-  }
-
-  Widget buildFieldDropDownFormField(
-      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
-    return Container(
-      height: 60,
-      child: Observer(builder: (_) {
-        return DropdownButtonFormField<int>(
-          validator: (val) {
-            if (val == null) {
-              return "Bu alan boş bırakılamaz";
-            }
-          },
-          hint: Text('Saha Seçiniz.'),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          value: tour.fieldId,
-          icon: const Icon(
-            Icons.arrow_downward,
-            // color: Colors.black38,
-          ),
-          iconSize: 24,
-          elevation: 20,
-          onChanged: (int? newValue) {
-            FocusScope.of(context).requestFocus(new FocusNode());
-            setState(() {
-              tour.fieldId = newValue!;
-            });
-          },
-          onSaved: (int? newValue) {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-            setState(() {
-              tour.fieldId = newValue!;
-            });
-          },
-          items:
-              viewModel.fields.map<DropdownMenuItem<int>>((FieldDDModel value) {
-            return DropdownMenuItem<int>(
-              value: value.id,
-              child: Text(value.fieldName!),
-            );
-          }).toList(),
-        );
-      }),
-    );
-  }
-
-  Widget buildLocationDropDownFormField(
-      EditUnPlannedTourViewModel viewModel, UnplannedTourModel tour) {
-    return Container(
-      height: 60,
-      child: Observer(builder: (_) {
-        return DropdownButtonFormField<int>(
-          validator: (val) {
-            if (val == null) {
-              return "Bu alan boş bırakılamaz";
-            }
-          },
-          hint: const Text('Lokasyon Seçiniz'),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          value: tour.locationId,
-          icon: const Icon(
-            Icons.arrow_downward,
-          ),
-          iconSize: 24,
-          elevation: 20,
-          onChanged: (int? newValue) {
-            setState(() {
-              tour.locationId = newValue!;
-            });
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          items: viewModel.locations
-              .map<DropdownMenuItem<int>>((LocationDDModel value) {
-            return DropdownMenuItem<int>(
-              value: value.id,
-              child:
-                  Text(value.locationName != null ? value.locationName! : ""),
-            );
-          }).toList(),
-        );
-      }),
-    );
-  }
-
-  Widget buildLittleTextWidget(String title) {
-    return AutoLocaleText(
-      value: title,
-      style: TextStyle(
-          fontSize: 12,
-          decoration: TextDecoration.underline,
-          fontWeight: FontWeight.w800),
     );
   }
 }
