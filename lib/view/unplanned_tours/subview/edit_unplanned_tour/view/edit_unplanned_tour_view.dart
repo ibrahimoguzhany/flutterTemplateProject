@@ -1,19 +1,16 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 import '../../../../../core/base/view/base_view.dart';
 import '../../../../../core/components/text/auto_locale.text.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../model/field_dd_model.dart';
 import '../../../model/location_dd_model.dart';
 import '../../../model/unplanned_tour_model.dart';
-import '../../../model/user_dd_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../viewmodel/edit_unplanned_tour_view_model.dart';
 
@@ -135,7 +132,6 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
       cursorColor: Colors.blue,
       decoration: InputDecoration(
         suffixIcon: Icon(Icons.date_range_outlined),
-        filled: true,
       ),
       type: DateTimePickerType.date,
       controller: _datePickerController,

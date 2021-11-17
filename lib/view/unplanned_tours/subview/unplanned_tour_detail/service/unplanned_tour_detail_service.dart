@@ -46,7 +46,7 @@ class UnPlannedTourDetailService {
         final responseBody = await response.data["result"];
         return FindingModel.fromJson(responseBody);
       default:
-        return null;
+        return response.data["result"];
     }
   }
 

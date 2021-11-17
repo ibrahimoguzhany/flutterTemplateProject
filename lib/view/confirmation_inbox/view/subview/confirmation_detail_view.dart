@@ -1,12 +1,15 @@
 import 'dart:ui';
 
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/confirmation_inbox/model/confirmation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/constants/image/image_constants.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../module/approve_button.dart';
+import '../../module/build_table.dart';
+import '../../module/reject_button.dart';
 import '../../viewmodel/subviewmodel/confirmation_detail_view_model.dart';
 
 class ConfirmationDetailView extends StatelessWidget {
@@ -14,6 +17,9 @@ class ConfirmationDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ConfirmationModel model =
+        ModalRoute.of(context)!.settings.arguments as ConfirmationModel;
+    print(model.formCreator);
     return BaseView<ConfirmationDetailViewModel>(
       viewModel: ConfirmationDetailViewModel(),
       onModelReady: (ConfirmationDetailViewModel model) {
@@ -47,118 +53,11 @@ class ConfirmationDetailView extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            color: Color(0xfffe7144),
+                            color: context.colors.secondary,
                           ),
                           padding: EdgeInsets.all(12),
                           child: Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: IconButton(
-                                    icon: Icon(Icons.arrow_back),
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.1,
-                                ),
-                                buildTable(),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.15,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    TextButton.icon(
-                                        style: ButtonStyle(
-                                          fixedSize: MaterialStateProperty.all(
-                                              Size(120, 15)),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.green),
-                                          foregroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.white),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side:
-                                                  BorderSide(color: Colors.red),
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          viewModel.changeIsApproveClicked();
-                                          viewModel.changeShowCPI();
-                                          Future.delayed(Duration(seconds: 3))
-                                              .then((value) =>
-                                                  viewModel.changeShowCPI())
-                                              .then((value) => viewModel
-                                                  .changeShowApprovedText())
-                                              .then((value) => Future.delayed(
-                                                      Duration(seconds: 1))
-                                                  .then((value) => viewModel
-                                                      .changeShowApprovedText())
-                                                  .then((value) => viewModel
-                                                      .changeIsApproveClicked()))
-                                              .then((value) =>
-                                                  Navigator.pop(context));
-                                        },
-                                        icon: Icon(Icons.check_circle_outline),
-                                        label: Text("Onayla")),
-                                    TextButton.icon(
-                                        style: ButtonStyle(
-                                            fixedSize:
-                                                MaterialStateProperty.all(
-                                                    Size(120, 15)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.red),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(18.0),
-                                                    side: BorderSide(color: Colors.red)))),
-                                        onPressed: () {
-                                          viewModel.changeIsRejectClicked();
-                                          viewModel.changeShowCPI();
-                                          Future.delayed(Duration(seconds: 3))
-                                              .then((value) =>
-                                                  viewModel.changeShowCPI())
-                                              .then((value) => viewModel
-                                                  .changeShowRejectedText())
-                                              .then((value) => Future.delayed(
-                                                      Duration(seconds: 1))
-                                                  .then((value) => viewModel
-                                                      .changeShowRejectedText())
-                                                  .then((value) => viewModel
-                                                      .changeIsRejectClicked()))
-                                              .then((value) =>
-                                                  Navigator.pop(context));
-                                        },
-                                        icon: Icon(Icons.close),
-                                        label: Text("Reddet"))
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.1,
-                                ),
-                              ],
-                            ),
+                            child: buildColumn(context, viewModel, model),
                           ),
                         ),
                       ),
@@ -242,6 +141,41 @@ class ConfirmationDetailView extends StatelessWidget {
     );
   }
 
+  Column buildColumn(BuildContext context,
+      ConfirmationDetailViewModel viewModel, ConfirmationModel model) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.1,
+        ),
+        BuildTable(model: model),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ApproveButton(viewModel: viewModel),
+            RejectButton(viewModel: viewModel),
+          ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.1,
+        ),
+      ],
+    );
+  }
+
   Widget buildBlur(
           {required Widget child,
           double sigmaX = 10.0,
@@ -250,120 +184,4 @@ class ConfirmationDetailView extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
         child: child,
       );
-}
-
-class buildTable extends StatelessWidget {
-  const buildTable({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(color: Colors.white10, style: BorderStyle.solid),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      defaultColumnWidth:
-          FixedColumnWidth(MediaQuery.of(context).size.width / 2.2),
-      children: [
-        TableRow(children: [
-          Column(children: [
-            Text('Formu Oluşturan:',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.start)
-          ]),
-          Column(children: [
-            Text('Dilek Kara',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.start)
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text(
-              'Şirket:',
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.start,
-            )
-          ]),
-          Column(
-              children: [Text('STAD', style: TextStyle(color: Colors.white))]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text('Ünite:', style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('Terminal A', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text(
-              'Emniyet Sistemi Açıklaması',
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.start,
-            )
-          ]),
-          Column(children: [
-            Text('Lorem Ipsum', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text('By-pass Nedeni',
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('Lorem Ipsum', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text('Emniyet Sistemi Tipi', style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('Yangın ve Gaz', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text('Trip Parametre Tag No', style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('Algılama', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text('Emniyet Sistemi Alt Tipi',
-                style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('TEST S.S ALT TİPİ 3.1',
-                style: TextStyle(color: Colors.white)),
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text("Tahmini By-Pass Süresi",
-                style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('2 saat', style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-        TableRow(children: [
-          Column(children: [
-            Text("By-Pass'a Alan Kişiler",
-                style: TextStyle(color: Colors.white))
-          ]),
-          Column(children: [
-            Text('Dilek Kara; Gülden Kelez',
-                style: TextStyle(color: Colors.white))
-          ]),
-        ]),
-      ],
-    );
-  }
 }

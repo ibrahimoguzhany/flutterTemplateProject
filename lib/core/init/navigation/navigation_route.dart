@@ -80,7 +80,7 @@ class NavigationRoute {
         return normalNavigate(ConfirmationInboxView());
 
       case NavigationConstants.CONFIRMATION_DETAIL_VIEW:
-        return normalNavigate(ConfirmationDetailView());
+        return navigateWithData(ConfirmationDetailView(), args.arguments);
 
       case NavigationConstants.EDIT_PLANNED_TOUR_VIEW:
         return navigateWithData(EditUnPlannedTourView(), args.arguments);

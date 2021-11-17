@@ -2,7 +2,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../../core/base/view/base_view.dart';
@@ -11,7 +10,6 @@ import '../../../../../core/extensions/context_extension.dart';
 import '../../../model/field_dd_model.dart';
 import '../../../model/location_dd_model.dart';
 import '../../../model/unplanned_tour_model.dart';
-import '../../../model/user_dd_model.dart';
 import '../viewmodel/add_unplanned_tour_view_model.dart';
 
 class AddUnPlannedTourView extends StatefulWidget {
@@ -23,16 +21,13 @@ class AddUnPlannedTourView extends StatefulWidget {
 
 class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   late UnplannedTourModel tour;
-  late TextEditingController _datePickerController;
+  late TextEditingController _datePickerController = TextEditingController();
   TextEditingController _controllerTourAccompaniers = TextEditingController();
   int _currentOrgScoreValue = 0;
 
   @override
   void initState() {
     super.initState();
-    _datePickerController =
-        TextEditingController(text: DateTime.now().toString());
-
     tour = UnplannedTourModel();
   }
 
@@ -118,22 +113,23 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
 
   DateTimePicker get buildTourDatePicker => DateTimePicker(
         validator: (val) {
-          if (val == null) {
+          if (val!.isEmpty) {
             return "Tur Tarihi Boş Bırakılamaz.";
           }
         },
         type: DateTimePickerType.date,
-        dateMask: 'dd/MM/yyyy',
-        decoration: InputDecoration(
-          suffixIcon: Icon(Icons.calendar_today_outlined),
-          border: OutlineInputBorder(),
-        ),
+        errorFormatText: "Lütfen geçerli bir tarih giriniz.",
+        errorInvalidText: "Lütfen geçerli bir tarih giriniz.",
+        locale: Locale("tr", "TR"),
+        fieldHintText: "Tarih Seçiniz.",
+        dateMask: 'yMMMMEEEEd',
+        autovalidate: true,
         controller: _datePickerController,
         firstDate: DateTime(2000),
         calendarTitle: "Tur Tarihi",
+        dateHintText: "Tarih Seçiniz.",
         lastDate: DateTime(2100),
         icon: Icon(Icons.event),
-        dateLabelText: 'Tur Tarihi',
         onChanged: (val) {
           setState(() {
             tour.tourDate = DateTime.parse(_datePickerController.text);
@@ -197,8 +193,9 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       return MultiSelect(
           buttonBarColor: Colors.red,
           cancelButtonText: "Geri",
-          titleText: "Tur Ekip Üyeleri",
+          titleText: "Tur Takım Üyeleri",
           titleTextColor: Colors.black,
+          errorBorderColor: context.colors.onError,
           checkBoxColor: Colors.black,
           selectedOptionsInfoText: "Seçilen Ekip Üyeleri (silmek için dokunun)",
           selectedOptionsBoxColor: Colors.green,
@@ -210,6 +207,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
             }
             return null;
           },
+          hintText: "Seçmek için dokunun.",
           selectIconColor: Colors.black54,
           maxLengthText: "",
           inputBoxFillColor: context.colors.secondaryVariant,
@@ -218,7 +216,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
           maxLengthIndicatorColor: context.colors.primary,
           clearButtonText: "Temizle",
           saveButtonText: "Kaydet",
-          errorText: 'Lütfen en az bir tur ekip üyesi seçiniz',
+          errorText: 'Lütfen en az bir tur ekip üyesi seçiniz.',
           // initialValue: tour.tourTeamMemberUsers!.map((e) => e.id).toList(),
           dataSource: viewModel.users!
               .map((e) => {"id": e.id, "fullName": e.fullName})
@@ -273,7 +271,7 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       return DropdownButtonFormField<int>(
         validator: (val) {
           if (val == null) {
-            return "Bu alan boş bırakılamaz";
+            return "Bu alan boş bırakılamaz.";
           }
         },
         itemHeight: 48,
@@ -317,11 +315,11 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
       return DropdownButtonFormField<int>(
         validator: (val) {
           if (val == null) {
-            return "Bu alan boş bırakılamaz";
+            return "Bu alan boş bırakılamaz.";
           }
         },
         itemHeight: 48,
-        hint: Text('Lokasyon Seçiniz'),
+        hint: Text('Lokasyon Seçiniz.'),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         value: tour.locationId,
         icon: const Icon(

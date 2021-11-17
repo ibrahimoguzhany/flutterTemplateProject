@@ -13,4 +13,34 @@ abstract class _ConfirmationInboxViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   @override
   void init() {}
+
+  @observable
+  bool isApproveClicked = false;
+
+  @observable
+  bool showCPI = false;
+
+  @observable
+  bool showApprovedText = false;
+
+  @observable
+  bool showRejectedText = false;
+
+  @observable
+  bool isRejectClicked = false;
+
+  @action
+  void changeShowRejectedText() => showRejectedText = !showRejectedText;
+
+  @action
+  void changeIsRejectClicked() => isRejectClicked = !isRejectClicked;
+
+  @action
+  void changeShowCPI() => showCPI = !showCPI;
+
+  @action
+  void changeShowApprovedText() => showApprovedText = !showApprovedText;
+
+  @action
+  void changeIsApproveClicked() => isApproveClicked = !isApproveClicked;
 }

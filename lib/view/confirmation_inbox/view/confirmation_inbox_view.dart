@@ -1,254 +1,259 @@
-import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
-import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class ConfirmationInboxView extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../../core/base/view/base_view.dart';
+import '../../../core/constants/image/image_constants.dart';
+import '../../../core/constants/navigation/navigation_constants.dart';
+import '../../../core/extensions/context_extension.dart';
+import '../../../core/init/navigation/navigation_service.dart';
+import '../model/confirmation_model.dart';
+import '../viewmodel/confirmation_inbox_view_model.dart';
+
+class ConfirmationInboxView extends StatefulWidget {
   const ConfirmationInboxView({Key? key}) : super(key: key);
 
   @override
+  _ConfirmationInboxViewState createState() => _ConfirmationInboxViewState();
+}
+
+class _ConfirmationInboxViewState extends State<ConfirmationInboxView> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffF9EEDF),
-      appBar: AppBar(
-        backgroundColor: Color(0xffF9EEDF),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 84),
-            child: Hero(
-              tag: "socarLogo",
-              child: Image.asset('assets/image/800pxlogo_of_socar1.png'),
-            ),
-          ),
-          Spacer(
-            flex: 1,
-          ),
-          Expanded(
-            flex: 20,
-            child: SingleChildScrollView(
-                child: Container(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8),
-                itemCount: 10,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    background: Container(
-                      color: Colors.green,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.check,
-                              color: Colors.blue,
-                              size: 32,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Onayla',
-                                style: TextStyle(color: Colors.white70)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.blueGrey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                              size: 32,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Reddet',
-                                style: TextStyle(color: Colors.white70)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    confirmDismiss: (DismissDirection direction) async {
-                      return await showDialog(
-                        context: context,
-                        builder: direction == DismissDirection.endToStart
-                            ? (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Reddet"),
-                                  content: const Text(
-                                      "Reddetmek istediğinize emin misiniz?"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                        child: const Text("Evet")),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: const Text("Hayır"),
-                                    ),
-                                  ],
-                                );
-                              }
-                            : (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Onayla"),
-                                  content: const Text(
-                                      "Onaylamak istediğinize emin misiniz?"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                        child: const Text("Evet")),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: const Text("Hayır"),
-                                    ),
-                                  ],
-                                );
-                              },
-                      );
-                    },
-                    onDismissed: (DismissDirection direction) {
-                      if (direction == DismissDirection.startToEnd) {
-                        print("Onaylandı");
-                      } else {
-                        print('Reddedildi');
-                      }
-                    },
-                    key: Key(index.toString()),
-                    child: Card(
-                      color: Color(0xffFF6333).withOpacity(0.9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 8.0,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 6.0),
-                      child: Container(
-                        child: ListTile(
-                          onTap: () async {
-                            await NavigationService.instance.navigateToPage(
-                                NavigationConstants.CONFIRMATION_DETAIL_VIEW);
-                          },
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          leading: Text("ESBP"),
-                          title: Text(
-                            "STAD Terminal A By Pass Süresi ESD Yazılım Aracılığı İle By-pass",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )),
-          ),
-          SizedBox(height: 18),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+    Widget buildBlur(
+            {required Widget child,
+            double sigmaX = 10.0,
+            double sigmaY = 10.0}) =>
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+          child: child,
+        );
+    return BaseView<ConfirmationInboxViewModel>(
+      viewModel: ConfirmationInboxViewModel(),
+      onModelReady: (ConfirmationInboxViewModel model) {
+        model.setContext(context);
+        model.init();
+      },
+      onPageBuilder:
+          (BuildContext context, ConfirmationInboxViewModel viewModel) =>
+              Scaffold(
+        body: SafeArea(
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            textDirection: TextDirection.rtl,
+            fit: StackFit.loose,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Container(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: context.colors.secondary,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Column(
                 children: [
                   Spacer(
-                    flex: 1,
+                    flex: 2,
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Icon(
-                              Icons.notifications_none_outlined,
-                              size: 42,
-                            ),
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: Color(0xffF9EEDF),
-                              foregroundColor: Colors.black,
-                              child: Text("8"),
-                            )
-                          ],
-                        ),
-                        Text(
-                          "Bildirimler",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 84),
+                    child: Hero(
+                      tag: "socarLogo",
+                      child: Image.asset(ImageConstants.instance!
+                          .toPng("800pxlogo_of_socar1")),
                     ),
                   ),
                   Spacer(
                     flex: 1,
                   ),
-                  InkWell(
-                    onTap: () async {
-                      await NavigationService.instance
-                          .navigateToPage(NavigationConstants.SETTINGS_VIEW);
-                    },
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.settings_outlined,
-                          size: 42,
-                        ),
-                        Text(
-                          "Ayarlar",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+                  Expanded(
+                    flex: 20,
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: ConfirmationList.confirmationList.length,
+                          itemBuilder: (_, i) => Slidable(
+                                actionPane: SlidableScrollActionPane(),
+                                actions: [
+                                  IconSlideAction(
+                                      caption: "Red",
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: () {
+                                        viewModel.changeIsRejectClicked();
+                                        viewModel.changeShowCPI();
+                                        Future.delayed(Duration(seconds: 3))
+                                            .then((value) =>
+                                                viewModel.changeShowCPI())
+                                            .then((value) => viewModel
+                                                .changeShowRejectedText())
+                                            .then((value) => Future.delayed(
+                                                    Duration(seconds: 1))
+                                                .then((value) => viewModel
+                                                    .changeShowRejectedText())
+                                                .then((value) => viewModel
+                                                    .changeIsRejectClicked()));
+                                        setState(() {
+                                          ConfirmationList.confirmationList
+                                              .removeAt(i);
+                                        });
+                                      }),
+                                  IconSlideAction(
+                                      caption: "Onay",
+                                      color: Colors.green,
+                                      icon: Icons.approval_outlined,
+                                      onTap: () {
+                                        viewModel.changeIsApproveClicked();
+                                        viewModel.changeShowCPI();
+                                        Future.delayed(Duration(seconds: 3))
+                                            .then((value) =>
+                                                viewModel.changeShowCPI())
+                                            .then((value) => viewModel
+                                                .changeShowApprovedText())
+                                            .then((value) => Future.delayed(
+                                                    Duration(seconds: 1))
+                                                .then((value) => viewModel
+                                                    .changeShowApprovedText())
+                                                .then((value) => viewModel
+                                                    .changeIsApproveClicked()));
+                                        setState(() {
+                                          ConfirmationList.confirmationList
+                                              .removeAt(i);
+                                        });
+                                      }),
+                                  IconSlideAction(
+                                    caption: "Vazgeç",
+                                    color: Colors.grey[300],
+                                    icon: Icons.cancel_outlined,
+                                    onTap: () {},
+                                  ),
+                                ],
+                                actionExtentRatio: 1 / 3,
+                                child: Card(
+                                  color:
+                                      context.colors.secondary.withOpacity(0.9),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 8.0,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 16.0, vertical: 6.0),
+                                  child: Container(
+                                    child: ListTile(
+                                      onTap: () async {
+                                        await NavigationService.instance
+                                            .navigateToPage(
+                                                NavigationConstants
+                                                    .CONFIRMATION_DETAIL_VIEW,
+                                                data: ConfirmationList
+                                                    .confirmationList[i]);
+                                      },
+                                      leading: Icon(Icons.message),
+                                      title: Text(ConfirmationList
+                                          .confirmationList[i].company!),
+                                      subtitle: Text(ConfirmationList
+                                          .confirmationList[i].bypassReason!),
+                                      trailing: Icon(Icons.arrow_back),
+                                    ),
+                                  ),
+                                ),
+                              )),
                     ),
                   ),
+                  Observer(builder: (_) {
+                    return Visibility(
+                      visible: viewModel.isApproveClicked,
+                      child: Center(
+                          child: buildBlur(
+                        child: viewModel.showCPI
+                            ? Center(
+                                child: SizedBox(
+                                  height: 40.0,
+                                  width: 40.0,
+                                  child: Transform.scale(
+                                    scale: 3,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.green,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(24),
+                                child: Text(
+                                  "Onaylandı!",
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                      )),
+                    );
+                  }),
+                  Observer(builder: (_) {
+                    return Visibility(
+                      visible: viewModel.isRejectClicked,
+                      child: Center(
+                          child: buildBlur(
+                        child: viewModel.showCPI
+                            ? Center(
+                                child: SizedBox(
+                                  height: 40.0,
+                                  width: 40.0,
+                                  child: Transform.scale(
+                                    scale: 3,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(24),
+                                child: Text(
+                                  "Reddedildi!",
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                      )),
+                    );
+                  }),
+                  Observer(builder: (_) {
+                    return Visibility(
+                      visible: viewModel.isApproveClicked ||
+                          viewModel.isRejectClicked,
+                      child: Spacer(
+                        flex: 20,
+                      ),
+                    );
+                  }),
                   Spacer(
-                    flex: 1,
+                    flex: 2,
                   ),
                 ],
-              )
+              ),
             ],
           ),
-          Spacer(flex: 1)
-        ],
+        ),
       ),
     );
   }
 }
-
-
-// actionPane: SlidableScrollActionPane(),
-//                         actions: [
-//                           IconSlideAction(
-//                               caption: "Red",
-//                               color: Colors.red,
-//                               icon: Icons.delete,
-//                               onTap: () {
-//                                 print("Red");
-//                               }),
-//                           IconSlideAction(
-//                               caption: "Onay",
-//                               color: Colors.green,
-//                               icon: Icons.approval_outlined,
-//                               onTap: () {
-//                                 print("onay");
-//                               }),
-//                           IconSlideAction(
-//                               caption: "Vazgeç",
-//                               color: Colors.grey[300],
-//                               icon: Icons.cancel_outlined,
-//                               onTap: () {
-//                                 print("vazgec");
-//                               }),
-//                         ],
-//                         actionExtentRatio: 1 / 4,

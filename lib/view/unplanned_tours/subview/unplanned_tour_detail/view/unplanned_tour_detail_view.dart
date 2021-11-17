@@ -175,7 +175,7 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView>
               child: Chip(
                 labelPadding: EdgeInsets.symmetric(horizontal: 10),
                 label: Text(
-                  "Bulgu ID: $index",
+                  "Bulgu $index",
                   style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.w500,

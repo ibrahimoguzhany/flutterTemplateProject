@@ -46,7 +46,7 @@ class AppThemeLight extends AppTheme with ILightTheme {
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: colorSchemeLight.darkAppColor),
           color: colorSchemeLight.scaffoldBackgroundColor,
-          elevation: 0,
+          elevation: 1.0,
           titleTextStyle: TextStyle(
             color: colorSchemeLight.appBarTitleColor,
             fontSize: 20,
@@ -79,7 +79,8 @@ class AppThemeLight extends AppTheme with ILightTheme {
       secondary: colorSchemeLight.darkAppColor,
       secondaryVariant: colorSchemeLight.scaffoldBackgroundColor, //xx
       surface: Colors.red[900]!,
-      background: Colors.white, //xx // green accent idi
+      background:
+          colorSchemeLight.scaffoldBackgroundColor, //xx // green accent idi
       error: colorSchemeLight.socarRed,
       onPrimary: Colors.greenAccent,
       onSecondary: Colors.black, //xx
