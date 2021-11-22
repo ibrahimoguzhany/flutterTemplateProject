@@ -37,11 +37,11 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
     domainHint: "consumers",
   );
 
-  final createUserInMobileURL =
-      "http://esdmobil.demos.arfitect.net/api/services/app/User/CreateUserInMobile";
+  // final createUserInMobileURL =
+  //     "http://esdmobil.demos.arfitect.net/api/services/app/User/CreateUserInMobile";
 
-  final authenticateMobile =
-      "http://esdmobil.demos.arfitect.net/api/TokenAuth/AuthenticateMobile";
+  // final authenticateMobile =
+  //     "http://esdmobil.demos.arfitect.net/api/TokenAuth/AuthenticateMobile";
 
   Future<String?> signIn(String email, String password) async {
     config.loginHint = email;
@@ -153,12 +153,6 @@ abstract class _LoginViaAzureViewModelBase with Store, BaseViewModel {
   @action
   void changeCurrentTabIndex(int val) {
     currentTabIndex = val;
-
-    // if (val == 1 && currentTabIndex == 0) {
-    //   changeVisibility();
-    // } else if (val == 0 && currentTabIndex == 1) {
-    //   changeVisibility();
-    // }
   }
 
   @action

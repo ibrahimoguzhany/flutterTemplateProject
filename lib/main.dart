@@ -12,7 +12,7 @@ import 'core/init/navigation/navigation_service.dart';
 import 'core/init/notifier/provider_list.dart';
 import 'core/init/notifier/theme_notifier.dart';
 import 'view/authenticate/login/view/splash_screen.dart';
-import 'view/home/view/home_view.dart';
+import 'view/esd_app/home/view/home_view.dart';
 
 Future<void> main() async {
   await _init();

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../_widgets/avatar/on_board_circle.dart';
 
 import '../../../../core/base/view/base_view.dart';
 import '../../../../core/components/text/auto_locale.text.dart';
 import '../../../../core/extensions/context_extension.dart';
+import '../../../common/_widgets/avatar/on_board_circle.dart';
 import '../model/on_board_model.dart';
 import '../viewmodel/on_board_view_model.dart';
 

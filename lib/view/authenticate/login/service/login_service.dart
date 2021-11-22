@@ -1,8 +1,9 @@
-import '../../../_product/enum/network_route_enum.dart';
-import '../model/login_response_model.dart';
-import '../model/login_model.dart';
-import 'ILoginService.dart';
 import 'package:vexana/vexana.dart';
+
+import '../../../common/_product/enum/network_route_enum.dart';
+import '../model/login_model.dart';
+import '../model/login_response_model.dart';
+import 'ILoginService.dart';
 
 class LoginService extends ILoginService {
   LoginService(INetworkManager manager) : super(manager);
