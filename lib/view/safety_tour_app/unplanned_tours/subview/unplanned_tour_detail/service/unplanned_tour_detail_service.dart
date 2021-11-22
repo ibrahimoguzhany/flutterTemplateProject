@@ -53,7 +53,6 @@ class UnPlannedTourDetailService {
   Future<void> uploadFindingFile(File fileInput, int findingId) async {
     var formDio = Dio(
       BaseOptions(
-        queryParameters: {"findingId": "$findingId"},
         baseUrl: NetworkConstants.BASE_URL,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -82,6 +81,7 @@ class UnPlannedTourDetailService {
     var response = await formDio.post(
       UnplannedTourDetailURLs.UploadFiles.rawValue,
       data: formData,
+      queryParameters: {"findingId": findingId},
     );
     print(response.statusCode);
     print(response.data);
@@ -101,8 +101,7 @@ class UnPlannedTourDetailService {
   Future<List<FindingFile>?> getFindingFiles(int findingId) async {
     final response = await dio.post(
         UnplannedTourDetailURLs.GetFindingFiles.rawValue,
-        data: findingId,
-        queryParameters: {"findingId": "$findingId"});
+        queryParameters: {"findingId": findingId});
     switch (response.statusCode) {
       case HttpStatus.ok:
         final responseBody = await response.data["result"];

@@ -49,6 +49,7 @@ class _UnPlannedTourListViewState extends State<UnPlannedTourListView> {
                             return Text("Error = ${snapshot.error}");
 
                           if (snapshot.hasData) {
+                            print(snapshot.data!.length);
                             return buildListView(snapshot.data!, viewModel);
                           }
                           return Center(

@@ -98,7 +98,10 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: ConfirmationList.confirmationList.length,
                           itemBuilder: (_, i) => Slidable(
-                                actionPane: SlidableScrollActionPane(),
+                                key: Key(ConfirmationList
+                                    .confirmationList[i].appName!),
+                                actionPane: SlidableDrawerActionPane(),
+                                showAllActionsThreshold: 0.75,
                                 actions: [
                                   IconSlideAction(
                                       caption: "Red",
@@ -153,7 +156,6 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                     onTap: () {},
                                   ),
                                 ],
-                                actionExtentRatio: 1 / 3,
                                 child: Card(
                                   color:
                                       context.colors.secondary.withOpacity(0.9),
