@@ -40,14 +40,6 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
 
   @override
   Widget build(BuildContext context) {
-    // Widget buildBlur(
-    //         {required Widget child,
-    //         double sigmaX = 10.0,
-    //         double sigmaY = 10.0}) =>
-    //     BackdropFilter(
-    //       filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-    //       child: child,
-    // );
     return BaseView<ConfirmationInboxViewModel>(
       viewModel: ConfirmationInboxViewModel(),
       onModelReady: (ConfirmationInboxViewModel model) {
@@ -107,13 +99,33 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                         itemCount: (snapshot.data ?? []).length,
                         itemBuilder: (context, index) => Slidable(
                               controller: slidableController,
-                              key: Key(ConfirmationList
-                                  .confirmationList[index].appName!),
+                              key: Key(UniqueKey().toString()),
                               actionPane: SlidableDrawerActionPane(),
-                              showAllActionsThreshold: 0.1,
                               actionExtentRatio: 0.15,
                               closeOnScroll: true,
-                              actions: [
+                              secondaryActions: [
+                                IconSlideAction(
+                                  closeOnTap: true,
+                                  color: Colors.grey[400],
+                                  icon: Icons.more_horiz,
+                                  foregroundColor: Colors.white70,
+                                  onTap: () {
+                                    NavigationService.instance.navigateToPage(
+                                        NavigationConstants
+                                            .CONFIRMATION_DETAIL_VIEW,
+                                        data: snapshot.data![index]);
+                                  },
+                                ),
+                                IconSlideAction(
+                                    closeOnTap: true,
+                                    color: Colors.green,
+                                    icon: Icons.check_circle_outlined,
+                                    onTap: () {
+                                      ConfirmationInboxService.instance!
+                                          .acceptConfirmationItem(
+                                              snapshot.data![index], context);
+                                      setState(() {});
+                                    }),
                                 IconSlideAction(
                                     closeOnTap: true,
                                     color: Colors.red,
@@ -121,36 +133,45 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                     onTap: () {
                                       ConfirmationInboxService.instance!
                                           .rejectConfirmationItem(
-                                              ConfirmationList
-                                                  .confirmationList[index],
+                                              (snapshot.data ?? [])[index],
                                               context);
                                       setState(() {});
                                     }),
-                                IconSlideAction(
-                                    closeOnTap: true,
-                                    color: Colors.green,
-                                    icon: Icons.check,
-                                    onTap: () {
-                                      ConfirmationInboxService.instance!
-                                          .acceptConfirmationItem(
-                                              ConfirmationList
-                                                  .confirmationList[index],
-                                              context);
-                                      setState(() {});
-                                    }),
-                                IconSlideAction(
-                                  closeOnTap: true,
-                                  color: Colors.grey[300],
-                                  icon: Icons.more_horiz_outlined,
-                                  onTap: () {
-                                    NavigationService.instance.navigateToPage(
-                                        NavigationConstants
-                                            .CONFIRMATION_DETAIL_VIEW,
-                                        data: ConfirmationList
-                                            .confirmationList[index]);
-                                  },
-                                ),
                               ],
+                              // actions: [
+                              //   IconSlideAction(
+                              //       closeOnTap: true,
+                              //       color: Colors.red,
+                              //       icon: Icons.cancel_outlined,
+                              //       onTap: () {
+                              //         ConfirmationInboxService.instance!
+                              //             .rejectConfirmationItem(
+                              //                 (snapshot.data ?? [])[index],
+                              //                 context);
+                              //         setState(() {});
+                              //       }),
+                              //   IconSlideAction(
+                              //       closeOnTap: true,
+                              //       color: Colors.green,
+                              //       icon: Icons.check,
+                              //       onTap: () {
+                              //         ConfirmationInboxService.instance!
+                              //             .acceptConfirmationItem(
+                              //                 snapshot.data![index], context);
+                              //         setState(() {});
+                              //       }),
+                              //   IconSlideAction(
+                              //     closeOnTap: true,
+                              //     color: Colors.grey[300],
+                              //     icon: Icons.more_horiz_outlined,
+                              //     onTap: () {
+                              //       NavigationService.instance.navigateToPage(
+                              //           NavigationConstants
+                              //               .CONFIRMATION_DETAIL_VIEW,
+                              //           data: snapshot.data![index]);
+                              //     },
+                              //   ),
+                              // ],
                               child: Card(
                                 color:
                                     context.colors.secondary.withOpacity(0.9),
@@ -169,13 +190,11 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                           .navigateToPage(
                                         NavigationConstants
                                             .CONFIRMATION_DETAIL_VIEW,
-                                        data: ConfirmationList
-                                            .confirmationList[index],
+                                        data: snapshot.data![index],
                                       );
                                     },
                                     leading: Text(
-                                      ConfirmationList
-                                          .confirmationList[index].appName!,
+                                      (snapshot.data ?? [])[index].appName!,
                                       style: TextStyle(
                                           fontSize: 12, color: Colors.white),
                                     ),
@@ -188,8 +207,7 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            ConfirmationList
-                                                .confirmationList[index]
+                                            (snapshot.data ?? [])[index]
                                                 .company!,
                                             style: TextStyle(
                                               fontSize: 12,
@@ -197,16 +215,14 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                             ),
                                           ),
                                           Text(
-                                            ConfirmationList
-                                                .confirmationList[index].unit!,
+                                            (snapshot.data ?? [])[index].unit!,
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
                                             ),
                                           ),
                                           Text(
-                                            ConfirmationList
-                                                .confirmationList[index]
+                                            (snapshot.data ?? [])[index]
                                                 .estimatedBypassTime!,
                                             style: TextStyle(
                                               fontSize: 12,
@@ -214,8 +230,7 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                                             ),
                                           ),
                                           Text(
-                                            ConfirmationList
-                                                .confirmationList[index]
+                                            (snapshot.data ?? [])[index]
                                                 .bypassReason!,
                                             style: TextStyle(
                                               fontSize: 12,
