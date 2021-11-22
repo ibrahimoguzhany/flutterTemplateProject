@@ -42,4 +42,9 @@ abstract class _ConfirmationInboxViewModelBase with Store, BaseViewModel {
 
   @action
   void changeIsApproveClicked() => isApproveClicked = !isApproveClicked;
+
+  @action
+  void refresh() {
+    
+  }
 }

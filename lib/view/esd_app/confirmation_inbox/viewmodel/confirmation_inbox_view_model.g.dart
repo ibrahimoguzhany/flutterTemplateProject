@@ -151,6 +151,17 @@ mixin _$ConfirmationInboxViewModel on _ConfirmationInboxViewModelBase, Store {
   }
 
   @override
+  void refresh() {
+    final _$actionInfo = _$_ConfirmationInboxViewModelBaseActionController
+        .startAction(name: '_ConfirmationInboxViewModelBase.refresh');
+    try {
+      return super.refresh();
+    } finally {
+      _$_ConfirmationInboxViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isApproveClicked: ${isApproveClicked},
