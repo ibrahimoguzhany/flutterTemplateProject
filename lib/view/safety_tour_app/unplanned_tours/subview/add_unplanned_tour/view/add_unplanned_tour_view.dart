@@ -1,12 +1,13 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/extensions/context_extension.dart';
-import 'package:esd_mobil/view/common/_product/_widgets/big_little_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../../../../../core/base/view/base_view.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/init/theme/light/color_scheme_light.dart';
+import '../../../../../common/_product/_widgets/big_little_text_widget.dart';
 import '../../../model/field_dd_model.dart';
 import '../../../model/location_dd_model.dart';
 import '../../../model/unplanned_tour_model.dart';
@@ -38,77 +39,89 @@ class _AddUnPlannedTourViewState extends State<AddUnPlannedTourView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<AddUnPlannedTourViewModel>(
-      viewModel: AddUnPlannedTourViewModel(),
-      onModelReady: (AddUnPlannedTourViewModel model) async {
-        model.setContext(context);
-        await model.init();
-      },
-      onPageBuilder:
-          (BuildContext context, AddUnPlannedTourViewModel viewModel) =>
-              Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Plansız Tur Ekleme Sayfası",
-            style: TextStyle(color: Color(0xFF31201B)),
-          ),
-        ),
-        body: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildLittleTextWidget("Lokasyon"),
-                  buildLocationDropDownFormField(viewModel),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Saha"),
-                  buildFieldDropDownFormField(viewModel),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tura Eşlik Edenler"),
-                  SizedBox(height: 5),
-                  buildTourAccompaniesTextField(viewModel),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tur Takım Üyeleri"),
-                  SizedBox(height: 5),
-                  buildTourTeamMembersMultiDropdownField(viewModel),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tur Tarihi"),
-                  SizedBox(height: 5),
-                  buildTourDatePicker,
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Saha Tertip Skoru"),
-                  buildFieldOrganizationScoreField,
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-                  SizedBox(height: 5),
-                  buildPositiveFindingTextFormField,
-                  SizedBox(height: 20),
-                  FloatingActionButton.extended(
-                    label: Text("Kaydet"),
-                    onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-                      if (isValid) {
-                        _formKey.currentState!.save();
-                        tour.isPlanned = false;
-                        await viewModel.addUnPlannedTour(tour, context);
-                      } else {
-                        final snackBar = SnackBar(
-                          content: Text("Lütfen gerekli alanları doldurunuz."),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                  )
-                ],
+        viewModel: AddUnPlannedTourViewModel(),
+        onModelReady: (AddUnPlannedTourViewModel model) async {
+          model.setContext(context);
+          await model.init();
+        },
+        onPageBuilder: (BuildContext context,
+                AddUnPlannedTourViewModel viewModel) =>
+            Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  "Plansız Tur Ekleme Sayfası",
+                  style: TextStyle(
+                      color: ColorSchemeLight.instance!.appBarTitleColor),
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+              body: Observer(builder: (_) {
+                return Container(
+                  child: viewModel.userList.isEmpty
+                      ? Center(child: CircularProgressIndicator())
+                      : Form(
+                          key: _formKey,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: EdgeInsets.all(24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  buildLittleTextWidget("Lokasyon"),
+                                  buildLocationDropDownFormField(viewModel),
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget("Saha"),
+                                  buildFieldDropDownFormField(viewModel),
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget("Tura Eşlik Edenler"),
+                                  SizedBox(height: 5),
+                                  buildTourAccompaniesTextField(viewModel),
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget("Tur Takım Üyeleri"),
+                                  SizedBox(height: 5),
+                                  buildTourTeamMembersMultiDropdownField(
+                                      viewModel),
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget("Tur Tarihi"),
+                                  SizedBox(height: 5),
+                                  buildTourDatePicker,
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget("Saha Tertip Skoru"),
+                                  buildFieldOrganizationScoreField,
+                                  SizedBox(height: 20),
+                                  buildLittleTextWidget(
+                                      "Gözlenen Pozitif Bulgular"),
+                                  SizedBox(height: 5),
+                                  buildPositiveFindingTextFormField,
+                                  SizedBox(height: 20),
+                                  FloatingActionButton.extended(
+                                    label: Text("Kaydet"),
+                                    onPressed: () async {
+                                      final isValid =
+                                          _formKey.currentState!.validate();
+                                      if (isValid) {
+                                        _formKey.currentState!.save();
+                                        tour.isPlanned = false;
+                                        await viewModel.addUnPlannedTour(
+                                            tour, context);
+                                      } else {
+                                        final snackBar = SnackBar(
+                                          content: Text(
+                                              "Lütfen gerekli alanları doldurunuz."),
+                                          backgroundColor: Colors.red,
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                );
+              }),
+            ));
   }
 
   DateTimePicker get buildTourDatePicker => DateTimePicker(

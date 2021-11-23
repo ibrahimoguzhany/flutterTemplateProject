@@ -96,160 +96,151 @@ class _ConfirmationInboxViewState extends State<ConfirmationInboxView>
                       );
                     }
                     return ListView.builder(
-                        itemCount: (snapshot.data ?? []).length,
-                        itemBuilder: (context, index) => Slidable(
-                              controller: slidableController,
-                              key: Key(UniqueKey().toString()),
-                              actionPane: SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.15,
-                              closeOnScroll: true,
-                              secondaryActions: [
-                                IconSlideAction(
-                                  closeOnTap: true,
-                                  color: Colors.grey[400],
-                                  icon: Icons.more_horiz,
-                                  foregroundColor: Colors.white70,
-                                  onTap: () {
-                                    NavigationService.instance.navigateToPage(
-                                        NavigationConstants
-                                            .CONFIRMATION_DETAIL_VIEW,
-                                        data: snapshot.data![index]);
-                                  },
+                      itemCount: (snapshot.data ?? []).length,
+                      itemBuilder: (context, index) => Slidable(
+                        controller: slidableController,
+                        key: Key(UniqueKey().toString()),
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.15,
+                        closeOnScroll: true,
+                        secondaryActions: [
+                          IconSlideAction(
+                            closeOnTap: true,
+                            color: Colors.grey[400],
+                            icon: Icons.more_horiz,
+                            foregroundColor: Colors.white70,
+                            onTap: () {
+                              viewModel.navigateToConfirmationDetailView(
+                                  snapshot, index);
+                            },
+                          ),
+                          IconSlideAction(
+                              closeOnTap: true,
+                              color: Colors.green,
+                              icon: Icons.check_circle_outlined,
+                              onTap: () {
+                                viewModel.acceptConfirmationItem(
+                                    snapshot, index);
+                                setState(() {});
+                              }),
+                          IconSlideAction(
+                              closeOnTap: true,
+                              color: Colors.red,
+                              icon: Icons.cancel_outlined,
+                              onTap: () {
+                                viewModel.rejectConfirmationItem(
+                                    snapshot, index);
+                                setState(() {});
+                              }),
+                        ],
+                        // actions: [
+                        //   IconSlideAction(
+                        //       closeOnTap: true,
+                        //       color: Colors.red,
+                        //       icon: Icons.cancel_outlined,
+                        //       onTap: () {
+                        //         ConfirmationInboxService.instance!
+                        //             .rejectConfirmationItem(
+                        //                 (snapshot.data ?? [])[index],
+                        //                 context);
+                        //         setState(() {});
+                        //       }),
+                        //   IconSlideAction(
+                        //       closeOnTap: true,
+                        //       color: Colors.green,
+                        //       icon: Icons.check,
+                        //       onTap: () {
+                        //         ConfirmationInboxService.instance!
+                        //             .acceptConfirmationItem(
+                        //                 snapshot.data![index], context);
+                        //         setState(() {});
+                        //       }),
+                        //   IconSlideAction(
+                        //     closeOnTap: true,
+                        //     color: Colors.grey[300],
+                        //     icon: Icons.more_horiz_outlined,
+                        //     onTap: () {
+                        //       NavigationService.instance.navigateToPage(
+                        //           NavigationConstants
+                        //               .CONFIRMATION_DETAIL_VIEW,
+                        //           data: snapshot.data![index]);
+                        //     },
+                        //   ),
+                        // ],
+                        child: Card(
+                          color: context.colors.secondary.withOpacity(0.9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 8.0,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 6.0),
+                          child: Container(
+                            child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              onTap: () =>
+                                  viewModel.onTileClick(snapshot, index),
+                              leading: Text(
+                                (snapshot.data ?? [])[index].appName!,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
+                              title: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 30,
                                 ),
-                                IconSlideAction(
-                                    closeOnTap: true,
-                                    color: Colors.green,
-                                    icon: Icons.check_circle_outlined,
-                                    onTap: () {
-                                      ConfirmationInboxService.instance!
-                                          .acceptConfirmationItem(
-                                              snapshot.data![index], context);
-                                      setState(() {});
-                                    }),
-                                IconSlideAction(
-                                    closeOnTap: true,
-                                    color: Colors.red,
-                                    icon: Icons.cancel_outlined,
-                                    onTap: () {
-                                      ConfirmationInboxService.instance!
-                                          .rejectConfirmationItem(
-                                              (snapshot.data ?? [])[index],
-                                              context);
-                                      setState(() {});
-                                    }),
-                              ],
-                              // actions: [
-                              //   IconSlideAction(
-                              //       closeOnTap: true,
-                              //       color: Colors.red,
-                              //       icon: Icons.cancel_outlined,
-                              //       onTap: () {
-                              //         ConfirmationInboxService.instance!
-                              //             .rejectConfirmationItem(
-                              //                 (snapshot.data ?? [])[index],
-                              //                 context);
-                              //         setState(() {});
-                              //       }),
-                              //   IconSlideAction(
-                              //       closeOnTap: true,
-                              //       color: Colors.green,
-                              //       icon: Icons.check,
-                              //       onTap: () {
-                              //         ConfirmationInboxService.instance!
-                              //             .acceptConfirmationItem(
-                              //                 snapshot.data![index], context);
-                              //         setState(() {});
-                              //       }),
-                              //   IconSlideAction(
-                              //     closeOnTap: true,
-                              //     color: Colors.grey[300],
-                              //     icon: Icons.more_horiz_outlined,
-                              //     onTap: () {
-                              //       NavigationService.instance.navigateToPage(
-                              //           NavigationConstants
-                              //               .CONFIRMATION_DETAIL_VIEW,
-                              //           data: snapshot.data![index]);
-                              //     },
-                              //   ),
-                              // ],
-                              child: Card(
-                                color:
-                                    context.colors.secondary.withOpacity(0.9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                elevation: 8.0,
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 6.0),
-                                child: Container(
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
-                                    onTap: () async {
-                                      await NavigationService.instance
-                                          .navigateToPage(
-                                        NavigationConstants
-                                            .CONFIRMATION_DETAIL_VIEW,
-                                        data: snapshot.data![index],
-                                      );
-                                    },
-                                    leading: Text(
-                                      (snapshot.data ?? [])[index].appName!,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      (snapshot.data ?? [])[index].company!,
                                       style: TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                    ),
-                                    title: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 30,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            (snapshot.data ?? [])[index]
-                                                .company!,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            (snapshot.data ?? [])[index].unit!,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            (snapshot.data ?? [])[index]
-                                                .estimatedBypassTime!,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            (snapshot.data ?? [])[index]
-                                                .bypassReason!,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                        fontSize: 12,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                  ),
+                                    Text(
+                                      (snapshot.data ?? [])[index].unit!,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      (snapshot.data ?? [])[index]
+                                          .estimatedBypassTime!,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    buildListTileTitle(snapshot, index),
+                                  ],
                                 ),
                               ),
-                            ));
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Text buildListTileTitle(
+      AsyncSnapshot<List<ConfirmationModel>> snapshot, int index) {
+    return Text(
+      (snapshot.data ?? [])[index].bypassReason!,
+      style: TextStyle(
+        fontSize: 12,
+        color: Colors.white,
       ),
     );
   }

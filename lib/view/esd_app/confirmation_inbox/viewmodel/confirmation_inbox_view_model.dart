@@ -1,4 +1,8 @@
 import 'package:esd_mobil/core/base/model/base_viewmodel.dart';
+import 'package:esd_mobil/core/constants/navigation/navigation_constants.dart';
+import 'package:esd_mobil/core/init/navigation/navigation_service.dart';
+import 'package:esd_mobil/view/esd_app/confirmation_inbox/model/confirmation_model.dart';
+import 'package:esd_mobil/view/esd_app/confirmation_inbox/service/confirmation_inbox_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -44,7 +48,35 @@ abstract class _ConfirmationInboxViewModelBase with Store, BaseViewModel {
   void changeIsApproveClicked() => isApproveClicked = !isApproveClicked;
 
   @action
-  void refresh() {
-    
+  void refresh() {}
+
+  @action
+  navigateToConfirmationDetailView(
+      AsyncSnapshot<List<ConfirmationModel>> snapshot, int index) {
+    NavigationService.instance.navigateToPage(
+        NavigationConstants.CONFIRMATION_DETAIL_VIEW,
+        data: snapshot.data![index]);
+  }
+
+  @action
+  rejectConfirmationItem(
+      AsyncSnapshot<List<ConfirmationModel>> snapshot, int index) {
+    ConfirmationInboxService.instance!
+        .rejectConfirmationItem((snapshot.data ?? [])[index], context);
+  }
+
+  @action
+  acceptConfirmationItem(
+      AsyncSnapshot<List<ConfirmationModel>> snapshot, int index) {
+    ConfirmationInboxService.instance!
+        .acceptConfirmationItem((snapshot.data ?? [])[index], context);
+  }
+
+  @action
+  onTileClick(
+      AsyncSnapshot<List<ConfirmationModel>> snapshot, int index) async {
+    await NavigationService.instance.navigateToPage(
+        NavigationConstants.CONFIRMATION_DETAIL_VIEW,
+        data: snapshot.data![index]);
   }
 }

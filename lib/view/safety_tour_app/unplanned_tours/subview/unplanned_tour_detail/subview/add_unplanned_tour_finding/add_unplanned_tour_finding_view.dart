@@ -1,18 +1,19 @@
 import 'dart:io';
 
-import 'package:esd_mobil/core/base/view/base_view.dart';
-import 'package:esd_mobil/core/components/text/auto_locale.text.dart';
-import 'package:esd_mobil/view/common/_product/_model/finding_file.dart';
-import 'package:esd_mobil/view/common/_product/_widgets/big_little_text_widget.dart';
-import 'package:esd_mobil/view/common/_widgets/button/button_widget.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../../core/base/view/base_view.dart';
+import '../../../../../../../core/components/text/auto_locale.text.dart';
+import '../../../../../../common/_product/_model/finding_file.dart';
+import '../../../../../../common/_product/_widgets/big_little_text_widget.dart';
+import '../../../../../../common/_widgets/button/button_widget.dart';
 import '../../../../model/category_dd_model.dart';
 import '../../../../model/unplanned_tour_model.dart';
 import '../../module/actions_mustbetaken_text_form_field.dart';
@@ -41,22 +42,29 @@ class _AddUnPlannedTourFindingViewState
 
   List<File>? files = <File>[];
 
-  List<CategoryDDModel>? findingTypes = <CategoryDDModel>[];
-  List<String>? findingTypeNames = <String>[];
-  List<String>? findingCategories = <String>[];
+  late List<CategoryDDModel>? findingTypes;
+  late List<String>? findingTypeNames;
+  late List<String>? findingCategories;
+
+  late final _controllerActionMustBeTaken;
+  late final _controllerActionMustBeTakenInField;
+  late final _controllerFieldManagerStatements;
+  late final _controllerObservations;
+  late final _formKey;
 
   @override
   void initState() {
     super.initState();
     finding = FindingModel();
+    findingTypes = <CategoryDDModel>[];
+    findingTypeNames = <String>[];
+    findingCategories = <String>[];
+    _controllerActionMustBeTaken = TextEditingController();
+    _controllerActionMustBeTakenInField = TextEditingController();
+    _controllerFieldManagerStatements = TextEditingController();
+    _controllerObservations = TextEditingController();
+    _formKey = GlobalKey<FormState>();
   }
-
-  final _controllerActionMustBeTaken = TextEditingController();
-  final _controllerActionMustBeTakenInField = TextEditingController();
-  final _controllerFieldManagerStatements = TextEditingController();
-  final _controllerObservations = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -89,62 +97,73 @@ class _AddUnPlannedTourFindingViewState
             style: TextStyle(fontSize: 18),
           ),
         ),
-        body: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildLittleTextWidget("Bulgu Tipi"),
-                  SizedBox(height: 5),
-                  FindingTypeDropdown(
-                      finding: finding, findingTypes: findingTypes),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Kategori"),
-                  SizedBox(height: 5),
-                  FindingCategoriesMultiSelectDropdown(
-                      finding: finding, viewModel: viewModel),
-                  SizedBox(height: 10),
-                  buildLittleTextWidget("Alınması Gereken Aksiyonlar"),
-                  SizedBox(height: 5),
-                  ActionsMustBeTakenTextFormField(
-                    controllerActionMustBeTaken: _controllerActionMustBeTaken,
-                    finding: finding,
+        body: Observer(builder: (_) {
+          return Container(
+            child: viewModel.categoryList.isEmpty
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildLittleTextWidget("Bulgu Tipi"),
+                            SizedBox(height: 5),
+                            FindingTypeDropdown(
+                                finding: finding, findingTypes: findingTypes),
+                            SizedBox(height: 20),
+                            buildLittleTextWidget("Kategori"),
+                            SizedBox(height: 5),
+                            FindingCategoriesMultiSelectDropdown(
+                                finding: finding, viewModel: viewModel),
+                            SizedBox(height: 10),
+                            buildLittleTextWidget(
+                                "Alınması Gereken Aksiyonlar"),
+                            SizedBox(height: 5),
+                            ActionsMustBeTakenTextFormField(
+                              controllerActionMustBeTaken:
+                                  _controllerActionMustBeTaken,
+                              finding: finding,
+                            ),
+                            SizedBox(height: 20),
+                            buildLittleTextWidget(
+                                "Sahada Alınması Gereken Aksiyonlar"),
+                            SizedBox(height: 5),
+                            ActionsTakenInFieldTextFormField(
+                                controllerActionMustBeTakenInField:
+                                    _controllerActionMustBeTakenInField,
+                                finding: finding),
+                            SizedBox(height: 20),
+                            buildLittleTextWidget("Gözlemler"),
+                            SizedBox(height: 5),
+                            ObservationsTextFormField(
+                                controllerObservations: _controllerObservations,
+                                finding: finding),
+                            SizedBox(height: 20),
+                            buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
+                            SizedBox(height: 5),
+                            FieldManagerStatementsTextFormField(
+                                controllerFieldManagerStatements:
+                                    _controllerFieldManagerStatements,
+                                finding: finding),
+                            SizedBox(height: 20),
+                            SaveFABButton(
+                              formKey: _formKey,
+                              tour: tour,
+                              finding: finding,
+                              viewModel: viewModel,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Sahada Alınması Gereken Aksiyonlar"),
-                  SizedBox(height: 5),
-                  ActionsTakenInFieldTextFormField(
-                      controllerActionMustBeTakenInField:
-                          _controllerActionMustBeTakenInField,
-                      finding: finding),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Gözlemler"),
-                  SizedBox(height: 5),
-                  ObservationsTextFormField(
-                      controllerObservations: _controllerObservations,
-                      finding: finding),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Saha Yöneticisi Açıklaması"),
-                  SizedBox(height: 5),
-                  FieldManagerStatementsTextFormField(
-                      controllerFieldManagerStatements:
-                          _controllerFieldManagerStatements,
-                      finding: finding),
-                  SizedBox(height: 20),
-                  SaveFABButton(
-                    formKey: _formKey,
-                    tour: tour,
-                    finding: finding,
-                    viewModel: viewModel,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

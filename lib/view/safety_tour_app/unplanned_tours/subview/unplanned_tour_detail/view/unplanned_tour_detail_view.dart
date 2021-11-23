@@ -95,9 +95,6 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // Expanded(
-              //   child: buildHorizontalChips(tour.findings, viewModel, tour.id!),
-              // ),
               Expanded(
                 child: FutureBuilder(
                     future: UnPlannedTourDetailService.instance!
@@ -116,24 +113,12 @@ class _UnPlannedTourDetailViewState extends State<UnPlannedTourDetailView>
                         return buildHorizontalChips(
                             snapshot.data, viewModel, tour.id!);
                       }
-                      // if (snapshot.hasData) {
-                      //   return buildHorizontalChips(
-                      //       snapshot.data, viewModel, tour.id!);
-                      // } else if (snapshot.hasError) {
-                      //   return Text(snapshot.error.toString());
-                      // }
-
-                      // return Center(
-                      //   child: CircularProgressIndicator(),
-                      // );
                     }),
               ),
-              Observer(builder: (_) {
-                return Expanded(
-                  flex: 12,
-                  child: buildExpandedTourDetails(tour, context),
-                );
-              }),
+              Expanded(
+                flex: 12,
+                child: buildExpandedTourDetails(tour, context),
+              )
             ],
           ),
         ),

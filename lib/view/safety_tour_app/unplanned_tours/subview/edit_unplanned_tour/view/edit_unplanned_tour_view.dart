@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../../../core/base/view/base_view.dart';
@@ -45,82 +46,97 @@ class _EditUnPlannedTourViewState extends State<EditUnPlannedTourView> {
 
     // print(tour.tourTeamMemberUsers);
     return BaseView<EditUnPlannedTourViewModel>(
-      viewModel: EditUnPlannedTourViewModel(),
-      onModelReady: (EditUnPlannedTourViewModel model) async {
-        model.setContext(context);
-        model.init();
-      },
-      onPageBuilder:
-          (BuildContext context, EditUnPlannedTourViewModel viewModel) =>
-              Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          title: Text("Plansız Tur Güncelle"),
-        ),
-        body: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildLittleTextWidget("Lokasyon"),
-                  LocationDropdownFormField(
-                      context: context, viewModel: viewModel, tour: tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Saha"),
-                  FieldDropdownField(
-                      context: context, viewModel: viewModel, tour: tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tur Takım Üyeleri"),
-                  SizedBox(height: 5),
-                  TourTeamMembersMultiDropdownField(
-                      context: context, viewModel: viewModel, tour: tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tura Eşlik Edenler"),
-                  SizedBox(height: 5),
-                  TourAccompaniesTextField(
-                      controllerTourAccompaniers: _controllerTourAccompaniers,
-                      tour: tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Tur Tarihi"),
-                  SizedBox(height: 5),
-                  TourDatePicker(
-                      datePickerController: _datePickerController, tour: tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Saha Tertip Skoru"),
-                  buildFieldOrganizationScoreField(tour),
-                  SizedBox(height: 20),
-                  buildLittleTextWidget("Gözlenen Pozitif Bulgular"),
-                  SizedBox(height: 5),
-                  buildPositiveFindingTextFormField(tour),
-                  SizedBox(height: 20),
-                  FloatingActionButton.extended(
-                    label: Text("Kaydet"),
-                    onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-                      if (isValid) {
-                        _formKey.currentState!.save();
-                        tour.isPlanned = false;
-                        await viewModel.updateUnplannedTour(tour);
-                      } else {
-                        final snackBar = SnackBar(
-                          content: Text("Lütfen gerekli alanları doldurunuz."),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                  )
-                ],
+        viewModel: EditUnPlannedTourViewModel(),
+        onModelReady: (EditUnPlannedTourViewModel model) async {
+          model.setContext(context);
+          model.init();
+        },
+        onPageBuilder: (BuildContext context,
+                EditUnPlannedTourViewModel viewModel) =>
+            Scaffold(
+              appBar: AppBar(
+                centerTitle: false,
+                elevation: 0,
+                title: Text("Plansız Tur Güncelle"),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+              body: Observer(builder: (_) {
+                return viewModel.userList.isEmpty
+                    ? Center(child: CircularProgressIndicator())
+                    : Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                buildLittleTextWidget("Lokasyon"),
+                                LocationDropdownFormField(
+                                    context: context,
+                                    viewModel: viewModel,
+                                    tour: tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget("Saha"),
+                                FieldDropdownField(
+                                    context: context,
+                                    viewModel: viewModel,
+                                    tour: tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget("Tur Takım Üyeleri"),
+                                SizedBox(height: 5),
+                                TourTeamMembersMultiDropdownField(
+                                    context: context,
+                                    viewModel: viewModel,
+                                    tour: tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget("Tura Eşlik Edenler"),
+                                SizedBox(height: 5),
+                                TourAccompaniesTextField(
+                                    controllerTourAccompaniers:
+                                        _controllerTourAccompaniers,
+                                    tour: tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget("Tur Tarihi"),
+                                SizedBox(height: 5),
+                                TourDatePicker(
+                                    datePickerController: _datePickerController,
+                                    tour: tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget("Saha Tertip Skoru"),
+                                buildFieldOrganizationScoreField(tour),
+                                SizedBox(height: 20),
+                                buildLittleTextWidget(
+                                    "Gözlenen Pozitif Bulgular"),
+                                SizedBox(height: 5),
+                                buildPositiveFindingTextFormField(tour),
+                                SizedBox(height: 20),
+                                FloatingActionButton.extended(
+                                  label: Text("Kaydet"),
+                                  onPressed: () async {
+                                    final isValid =
+                                        _formKey.currentState!.validate();
+                                    if (isValid) {
+                                      _formKey.currentState!.save();
+                                      tour.isPlanned = false;
+                                      await viewModel.updateUnplannedTour(tour);
+                                    } else {
+                                      final snackBar = SnackBar(
+                                        content: Text(
+                                            "Lütfe;})n gerekli alanları doldurunuz."),
+                                        backgroundColor: Colors.red,
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+              }),
+            ));
   }
 
   TextFormField buildPositiveFindingTextFormField(UnplannedTourModel tour) {
